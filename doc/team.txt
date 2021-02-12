@@ -5,3 +5,4 @@ eggert        FearlessSeagull
 apramani      Aryan8337
 askiba        aaronskiba
 haquino       aqueeno
+mddavies      davedoescode
