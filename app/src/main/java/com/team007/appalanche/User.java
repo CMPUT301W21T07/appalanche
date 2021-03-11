@@ -7,9 +7,13 @@ public class User {
     private Profile profile;
     private ArrayList<Experiment> subscribedExpList;
 
-
     public void subscribeToExperiment(Experiment exp){
-        subscribedExpList.add(exp);
+        if (!(subscribedExpList.contains(exp))){
+            subscribedExpList.add(exp);
+        }
+        // idea for UI: print an error message that says "already added"
+        // or...remove the subscribe button from an experiment that's
+        // being subscribed to...but that could be tricky to make
     }
 
 }
