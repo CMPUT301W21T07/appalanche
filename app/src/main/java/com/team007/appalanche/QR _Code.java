@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-public class QR_Code extends Experimenter{
+public class QR_Code extends Experimenter {
     private string trialType;
     public string getTrialType(){
         /* Covert the scanned QR code into a string*/
