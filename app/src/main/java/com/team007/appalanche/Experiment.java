@@ -6,6 +6,13 @@ public class Experiment {
     private String description;
     private ArrayList<Question>  questionList = new ArrayList<Question>();
 
+    public Experiment(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
     /**
      * This adds a new question to the question list of an Experiment
      * @param question
@@ -14,5 +21,6 @@ public class Experiment {
     public void askQuestion (Question question) {
         questionList.add(question);
     }
+
 
 }
