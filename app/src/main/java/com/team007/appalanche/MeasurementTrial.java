@@ -10,4 +10,3 @@ public class MeasurementTrial extends Trial {
         this.value = value;
     }
 }
-
