@@ -1,4 +1,4 @@
-package com.team007.appalanche;
+package com.team007.appalanche.customList;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+
+import com.team007.appalanche.R;
+import com.team007.appalanche.model.Experiment;
 
 import java.util.ArrayList;
 

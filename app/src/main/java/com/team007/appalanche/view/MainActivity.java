@@ -1,20 +1,18 @@
-package com.team007.appalanche;
+package com.team007.appalanche.view;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.team007.appalanche.customList.CustomList;
+import com.team007.appalanche.R;
+import com.team007.appalanche.model.Experiment;
 
 import java.util.ArrayList;
 

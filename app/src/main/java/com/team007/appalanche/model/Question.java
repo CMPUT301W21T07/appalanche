@@ -1,4 +1,7 @@
-package com.team007.appalanche;
+package com.team007.appalanche.model;
+
+import com.team007.appalanche.model.Reply;
+import com.team007.appalanche.model.User;
 
 import java.util.ArrayList;
 
@@ -13,6 +16,14 @@ public class Question {
     public Question(String content, User userPostedQuestion) {
         this.content = content;
         this.userPostedQuestion = userPostedQuestion;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public User getUserPostedQuestion() {
+        return userPostedQuestion;
     }
 
     /**
