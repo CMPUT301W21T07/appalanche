@@ -1,5 +1,7 @@
 package com.team007.appalanche.Experiment;
 
+import com.team007.appalanche.User.User;
+
 public class BinomialExperiment extends Experiment implements ExperimentInterface {
     public String trialType;
 
@@ -17,7 +19,7 @@ public class BinomialExperiment extends Experiment implements ExperimentInterfac
                               Integer minNumTrials,
                               Boolean locationRequired,
                               Boolean status,
-                              Profile experimentOwner) {
+                              User experimentOwner) {
         super(description, region, "binomial", minNumTrials, locationRequired, status, experimentOwner);
     }
 

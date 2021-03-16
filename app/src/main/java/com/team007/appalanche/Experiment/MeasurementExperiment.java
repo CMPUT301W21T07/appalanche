@@ -1,5 +1,7 @@
 package com.team007.appalanche.Experiment;
 
+import com.team007.appalanche.User.User;
+
 public class MeasurementExperiment extends Experiment implements ExperimentInterface {
     /**
      * Constructor function for measurement experiment class
@@ -14,7 +16,7 @@ public class MeasurementExperiment extends Experiment implements ExperimentInter
                                  Integer minNumTrials,
                                  Boolean locationRequired,
                                  Boolean status,
-                                 Profile experimentOwner) {
+                                 User experimentOwner) {
         super(description, region, "measurement", minNumTrials, locationRequired, status, experimentOwner);
     }
 

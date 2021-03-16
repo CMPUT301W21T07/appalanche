@@ -1,5 +1,7 @@
 package com.team007.appalanche.Experiment;
 
+import com.team007.appalanche.User.User;
+
 public class NonNegativeCountExperiment extends Experiment implements ExperimentInterface {
     public String trialType = "NonNegativeCount";
     /**
@@ -15,7 +17,7 @@ public class NonNegativeCountExperiment extends Experiment implements Experiment
                                       Integer minNumTrials,
                                       Boolean locationRequired,
                                       Boolean status,
-                                      Profile experimentOwner) {
+                                      User experimentOwner) {
         super(description, region, "nonNegativeCount", minNumTrials, locationRequired, status, experimentOwner);
     }
 

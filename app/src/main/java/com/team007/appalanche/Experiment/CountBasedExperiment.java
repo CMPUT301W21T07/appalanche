@@ -1,5 +1,7 @@
 package com.team007.appalanche.Experiment;
 
+import com.team007.appalanche.User.User;
+
 public class CountBasedExperiment extends Experiment implements ExperimentInterface {
     /**
      * Constructor function for count based experiment class
@@ -14,7 +16,7 @@ public class CountBasedExperiment extends Experiment implements ExperimentInterf
                                 Integer minNumTrials,
                                 Boolean locationRequired,
                                 Boolean status,
-                                Profile experimentOwner) {
+                                User experimentOwner) {
         super(description, region, "count", minNumTrials, locationRequired, status, experimentOwner);
     }
 
