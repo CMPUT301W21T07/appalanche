@@ -9,6 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 
+import com.team007.appalanche.R;
+import com.team007.appalanche.Experiment;
+
 import java.util.ArrayList;
 
 public class CustomList extends ArrayAdapter<Experiment> {

@@ -14,6 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.team007.appalanche.R;
+import com.team007.appalanche.Question;
+import com.team007.appalanche.User;
+
+import java.util.Date;
+
 
 public class AskQuestionFragment extends DialogFragment  {
     private OnFragmentInteractionListener listener;
@@ -30,17 +36,20 @@ public class AskQuestionFragment extends DialogFragment  {
                 .setView(view)
                 .setTitle("NEW QUESTION")
                 .setNegativeButton("Cancel", null)
-//                .setPositiveButton("Post", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                    }
-//                })
+                .setPositiveButton("Post", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
+                        Question newQuestion = new Question(askQuestion.getText().toString(), new User("Tom"), new Date());
+                        listener.askQuestion(newQuestion);
+                    }
+                })
 
                 .create();
     }
 
     public interface OnFragmentInteractionListener {
+        void askQuestion(Question question);
     }
 
     @Override
