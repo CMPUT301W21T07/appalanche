@@ -1,5 +1,7 @@
 package com.team007.appalanche.Experiment;
 
+import com.team007.appalanche.User.User;
+
 /**
  * abstract class representing an experiment object
  */
@@ -10,7 +12,7 @@ public class Experiment {
     private Integer minNumTrials;
     private Boolean locationRequired;
     private Boolean status;
-    private Profile experimentOwner;
+    private User experimentOwner;
 
     /**
      * Constructor function for abstract experiment class
@@ -26,7 +28,7 @@ public class Experiment {
                       Integer minNumTrials,
                       Boolean locationRequired,
                       Boolean status,
-                      Profile experimentOwner) {
+                      User experimentOwner) {
         this.description = description;
         this.region = region;
         this.trialType = trialType;
@@ -118,5 +120,5 @@ public class Experiment {
      * @return
      *  return profile object of the individual who created the experiment
      */
-    public Profile getExperimentOwner(){ return this.experimentOwner; }
+    public User getExperimentOwner(){ return this.experimentOwner; }
 }
