@@ -4,6 +4,6 @@ public class BinomialTrial extends Trial{
         this.outcome= outcome;
     }
     public boolean getOutcome(){
-        return outcome;
+        return  outcome;
     }
 }

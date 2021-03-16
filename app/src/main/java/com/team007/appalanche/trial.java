@@ -4,7 +4,7 @@ public abstract class Trial{
     private ArrayList<Location> locationList = new ArrayList<Location>();
     private Experimenter userAddedTrial;
 
-    public Trial(Date date, ArrayList<Location> locationList, Experimenter userAddedTrial){
+    public Trial (Date date, ArrayList<Location> locationList, Experimenter userAddedTrial){
         this.date=date;
         this.userAddedTrial=userAddedTrial;
         this.locationList=locationList;

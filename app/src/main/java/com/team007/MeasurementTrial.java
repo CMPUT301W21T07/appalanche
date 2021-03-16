@@ -3,7 +3,7 @@ public class MeasurementTrial extends Trial{
     public void setValue(double value){
         this.value=value;
     }
-    public double getValue(){
+    public double getValue (){
         return value;
     }
 }
