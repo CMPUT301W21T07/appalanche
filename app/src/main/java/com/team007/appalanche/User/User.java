@@ -2,7 +2,7 @@ package com.team007.appalanche.User;
 
 import java.util.ArrayList;
 
-public class User {
+public abstract class User {
     private String ID;
     private Profile profile;
     private ArrayList<Object> subscribedExperiments;
