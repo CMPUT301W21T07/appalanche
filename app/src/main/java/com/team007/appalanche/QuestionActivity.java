@@ -17,12 +17,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.team007.appalanche.AskQuestionFragment;
 import com.team007.appalanche.R;
-import com.team007.appalanche.controller.QuestionListController;
-import com.team007.appalanche.customList.QuestionCustomList;
-import com.team007.appalanche.model.Question;
-import com.team007.appalanche.model.User;
-import com.team007.appalanche.view.AskQuestionFragment;
+import com.team007.appalanche.QuestionListController;
+import com.team007.appalanche.QuestionCustomList;
+import com.team007.appalanche.Question;
+import com.team007.appalanche.User;
+import com.team007.appalanche.AskQuestionFragment;
 
 
 public class QuestionActivity extends AppCompatActivity implements AskQuestionFragment.OnFragmentInteractionListener {
