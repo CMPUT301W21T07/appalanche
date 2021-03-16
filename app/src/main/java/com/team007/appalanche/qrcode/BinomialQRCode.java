@@ -1,8 +1,5 @@
 package com.team007.appalanche.qrcode;
 
-import com.team007.appalanche.BinomialTrial;
-import com.team007.appalanche.Experiment;
-import com.team007.appalanche.Experimenter;
 import com.team007.appalanche.Location;
 
 import java.util.Date;

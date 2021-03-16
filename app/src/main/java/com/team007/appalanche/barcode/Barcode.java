@@ -1,6 +1,6 @@
 package com.team007.appalanche.barcode;
 
-import com.team007.appalanche.Experiment;
+import com.team007.appalanche.Experiment.*;
 
 /**
  * This is the barcode abstract class that represents a barcode.

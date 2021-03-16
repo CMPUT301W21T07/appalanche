@@ -1,8 +1,5 @@
 package com.team007.appalanche.barcode;
 
-import com.team007.appalanche.CountBasedTrial;
-import com.team007.appalanche.Experiment;
-import com.team007.appalanche.Experimenter;
 import com.team007.appalanche.Location;
 
 import java.util.Date;

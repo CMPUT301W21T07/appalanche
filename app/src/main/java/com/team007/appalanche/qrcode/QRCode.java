@@ -1,6 +1,6 @@
 package com.team007.appalanche.qrcode;
 
-import com.team007.appalanche.Experiment;
+import com.team007.appalanche.Experiment.*;
 
 //The QRCode abstract class represents a QR code
 public abstract class QRCode {

@@ -1,9 +1,6 @@
 package com.team007.appalanche.qrcode;
 
-import com.team007.appalanche.Experiment;
-import com.team007.appalanche.Experimenter;
 import com.team007.appalanche.Location;
-import com.team007.appalanche.NonNegCountTrial;
 
 import java.util.Date;
 
