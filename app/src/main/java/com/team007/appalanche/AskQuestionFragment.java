@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 
@@ -30,12 +31,12 @@ public class AskQuestionFragment extends DialogFragment  {
                 .setView(view)
                 .setTitle("NEW QUESTION")
                 .setNegativeButton("Cancel", null)
-//                .setPositiveButton("Post", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                    }
-//                })
+                .setPositiveButton("Post", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // send the askQuestion back to QuestionActivity
+                    }
+                })
 
                 .create();
     }

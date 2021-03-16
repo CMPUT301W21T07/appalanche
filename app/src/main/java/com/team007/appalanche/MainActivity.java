@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         ExperimentDataList = new ArrayList<>();
-        Experiment newExp = new Experiment("How many jelly beans can I fit into my month?");
+        Experiment newExp = new Experiment("How many jelly beans can I fit into my mouth?");
         ExperimentDataList.add(newExp);
         // Set up the adapter for Experiment List View
         expAdapter = new CustomList(this, ExperimentDataList);
