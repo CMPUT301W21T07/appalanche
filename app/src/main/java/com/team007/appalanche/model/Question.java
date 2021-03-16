@@ -4,6 +4,7 @@ import com.team007.appalanche.model.Reply;
 import com.team007.appalanche.model.User;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * This class represents a question that a user wants to ask about an Experiment
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 public class Question {
     private String content;
     private User userPostedQuestion;
+    private Date dateAsked;
     private ArrayList<Reply> replies = new ArrayList<Reply>();
 
     /**
@@ -20,7 +22,7 @@ public class Question {
      * @param userPostedQuestion
      *  This is the user that has posted the question
      */
-    public Question(String content, User userPostedQuestion) {
+    public Question(String content, User userPostedQuestion, Date dateAsked) {
         this.content = content;
         this.userPostedQuestion = userPostedQuestion;
     }
@@ -33,13 +35,6 @@ public class Question {
         return content;
     }
 
-    /**
-     * This is a getter method for userPostedQuestion, we obtain the user's information using this method
-     * @return
-     */
-    public User getUserPostedQuestion() {
-        return userPostedQuestion;
-    }
 
     /**
      * This adds a reply to the reply list of a question

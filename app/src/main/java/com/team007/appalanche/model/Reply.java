@@ -2,12 +2,15 @@ package com.team007.appalanche.model;
 
 import com.team007.appalanche.model.User;
 
+import java.util.Date;
+
 /**
  * This class represents a reply whenever a user wants to add a reply to a specific experiment question
  */
 public class Reply {
     private String replyText;
     private User userReplied;
+    private Date dateReplied;
 
     /**
      * This is a constructor for Reply class
@@ -16,7 +19,7 @@ public class Reply {
      * @param userReplied
      *  This contains the user posted the reply to question
      */
-    public Reply(String replyText, User userReplied) {
+    public Reply(String replyText, User userReplied, Date dateReplied) {
         this.replyText = replyText;
         this.userReplied = userReplied;
     }
