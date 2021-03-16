@@ -3,9 +3,11 @@ package com.team007.appalanche.view;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -18,6 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.team007.appalanche.R;
+import com.team007.appalanche.ReplyActivity;
 import com.team007.appalanche.controller.QuestionListController;
 import com.team007.appalanche.customList.QuestionCustomList;
 import com.team007.appalanche.model.Question;
@@ -98,4 +101,19 @@ public class QuestionActivity extends AppCompatActivity implements AskQuestionFr
         questionAdapter.notifyDataSetChanged();
 
     }
+
+    User currentUser = null;
+
+    //reply to a question
+        questionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Question questionToReply = questionDataList.get(position);
+
+            Intent intent = new Intent(QuestionActivity.this, ReplyActivity.class);
+            intent.putExtra("Question", questionToReply);
+            intent.putExtra("Replying User", currentUser);
+            QuestionActivity.this.startActivity(intent);
+        }
+    });
 }
