@@ -37,6 +37,7 @@ public class AskQuestionFragment extends DialogFragment  {
                 .setPositiveButton("Post", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
                         Question newQuestion = new Question(askQuestion.getText().toString(), new User("Tom"));
                         listener.askQuestion(newQuestion);
                     }

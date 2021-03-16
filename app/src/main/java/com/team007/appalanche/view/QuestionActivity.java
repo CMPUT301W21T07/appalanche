@@ -1,18 +1,27 @@
 package com.team007.appalanche.view;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.team007.appalanche.R;
 import com.team007.appalanche.controller.QuestionListController;
 import com.team007.appalanche.customList.QuestionCustomList;
 import com.team007.appalanche.model.Question;
+import com.team007.appalanche.model.User;
 import com.team007.appalanche.view.AskQuestionFragment;
 
 
@@ -44,23 +53,22 @@ public class QuestionActivity extends AppCompatActivity implements AskQuestionFr
 //        // Access a Cloud Firestore instance from your Activity
 //        db = FirebaseFirestore.getInstance();
 //        // Get a top-level reference to the collection.
-//        final CollectionReference collectionReference = db.collection("questions");
+//        final CollectionReference collectionReference = db.collection("Questions");
 //
-
 //        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
 //            @Override
-//            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+//            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,@Nullable FirebaseFirestoreException e) {
 //                // clear the old list
 //                questionList.clearQuestionList();
+//                if (e != null){
+//                    //Toast.makeText(QuestionActivity.this, " deleted", Toast.LENGTH_SHORT).show();
+//                    return;
+//                } else {
 //                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
-//                    if (queryDocumentSnapshots == null){
-//                        Toast.makeText(QuestionActivity.this, " deleted", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    } else {
 //                    Log.d(TAG, String.valueOf(doc.getData().get("user_posted_question")));
 //                    String question = doc.getId();
 //                    String user = (String) doc.getData().get("user_posted_question");
-//                    questionList.addQuestion(new Question(question, new User(user)));} // Adding the cities and provinces from FireStore.
+//                    questionList.addQuestion(new Question(question, new User(user)));}
 //
 //                }
 //                questionAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.

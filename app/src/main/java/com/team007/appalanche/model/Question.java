@@ -13,15 +13,30 @@ public class Question {
     private User userPostedQuestion;
     private ArrayList<Reply> replies = new ArrayList<Reply>();
 
+    /**
+     * This a constructor for class Question
+     * @param content
+     *  This is the content of question
+     * @param userPostedQuestion
+     *  This is the user that has posted the question
+     */
     public Question(String content, User userPostedQuestion) {
         this.content = content;
         this.userPostedQuestion = userPostedQuestion;
     }
 
+    /**
+     * This is a getter method for content attribute, we obtain the question content through this method
+     * @return
+     */
     public String getContent() {
         return content;
     }
 
+    /**
+     * This is a getter method for userPostedQuestion, we obtain the user's information using this method
+     * @return
+     */
     public User getUserPostedQuestion() {
         return userPostedQuestion;
     }
