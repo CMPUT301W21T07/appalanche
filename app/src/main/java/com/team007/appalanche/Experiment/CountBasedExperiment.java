@@ -10,11 +10,12 @@ public class CountBasedExperiment extends Experiment implements ExperimentInterf
      * @param status
      */
     public CountBasedExperiment(String description,
-                              String region,
-                              Integer minNumTrials,
-                              Boolean locationRequired,
-                              Boolean status) {
-        super(description, region, "count", minNumTrials, locationRequired, status);
+                                String region,
+                                Integer minNumTrials,
+                                Boolean locationRequired,
+                                Boolean status,
+                                Profile experimentOwner) {
+        super(description, region, "count", minNumTrials, locationRequired, status, experimentOwner);
     }
 
     /**

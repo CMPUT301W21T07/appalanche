@@ -11,11 +11,12 @@ public class NonNegativeCountExperiment extends Experiment implements Experiment
      * @param status
      */
     public NonNegativeCountExperiment(String description,
-                              String region,
-                              Integer minNumTrials,
-                              Boolean locationRequired,
-                              Boolean status) {
-        super(description, region, "nonNegativeCount", minNumTrials, locationRequired, status);
+                                      String region,
+                                      Integer minNumTrials,
+                                      Boolean locationRequired,
+                                      Boolean status,
+                                      Profile experimentOwner) {
+        super(description, region, "nonNegativeCount", minNumTrials, locationRequired, status, experimentOwner);
     }
 
     /**

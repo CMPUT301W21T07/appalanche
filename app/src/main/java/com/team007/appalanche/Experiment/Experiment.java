@@ -10,7 +10,7 @@ public class Experiment {
     private Integer minNumTrials;
     private Boolean locationRequired;
     private Boolean status;
-    // private Profile userProfile; --> TODO: get userProfile class
+    private Profile experimentOwner;
 
     /**
      * Constructor function for abstract experiment class
@@ -25,13 +25,15 @@ public class Experiment {
                       String trialType,
                       Integer minNumTrials,
                       Boolean locationRequired,
-                      Boolean status) {
+                      Boolean status,
+                      Profile experimentOwner) {
         this.description = description;
         this.region = region;
         this.trialType = trialType;
         this.minNumTrials = minNumTrials;
         this.locationRequired = locationRequired;
         this.status = status;
+        this.experimentOwner = experimentOwner;
     }
 
     /**
@@ -111,5 +113,10 @@ public class Experiment {
      */
     public void setStatus(Boolean status) { this.status = status; }
 
-    // TODO: getter/setter for user profile
+    /**
+     * function to get experiment owner
+     * @return
+     *  return profile object of the individual who created the experiment
+     */
+    public Profile getExperimentOwner(){ return this.experimentOwner; }
 }

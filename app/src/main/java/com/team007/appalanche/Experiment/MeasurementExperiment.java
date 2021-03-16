@@ -10,11 +10,12 @@ public class MeasurementExperiment extends Experiment implements ExperimentInter
      * @param status
      */
     public MeasurementExperiment(String description,
-                              String region,
-                              Integer minNumTrials,
-                              Boolean locationRequired,
-                              Boolean status) {
-        super(description, region, "measurement", minNumTrials, locationRequired, status);
+                                 String region,
+                                 Integer minNumTrials,
+                                 Boolean locationRequired,
+                                 Boolean status,
+                                 Profile experimentOwner) {
+        super(description, region, "measurement", minNumTrials, locationRequired, status, experimentOwner);
     }
 
     /**

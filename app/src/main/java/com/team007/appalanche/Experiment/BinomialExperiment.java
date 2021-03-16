@@ -16,8 +16,9 @@ public class BinomialExperiment extends Experiment implements ExperimentInterfac
                               String trialType,
                               Integer minNumTrials,
                               Boolean locationRequired,
-                              Boolean status) {
-        super(description, region, "binomial", minNumTrials, locationRequired, status);
+                              Boolean status,
+                              Profile experimentOwner) {
+        super(description, region, "binomial", minNumTrials, locationRequired, status, experimentOwner);
     }
 
     /**
