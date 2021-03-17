@@ -1,6 +1,8 @@
-package com.team007.appalanche;
+package com.team007.appalanche.model;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private String id;
 
     public User(String id) {

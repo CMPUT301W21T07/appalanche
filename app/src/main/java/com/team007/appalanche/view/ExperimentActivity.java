@@ -1,4 +1,4 @@
-package com.team007.appalanche;
+package com.team007.appalanche.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.team007.appalanche.R;
 
 public class ExperimentActivity extends AppCompatActivity {
 

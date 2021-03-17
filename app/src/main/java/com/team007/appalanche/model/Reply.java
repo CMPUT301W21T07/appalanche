@@ -1,13 +1,12 @@
-package com.team007.appalanche;
+package com.team007.appalanche.model;
 
-import com.team007.appalanche.User;
-
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * This class represents a reply whenever a user wants to add a reply to a specific experiment question
  */
-public class Reply {
+public class Reply implements Serializable {
     private String replyText;
     private User userReplied;
     private Date dateReplied;

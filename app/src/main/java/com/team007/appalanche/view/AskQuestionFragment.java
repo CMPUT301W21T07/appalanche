@@ -1,4 +1,4 @@
-package com.team007.appalanche;
+package com.team007.appalanche.view;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -15,8 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.team007.appalanche.R;
-import com.team007.appalanche.Question;
-import com.team007.appalanche.User;
+import com.team007.appalanche.model.Question;
+import com.team007.appalanche.model.User;
 
 import java.util.Date;
 
