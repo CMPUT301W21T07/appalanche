@@ -8,13 +8,13 @@ import java.util.Date;
 
 public abstract class Trial {
     private Date date;
-    private ArrayList<Location> locationList = new ArrayList<Location>();
+    private Location location = new Location();
     private Experimenter userAddedTrial;
     /* constructor function for the trial class*/
 
-    public Trial(Experimenter userAddedTrial, ArrayList<Location> locationList, Date date) {
+    public Trial(Experimenter userAddedTrial, Location location, Date date) {
         this.userAddedTrial = userAddedTrial;
-        this.locationList = locationList;
+        this.location = location;
         this.date = date;
     }
     /*getters and setters for the varialbles in the trial class*/
@@ -22,8 +22,8 @@ public abstract class Trial {
         return date;
     }
 
-    public ArrayList<Location> getLocationList() {
-        return locationList;
+    public Location getLocationList() {
+        return location;
     }
 
     public Experimenter getUserAddedTrial() {
@@ -34,8 +34,8 @@ public abstract class Trial {
         this.date = date;
     }
 
-    public void setLocationList(ArrayList<Location> locationList) {
-        this.locationList = locationList;
+    public void setLocationList(Location location) {
+        this.location = location;
     }
 
     public void setUserAddedTrial(Experimenter userAddedTrial) {

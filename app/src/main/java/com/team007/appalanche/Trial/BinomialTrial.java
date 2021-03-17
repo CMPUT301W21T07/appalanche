@@ -9,8 +9,8 @@ import java.util.Date;
 public class BinomialTrial extends Trial{
     private boolean outcome;
     /*Constructor function for the binomial trial class*/
-    public BinomialTrial(Experimenter userAddedTrial, ArrayList<Location> locationList, Date date) {
-        super(userAddedTrial, locationList, date);
+    public BinomialTrial(Experimenter userAddedTrial, Location location, Date date) {
+        super(userAddedTrial, location, date);
     }
     /*GETTER AND SETTER FOR THE CLASS THAT GIVES US THE BOOLEAN OUTCOME OF THE TRIAL*/
     public void setOutcome(boolean outcome){
