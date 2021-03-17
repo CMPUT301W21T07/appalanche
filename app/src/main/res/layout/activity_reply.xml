@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.ReplyActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="top">
+
+        <TextView
+            android:id="@+id/display_question"
+            android:text="This is a sample question. What would this look like in XML?"
+            android:textSize="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"/>
+
+        <ListView
+            android:id="@+id/reply_list"
+            android:layout_below="@id/display_question"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true">
+        </ListView>
+
+
+        <EditText
+            android:id="@+id/reply_message"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="100dp"
+            android:layout_marginRight="100dp"
+            android:layout_marginBottom="308dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Enter a reply..."
+            android:inputType="textCapWords"
+            android:textColor="#000000"
+            android:translationY="300sp"
+            tools:ignore="ObsoleteLayoutParam" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom">
+
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Go Back"/>
+
+        <Button
+            android:id="@+id/reply_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reply"
+            app:backgroundTint="#000000" />
+
+    </RelativeLayout>
+</RelativeLayout>
+
+
