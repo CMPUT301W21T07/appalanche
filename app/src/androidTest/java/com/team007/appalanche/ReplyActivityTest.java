@@ -11,6 +11,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.robotium.solo.Solo;
 import com.team007.appalanche.model.Question;
+import com.team007.appalanche.model.Reply;
 import com.team007.appalanche.view.ReplyActivity;
 
 import org.junit.Before;
@@ -44,7 +45,9 @@ public class ReplyActivityTest {
         solo.clearEditText((EditText)solo.getView(R.id.reply_message));
 
         ReplyActivity activity = (ReplyActivity) solo.getCurrentActivity();
-//        final ListView replyList = activity.?;
+        final ListView replyListView = activity.replyListView; // get the ListView
+        Reply testReply = (Reply) replyListView.getItemAtPosition(0);
+        testReply.getReplyText();
 
         // check that first list item is "Great idea!"
 

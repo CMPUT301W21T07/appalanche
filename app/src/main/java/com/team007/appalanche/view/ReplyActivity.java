@@ -36,9 +36,9 @@ public class ReplyActivity extends AppCompatActivity {
     private EditText replyMessage;
 
     // list display tools
-     private ListView replyListView;
-     private ArrayAdapter<Reply> replyAdapter;
-     private ArrayList<Reply> replyDataList;
+    public ListView replyListView; // public so that can be used in ReplyActivityTest
+    private ArrayAdapter<Reply> replyAdapter;
+    private ArrayList<Reply> replyDataList;
     private FirebaseFirestore db;
     private ReplyListController replyListController;
 
