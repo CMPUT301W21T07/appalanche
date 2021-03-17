@@ -1,6 +1,9 @@
 package com.team007.appalanche.barcode;
 
 import com.team007.appalanche.Location;
+import com.team007.appalanche.Experiment.*;
+import com.team007.appalanche.User.*;
+import com.team007.appalanche.Trial.*;
 
 import java.util.Date;
 
@@ -33,7 +36,7 @@ public class MeasurementBarcode extends Barcode {
      */
     public MeasurementTrial scan(Experimenter experimenter, Location location) {
         Date date = new Date();
-        MeasurementTrial trial = new MeasurementTrial(date, experimenter, location, result);
+        MeasurementTrial trial = new MeasurementTrial(experimenter, location, date);
         return trial;
     }
 

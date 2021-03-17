@@ -1,6 +1,9 @@
 package com.team007.appalanche.qrcode;
 
 import com.team007.appalanche.Location;
+import com.team007.appalanche.Experiment.*;
+import com.team007.appalanche.User.*;
+import com.team007.appalanche.Trial.*;
 
 import java.util.Date;
 
@@ -21,7 +24,7 @@ public class BinomialQRCode extends QRCode {
     //@param location: the location/coordinates where the QR code is scanned
     public BinomialTrial scanQRCode(Experimenter experimenter, Location location) {
         Date date = new Date();
-        BinomialTrial trial = new BinomialTrial(date, experimenter, location, result);
+        BinomialTrial trial = new BinomialTrial(experimenter, location, date);
         return trial;
     }
 }

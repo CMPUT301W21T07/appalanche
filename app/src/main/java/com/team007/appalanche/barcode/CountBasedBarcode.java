@@ -1,6 +1,9 @@
 package com.team007.appalanche.barcode;
 
 import com.team007.appalanche.Location;
+import com.team007.appalanche.Experiment.*;
+import com.team007.appalanche.User.*;
+import com.team007.appalanche.Trial.*;
 
 import java.util.Date;
 
@@ -29,7 +32,7 @@ public class CountBasedBarcode extends Barcode {
      */
     public CountBasedTrial scan(Experimenter experimenter, Location location) {
         Date date = new Date();
-        CountBasedTrial trial = new CountBasedTrial(date, experimenter, location);
+        CountBasedTrial trial = new CountBasedTrial(experimenter, location, date);
         return trial;
     }
 }

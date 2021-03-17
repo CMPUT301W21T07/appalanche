@@ -1,6 +1,9 @@
 package com.team007.appalanche.qrcode;
 
 import com.team007.appalanche.Location;
+import com.team007.appalanche.Experiment.*;
+import com.team007.appalanche.Trial.*;
+import com.team007.appalanche.User.*;
 
 import java.util.Date;
 
@@ -21,7 +24,7 @@ public class CountBasedQRCode extends QRCode {
     //@param location: the location/coordinates where the QR code is scanned
     public CountBasedTrial scanQRCode(Experimenter experimenter, Location location) {
         Date date = new Date();
-        CountBasedTrial trial = new CountBasedTrial(date, experimenter, location);
+        CountBasedTrial trial = new CountBasedTrial(experimenter, location, date);
         return trial;
     }
 }

@@ -1,6 +1,9 @@
 package com.team007.appalanche.barcode;
 
 import com.team007.appalanche.Location;
+import com.team007.appalanche.Experiment.*;
+import com.team007.appalanche.User.*;
+import com.team007.appalanche.Trial.*;
 
 import java.util.Date;
 
@@ -34,7 +37,7 @@ public class BinomialBarcode extends Barcode {
      */
     public BinomialTrial scan(Experimenter experimenter, Location location) {
         Date date = new Date();
-        BinomialTrial trial = new BinomialTrial(date, experimenter, location, result);
+        BinomialTrial trial = new BinomialTrial(experimenter, location, date);
         return trial;
     }
 

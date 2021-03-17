@@ -1,6 +1,9 @@
 package com.team007.appalanche.barcode;
 
 import com.team007.appalanche.Location;
+import com.team007.appalanche.Experiment.*;
+import com.team007.appalanche.User.*;
+import com.team007.appalanche.Trial.*;
 
 import java.util.Date;
 
@@ -31,9 +34,9 @@ public class NonNegBarcode extends Barcode {
      * @param location The location that the barcode was scanned at
      * @return Returns the constructed non-negative trial
      */
-    public NonNegCountTrial scan(Experimenter experimenter, Location location) {
+    public NonNegativeCountTrial scan(Experimenter experimenter, Location location) {
         Date date = new Date();
-        NonNegCountTrial trial = new NonNegCountTrial(date, experimenter, location, result);
+        NonNegativeCountTrial trial = new NonNegativeCountTrial(experimenter, location, date);
         return trial;
     }
 
