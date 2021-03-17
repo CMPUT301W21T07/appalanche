@@ -1,4 +1,4 @@
-package com.team007.appalanche;
+package com.team007.appalanche.custom;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.team007.appalanche.R;
-import com.team007.appalanche.Question;
+import com.team007.appalanche.model.Question;
 
 import java.util.ArrayList;
 

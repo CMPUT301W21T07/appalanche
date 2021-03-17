@@ -1,4 +1,6 @@
-package com.team007.appalanche;
+package com.team007.appalanche.controller;
+
+import com.team007.appalanche.model.Question;
 
 import java.util.ArrayList;
 

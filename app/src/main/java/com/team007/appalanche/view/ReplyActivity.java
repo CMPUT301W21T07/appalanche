@@ -1,4 +1,4 @@
-package com.team007.appalanche;
+package com.team007.appalanche.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,8 +13,13 @@ import android.widget.TextView;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.team007.appalanche.R;
+import com.team007.appalanche.model.Question;
+import com.team007.appalanche.model.Reply;
+import com.team007.appalanche.model.User;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Functionally, this is a list whose
@@ -58,7 +63,7 @@ public class ReplyActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (replyMessage != null){
                     String replyString = replyMessage.getText().toString();
-                    Reply newReply = new Reply(replyString, replyingUser);
+                    Reply newReply = new Reply(replyString, replyingUser, new Date());
                     replyMessage.getText().clear();
                     originalQuestion.addReply(newReply);
                 }

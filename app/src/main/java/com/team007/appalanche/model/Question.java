@@ -1,15 +1,13 @@
-package com.team007.appalanche;
+package com.team007.appalanche.model;
 
-import com.team007.appalanche.Reply;
-import com.team007.appalanche.User;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * This class represents a question that a user wants to ask about an Experiment
  */
-public class Question {
+public class Question implements Serializable {
     private String content;
     private User userPostedQuestion;
     private Date dateAsked;
