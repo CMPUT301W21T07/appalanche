@@ -23,6 +23,11 @@ public class Reply implements Serializable {
         this.userReplied = userReplied;
     }
 
+    /**
+     * Returns a user's reply message.
+     * @return
+     *  replyText
+     */
     public String getReplyText() {
         return replyText;
     }
