@@ -11,7 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.firebase.firestore.FirebaseFirestore;
+// import com.google.firebase.firestore.FirebaseFirestore; TODO: hook up firebase
 import com.team007.appalanche.model.Experiment;
 import com.team007.appalanche.R;
 import com.team007.appalanche.custom.CustomList;
@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     ListView expList;
     ArrayAdapter<Experiment> expAdapter;
     ArrayList<Experiment> ExperimentDataList;
-    FirebaseFirestore db;
+    // FirebaseFirestore db; // TODO: hook up firebase
 
 
     @Override

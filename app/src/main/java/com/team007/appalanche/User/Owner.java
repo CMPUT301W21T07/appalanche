@@ -1,5 +1,7 @@
 package com.team007.appalanche.User;
 
+import com.team007.appalanche.Experiment.*;
+
 public class Owner extends User {
     public Owner(String ID, Profile profile) {
         super(ID, profile);

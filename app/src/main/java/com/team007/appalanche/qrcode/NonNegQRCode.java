@@ -1,6 +1,9 @@
 package com.team007.appalanche.qrcode;
 
 import com.team007.appalanche.Location;
+import com.team007.appalanche.Experiment.*;
+import com.team007.appalanche.User.*;
+import com.team007.appalanche.Trial.*;
 
 import java.util.Date;
 
@@ -19,9 +22,9 @@ public class NonNegQRCode extends QRCode {
     //The scanQRCode method creates and returns a non-negative count trial
     //@param experimenter: the user conducting the trial
     //@param location: the location/coordinates where the QR code is scanned
-    public NonNegCountTrial scanQRCode(Experimenter experimenter, Location location) {
+    public NonNegativeCountTrial scanQRCode(Experimenter experimenter, Location location) {
         Date date = new Date();
-        NonNegCountTrial trial = new NonNegCountTrial(date, experimenter, location, result);
+        NonNegativeCountTrial trial = new NonNegativeCountTrial(experimenter, location, date);
         return trial;
     }
 }
