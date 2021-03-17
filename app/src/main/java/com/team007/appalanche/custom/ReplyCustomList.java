@@ -16,8 +16,8 @@ import java.util.ArrayList;
 public class ReplyCustomList extends ArrayAdapter<Reply> {
     private ArrayList<Reply> replies;
     private Context context;
-    public ReplyCustomList(Context context, ArrayList<Reply> Replies) {
-        super(context, 0, Replies);
+    public ReplyCustomList(Context context, ArrayList<Reply> replies) {
+        super(context, 0, replies);
         this.context = context;
         this.replies = replies;
     }
