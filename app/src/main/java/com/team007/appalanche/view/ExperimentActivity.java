@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -25,6 +28,36 @@ public class ExperimentActivity extends AppCompatActivity {
                 openQuestionActivity();
             }
         });
+    }
+
+    //When the 3-dot options menu is selected on an experiment page
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.experiment_settings, menu);
+        return true;
+    }
+
+    // Direct user depending on which menu item they select
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemID = item.getItemId();
+        switch (itemID) {
+            //selecting "Generate CR Code" menu item
+            case R.id.generate_qr_code:
+                // TODO: implement generating QR Code
+                return true;
+            //selecting "Scan QR Code" menu item
+            case R.id.scan_qr_code:
+                // TODO: implement scanning QR Code
+                // Hindle answer my question pls I'm so confused
+                return true;
+            // selecting "Scan QR Code" menu item
+            case R.id.scan_barcode:
+                // TODO: implement scanning barcode
+                return true;
+            default:
+                return false;
+        }
     }
 
     public void openQuestionActivity() {
