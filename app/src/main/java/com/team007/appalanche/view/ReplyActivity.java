@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.team007.appalanche.R;
+import com.team007.appalanche.custom.ReplyCustomList;
 import com.team007.appalanche.model.Question;
 import com.team007.appalanche.model.Reply;
 import com.team007.appalanche.model.User;
@@ -27,10 +28,11 @@ import java.util.Date;
  */
 public class ReplyActivity extends AppCompatActivity {
 
+    private Button backButton;
     private EditText replyMessage;
 
     // list display tools
-    private ListView replyList;
+    private ListView replyListView;
     private ArrayAdapter<Reply> replyAdapter;
     private ArrayList<Reply> replyDataList;
     private FirebaseFirestore db;
@@ -45,11 +47,15 @@ public class ReplyActivity extends AppCompatActivity {
         final CollectionReference collectionReference = db.collection("Replies");
 
         replyMessage = findViewById(R.id.reply_message);
-        replyList = findViewById(R.id.reply_list);
+        replyListView = findViewById(R.id.reply_list);
 
         Intent intent = getIntent();
         Question originalQuestion = (Question) intent.getSerializableExtra("Question");
         User replyingUser = (User) intent.getSerializableExtra("Replying User");
+
+        replyDataList = new ArrayList<>();
+        replyAdapter = new ReplyCustomList(this, originalQuestion.getReplies());
+        replyListView.setAdapter(replyAdapter);
 
         TextView displayQuestion = findViewById(R.id.display_question);
 
@@ -66,8 +72,16 @@ public class ReplyActivity extends AppCompatActivity {
                     Reply newReply = new Reply(replyString, replyingUser, new Date());
                     replyMessage.getText().clear();
                     originalQuestion.addReply(newReply);
+                    replyAdapter.notifyDataSetChanged();
                 }
-                //todo: UI part for displaying list of replies
+            }
+        });
+
+        final Button backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

@@ -42,4 +42,10 @@ public class Question implements Serializable {
     public void addReply(Reply reply) {
         replies.add(reply);
     }
+
+
+    public ArrayList<Reply> getReplies() {
+        return replies;
+    }
+    
 }

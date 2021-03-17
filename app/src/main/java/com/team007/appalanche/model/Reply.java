@@ -22,4 +22,8 @@ public class Reply implements Serializable {
         this.replyText = replyText;
         this.userReplied = userReplied;
     }
+
+    public String getReplyText() {
+        return replyText;
+    }
 }

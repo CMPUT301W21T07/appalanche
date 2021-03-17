@@ -44,7 +44,7 @@
             android:hint="Enter a reply..."
             android:inputType="textCapWords"
             android:textColor="#000000"
-            android:translationY="630sp"
+            android:translationY="300sp"
             tools:ignore="ObsoleteLayoutParam" />
 
 
