@@ -1,5 +1,10 @@
 package com.team007.appalanche.view;
 
+
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.team007.appalanche.model.Question;
 import com.team007.appalanche.custom.QuestionCustomList;
 import com.team007.appalanche.R;
+
 import com.team007.appalanche.controller.QuestionListController;
 import com.team007.appalanche.model.User;
 
@@ -105,6 +111,5 @@ public class QuestionActivity extends AppCompatActivity implements AskQuestionFr
     }
 
 
-
-
 }
+
