@@ -109,7 +109,5 @@ public class QuestionActivity extends AppCompatActivity implements AskQuestionFr
         questionAdapter.notifyDataSetChanged();
 
     }
-
-
 }
 
