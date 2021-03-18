@@ -36,7 +36,6 @@ import java.util.Date;
  */
 public class ReplyActivity extends AppCompatActivity {
 
-    private Button backButton;
     private EditText replyMessage;
 
     // list display tools
