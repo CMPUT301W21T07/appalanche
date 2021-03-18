@@ -1,23 +1,25 @@
 package com.team007.appalanche.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.team007.appalanche.R;
+import com.team007.appalanche.User.User;
+import com.team007.appalanche.controller.ReplyListController;
 import com.team007.appalanche.custom.ReplyCustomList;
-import com.team007.appalanche.model.Question;
-import com.team007.appalanche.model.Reply;
-import com.team007.appalanche.model.User;
+import com.team007.appalanche.question.Question;
+import com.team007.appalanche.question.Reply;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,15 +34,19 @@ public class ReplyActivity extends AppCompatActivity {
     private EditText replyMessage;
 
     // list display tools
-    private ListView replyListView;
+    public ListView replyListView; // public so that can be used in ReplyActivityTest
     private ArrayAdapter<Reply> replyAdapter;
     private ArrayList<Reply> replyDataList;
     private FirebaseFirestore db;
+    private ReplyListController replyListController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reply);
+
+
+       
 
         // Firestore stuff
         db = FirebaseFirestore.getInstance();
@@ -50,20 +56,25 @@ public class ReplyActivity extends AppCompatActivity {
         replyListView = findViewById(R.id.reply_list);
 
         Intent intent = getIntent();
-        Question originalQuestion = (Question) intent.getSerializableExtra("Question");
+        Question question = (Question) intent.getSerializableExtra("Question");
         User replyingUser = (User) intent.getSerializableExtra("Replying User");
 
-        replyDataList = new ArrayList<>();
-        replyAdapter = new ReplyCustomList(this, originalQuestion.getReplies());
+        replyListController = new ReplyListController(question);
+
+
+        replyAdapter = new ReplyCustomList(this, replyListController.getQuestion().getReplies());
+        replyListView = findViewById(R.id.reply_list);
         replyListView.setAdapter(replyAdapter);
 
+
+        // DISPLAY QESTION
         TextView displayQuestion = findViewById(R.id.display_question);
 
-        String questionString = originalQuestion.getContent();
+        String questionString = question.getContent();
 
         displayQuestion.setText(questionString);
 
-        final Button replyButton = findViewById(R.id.reply_button);
+        final ImageButton replyButton = findViewById(R.id.reply_button);
         replyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,19 +82,22 @@ public class ReplyActivity extends AppCompatActivity {
                     String replyString = replyMessage.getText().toString();
                     Reply newReply = new Reply(replyString, replyingUser, new Date());
                     replyMessage.getText().clear();
-                    originalQuestion.addReply(newReply);
+                    replyListController.getQuestion().addReply(newReply);
+                    //replyDataList.add(newReply);
                     replyAdapter.notifyDataSetChanged();
                 }
             }
         });
 
-        final Button backButton = findViewById(R.id.back_button);
+        final ImageButton backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+
+
     }
 }
 

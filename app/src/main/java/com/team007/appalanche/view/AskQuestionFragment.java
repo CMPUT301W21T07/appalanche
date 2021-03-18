@@ -15,8 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.team007.appalanche.R;
-import com.team007.appalanche.model.Question;
-import com.team007.appalanche.model.User;
+import com.team007.appalanche.User.Experimenter;
+import com.team007.appalanche.question.Question;
 
 import java.util.Date;
 
@@ -40,7 +40,7 @@ public class AskQuestionFragment extends DialogFragment  {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
-                        Question newQuestion = new Question(askQuestion.getText().toString(), new User("Tom"), new Date());
+                        Question newQuestion = new Question(askQuestion.getText().toString(), new Experimenter("123", null), new Date());
                         listener.askQuestion(newQuestion);
                     }
                 })

@@ -2,7 +2,6 @@ package com.team007.appalanche.view;
 
 
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -13,15 +12,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.team007.appalanche.model.Question;
+import com.team007.appalanche.User.User;
+import com.team007.appalanche.question.Question;
 import com.team007.appalanche.custom.QuestionCustomList;
 import com.team007.appalanche.R;
 
 import com.team007.appalanche.controller.QuestionListController;
-import com.team007.appalanche.model.User;
 
 
 public class QuestionActivity extends AppCompatActivity implements AskQuestionFragment.OnFragmentInteractionListener {
@@ -59,17 +56,17 @@ public class QuestionActivity extends AppCompatActivity implements AskQuestionFr
 //            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,@Nullable FirebaseFirestoreException e) {
 //                // clear the old list
 //                questionList.clearQuestionList();
-//                if (e != null){
-//                    //Toast.makeText(QuestionActivity.this, " deleted", Toast.LENGTH_SHORT).show();
-//                    return;
-//                } else {
+////                if (e != null){
+////                    //Toast.makeText(QuestionActivity.this, " deleted", Toast.LENGTH_SHORT).show();
+////                    return;
+////                } else {
 //                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
 //                    Log.d(TAG, String.valueOf(doc.getData().get("user_posted_question")));
 //                    String question = doc.getId();
 //                    String user = (String) doc.getData().get("user_posted_question");
-//                    questionList.addQuestion(new Question(question, new User(user)));}
+//                    questionList.addQuestion(new Question(question, new User(user), new Date()));}
 //
-//                }
+//                //}
 //                questionAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.
 //            }
 //        });

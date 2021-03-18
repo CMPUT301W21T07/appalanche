@@ -50,7 +50,7 @@
                 android:layout_height="25dp"
                 android:layout_gravity="right"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/ic_action_name"
+                android:src="@drawable/replies"
                 >
             </ImageView>
         </RelativeLayout>
