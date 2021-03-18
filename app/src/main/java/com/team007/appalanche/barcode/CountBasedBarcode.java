@@ -1,5 +1,6 @@
 package com.team007.appalanche.barcode;
 
+import com.google.gson.Gson;
 import com.team007.appalanche.Location;
 import com.team007.appalanche.Experiment.*;
 import com.team007.appalanche.User.*;
@@ -34,5 +35,14 @@ public class CountBasedBarcode extends Barcode {
         Date date = new Date();
         CountBasedTrial trial = new CountBasedTrial(experimenter, location, date);
         return trial;
+    }
+
+    /**
+     * This serializes the barcode object and returns it as a string
+     * @return The serialized barcode object
+     */
+    public String serialize() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }
