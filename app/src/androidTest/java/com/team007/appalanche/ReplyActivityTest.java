@@ -10,15 +10,12 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.robotium.solo.Solo;
-import com.team007.appalanche.model.Question;
-import com.team007.appalanche.model.Reply;
+import com.team007.appalanche.question.Reply;
 import com.team007.appalanche.view.ReplyActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
-import java.util.Date;
 
 public class ReplyActivityTest {
     private Solo solo;
@@ -47,12 +44,7 @@ public class ReplyActivityTest {
         ReplyActivity activity = (ReplyActivity) solo.getCurrentActivity();
         final ListView replyListView = activity.replyListView; // get the ListView
         Reply testReply = (Reply) replyListView.getItemAtPosition(0);
-        testReply.getReplyText();
-
-        // check that first list item is "Great idea!"
-
-
-
+        assert(testReply.getReplyText().equals("Great idea!")); // check that first list item is "Great idea!"
     }
 
 }

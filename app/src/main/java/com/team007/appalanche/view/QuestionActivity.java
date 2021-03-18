@@ -2,34 +2,23 @@ package com.team007.appalanche.view;
 
 
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.team007.appalanche.model.Question;
+import com.team007.appalanche.User.User;
+import com.team007.appalanche.question.Question;
 import com.team007.appalanche.custom.QuestionCustomList;
 import com.team007.appalanche.R;
 
 import com.team007.appalanche.controller.QuestionListController;
-import com.team007.appalanche.model.User;
-
-import java.util.Date;
 
 
 public class QuestionActivity extends AppCompatActivity implements AskQuestionFragment.OnFragmentInteractionListener {

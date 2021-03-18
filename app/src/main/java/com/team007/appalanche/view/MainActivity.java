@@ -12,11 +12,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 // import com.google.firebase.firestore.FirebaseFirestore; TODO: hook up firebase
-import com.team007.appalanche.model.Experiment;
 import com.team007.appalanche.R;
 import com.team007.appalanche.custom.CustomList;
 
 import java.util.ArrayList;
+import com.team007.appalanche.Experiment.Experiment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         ExperimentDataList = new ArrayList<>();
-        Experiment newExp = new Experiment("How many jelly beans can I fit into my month?");
+        Experiment newExp = new Experiment("How many jelly beans can I fit in my mouth?", "Alberta", "NonNegTrial",2, false, true, null);
         ExperimentDataList.add(newExp);
         // Set up the adapter for Experiment List View
         expAdapter = new CustomList(this, ExperimentDataList);

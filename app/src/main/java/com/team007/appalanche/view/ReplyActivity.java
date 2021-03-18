@@ -1,7 +1,5 @@
 package com.team007.appalanche.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,16 +10,16 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.team007.appalanche.R;
-import com.team007.appalanche.controller.QuestionListController;
+import com.team007.appalanche.User.User;
 import com.team007.appalanche.controller.ReplyListController;
-import com.team007.appalanche.custom.QuestionCustomList;
 import com.team007.appalanche.custom.ReplyCustomList;
-import com.team007.appalanche.model.Question;
-import com.team007.appalanche.model.Reply;
-import com.team007.appalanche.model.User;
+import com.team007.appalanche.question.Question;
+import com.team007.appalanche.question.Reply;
 
 import java.util.ArrayList;
 import java.util.Date;

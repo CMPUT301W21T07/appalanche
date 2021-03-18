@@ -1,6 +1,6 @@
 package com.team007.appalanche;
 
-import com.team007.appalanche.model.Reply;
+import com.team007.appalanche.question.Reply;
 
 import org.junit.Test;
 
