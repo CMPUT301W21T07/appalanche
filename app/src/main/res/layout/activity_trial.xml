@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -30,6 +30,7 @@
             >
         </ImageView>
     </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,10 +38,8 @@
         android:id="@+id/description"
         android:textSize="20dp"
         android:text="Experiment Description"
-
         >
     </TextView>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,6 +59,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/trialButton"
             android:text="Trials"
+            android:layout_gravity="bottom|end"
+            android:backgroundTint="#bebebe"
+            android:textColor="@color/black"
             >
         </Button>
         <Button
@@ -67,38 +69,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text = "Question"
-            android:textColor="@color/black"
-            android:layout_gravity="bottom|end"
-            android:backgroundTint="#bebebe">
+            >
 
         </Button>
-
-
     </LinearLayout>
     <Button
-        android:id="@+id/question"
+        android:id="@+id/addTrialButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:text=" ASK NEW QUESTION"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="187dp">
-
+        android:text=" ADD TRIAL">
     </Button>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="100dp"
+        android:src="@drawable/map" />
+
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="20dp"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip"
-        android:paddingTop="1dip"
-
-        android:id="@+id/questionListView"
+        android:layout_height="wrap_content"
+        android:id="@+id/trialList"
         >
     </ListView>
+
 
 </LinearLayout>
