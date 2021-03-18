@@ -1,6 +1,9 @@
 package com.team007.appalanche.Experiment;
 
 import com.team007.appalanche.User.User;
+import com.team007.appalanche.barcode.MeasurementBarcode;
+import com.team007.appalanche.barcode.NonNegBarcode;
+import com.team007.appalanche.qrcode.QRCode;
 
 public class NonNegativeCountExperiment extends Experiment implements ExperimentInterface {
     public String trialType = "NonNegativeCount";
@@ -25,7 +28,7 @@ public class NonNegativeCountExperiment extends Experiment implements Experiment
      * function to obtain experiment statistics
      */
     @Override
-    public void ObtainStatistics() {
+    public void obtainStatistics() {
         // TODO: implement
     }
 
@@ -65,7 +68,19 @@ public class NonNegativeCountExperiment extends Experiment implements Experiment
      * function to get experiment QR code
      */
     @Override
-    public void obtainQR() {
+    public QRCode generateQRCode() {
         // TODO: implement
+        return null;
+    }
+
+    /**
+     * function to create a Barcode
+     * @param barcode
+     *  The barcode that I want to register
+     * @param intendedResult
+     *  The result that I want the registered barcode to encode
+     */
+    public NonNegBarcode registerBarcode(int barcode, int intendedResult) {
+        return new NonNegBarcode(this, barcode, intendedResult);
     }
 }

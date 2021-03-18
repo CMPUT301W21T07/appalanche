@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         // Obtain the IDs
         expList = findViewById(R.id.expList);
 
-
         ExperimentDataList = new ArrayList<>();
         Experiment newExp = new Experiment("How many jelly beans can I fit in my mouth?", "Alberta", "NonNegTrial",2, false, true, null);
         ExperimentDataList.add(newExp);
@@ -55,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     public void openExperimentActivity() {
         Intent intent = new Intent(this, ExperimentActivity.class);
         startActivityForResult(intent,1);

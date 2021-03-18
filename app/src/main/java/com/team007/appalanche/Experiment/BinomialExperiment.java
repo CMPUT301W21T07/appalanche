@@ -1,6 +1,9 @@
 package com.team007.appalanche.Experiment;
 
 import com.team007.appalanche.User.User;
+import com.team007.appalanche.barcode.Barcode;
+import com.team007.appalanche.barcode.BinomialBarcode;
+import com.team007.appalanche.qrcode.QRCode;
 
 public class BinomialExperiment extends Experiment implements ExperimentInterface {
     public String trialType;
@@ -27,7 +30,7 @@ public class BinomialExperiment extends Experiment implements ExperimentInterfac
      * function to obtain experiment statistics
      */
     @Override
-    public void ObtainStatistics() {
+    public void obtainStatistics() {
         // TODO: implement
     }
 
@@ -67,7 +70,19 @@ public class BinomialExperiment extends Experiment implements ExperimentInterfac
      * function to get experiment QR code
      */
     @Override
-    public void obtainQR() {
+    public QRCode generateQRCode() {
         // TODO: implement
+        return null;
+    }
+
+    /**
+     * function to create a Barcode
+     * @param barcode
+     *  The barcode that I want to register
+     * @param intendedResult
+     *  The result that I want the registered barcode to encode
+     */
+    public BinomialBarcode registerBarcode(int barcode, boolean intendedResult) {
+        return new BinomialBarcode(this, barcode, intendedResult);
     }
 }
