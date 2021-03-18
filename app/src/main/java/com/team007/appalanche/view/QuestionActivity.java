@@ -56,30 +56,33 @@ public class QuestionActivity extends AppCompatActivity implements AskQuestionFr
         questionListView.setAdapter(questionAdapter);
 
 
-        // Access a Cloud Firestore instance from your Activity
-        db = FirebaseFirestore.getInstance();
-        // Get a top-level reference to the collection.
-        final CollectionReference collectionReference = db.collection("Questions");
-
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                // clear the old list
-                questionList.clearQuestionList();
-//                if (e != null){
-//                    //Toast.makeText(QuestionActivity.this, " deleted", Toast.LENGTH_SHORT).show();
-//                    return;
-//                } else {
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
-                    Log.d(TAG, String.valueOf(doc.getData().get("user_posted_question")));
-                    String question = doc.getId();
-                    String user = (String) doc.getData().get("user_posted_question");
-                    questionList.addQuestion(new Question(question, new User(user), new Date()));}
-
-                //}
-                questionAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.
-            }
-        });
+//        // Access a Cloud Firestore instance from your Activity
+//        db = FirebaseFirestore.getInstance();
+//        // Get a top-level reference to the collection.
+//        final CollectionReference collectionReference = db.collection("Questions");
+//
+//        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//
+//            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+//                // clear the old list
+//                questionList.clearQuestionList();
+////                if (e != null){
+////                    //Toast.makeText(QuestionActivity.this, " deleted", Toast.LENGTH_SHORT).show();
+////                    return;
+////                } else {
+//                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+//                    Log.d(TAG, String.valueOf(doc.getData().get("user_posted_question")));
+//                    String question = doc.getId();
+//                    String user = (String) doc.getData().get("user_posted_question");
+//
+//                    questionList.addQuestion(new Question(question, new User(user, null), new Date()));}
+//
+//
+//                //}
+//                questionAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.
+//            }
+//        });
 
 
         // CLICK ON BACK BUTTON
@@ -87,7 +90,7 @@ public class QuestionActivity extends AppCompatActivity implements AskQuestionFr
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(QuestionActivity.this, ExperimentActivity.class);
+                Intent intent = new Intent(QuestionActivity.this, MainActivity.class);
                 QuestionActivity.this.startActivity(intent);
             }
         });
@@ -105,7 +108,8 @@ public class QuestionActivity extends AppCompatActivity implements AskQuestionFr
         overviewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               //FILL IN HERE
+               Intent overviewIntent = new Intent(QuestionActivity.this, ExperimentActivity.class);
+               QuestionActivity.this.startActivity(overviewIntent);
             }
         });
 
@@ -115,12 +119,13 @@ public class QuestionActivity extends AppCompatActivity implements AskQuestionFr
         trialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //FILL IN HERE
+                Intent trialIntent = new Intent(QuestionActivity.this, TrialActivity.class);
+                QuestionActivity.this.startActivity(trialIntent);
             }
         });
         // WE'RE AT QUESTION LIST PAGE, NO NEED TO SET UP QUESTION BUTTON
 
-        // CLICK BUTTON ASK QUESTION TO ASK A NEW QUESTION
+        // CLICK BUTTON "ASK QUESTION" TO ASK A NEW QUESTION
         final Button askQuestionButton;
         askQuestionButton = findViewById(R.id.question);
         askQuestionButton.setOnClickListener(new View.OnClickListener() {
@@ -143,7 +148,7 @@ public class QuestionActivity extends AppCompatActivity implements AskQuestionFr
                 QuestionActivity.this.startActivity(intent);
             }
         });
-    }
+    } // end of onCreate()
 
     @Override
     public void askQuestion(Question question) {

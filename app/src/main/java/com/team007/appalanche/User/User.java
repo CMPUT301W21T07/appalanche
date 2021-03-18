@@ -14,7 +14,7 @@ public class User implements Serializable {
      * @param ID
      * @param profile
      */
-    User(String ID, Profile profile) {
+    public User(String ID, Profile profile) {
         this.ID = ID;
         this.profile = profile;
 

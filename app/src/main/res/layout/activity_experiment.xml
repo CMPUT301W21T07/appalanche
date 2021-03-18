@@ -117,15 +117,6 @@
         android:textSize="10dp"
         android:paddingLeft="15dp"
         android:textColor="@color/black" />
-    <Button
-        android:id="@+id/addTrialButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:text=" ADD TRIAL">
-    </Button>
-
-
 
         <com.jjoe64.graphview.GraphView
             android:layout_width="match_parent"

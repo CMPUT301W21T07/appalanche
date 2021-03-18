@@ -26,6 +26,7 @@ public class TrialActivity extends AppCompatActivity {
     private ListView trialListView;
     private ArrayAdapter<Trial> trialAdapter;
     private ArrayList<Trial> trialDataList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,9 +73,9 @@ public class TrialActivity extends AppCompatActivity {
             }
         });
 
-        // SET UP LISTVIEW
-        // A LIST VIEW OF QUESTION LIST
-        // MIGHT USE A CONTROLLER HERE TO ADD ITEM INTO THE LIST
+//         SET UP LISTVIEW
+//         A LIST VIEW OF QUESTION LIST
+//         MIGHT USE A CONTROLLER HERE TO ADD ITEM INTO THE LIST
 //        trialDataList = new ArrayList<Trial>();
 //
 //        // set adapter to the new TrialCustomList
@@ -83,7 +84,7 @@ public class TrialActivity extends AppCompatActivity {
 //        trialListView = findViewById(R.id.trialList);
 //        // Set the content for TrialListView
 //        trialListView.setAdapter(trialAdapter);
-
+//
 
     }
 
@@ -102,3 +103,7 @@ public class TrialActivity extends AppCompatActivity {
     }
 
 }
+
+
+
+

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.team007.appalanche.R;
 
@@ -21,14 +22,7 @@ public class ExperimentActivity extends AppCompatActivity {
 
         // NO NEED TO SET UP OVERVIEW, WE'RE ON OVERVIEW PAGE
 
-        // if TRIAL BUTTON IS CLICKED
-        final Button trialButton = findViewById(R.id.trialButton);
-        trialButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openTrialActivity();
-            }
-        });
+
         // IF QUESTION BUTTON IS CLICKED
         final Button questionButton;
         questionButton = findViewById(R.id.questionButton);
@@ -39,15 +33,38 @@ public class ExperimentActivity extends AppCompatActivity {
             }
         });
 
+        // CLICK ON BACK BUTTON
+        final ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ExperimentActivity.this, MainActivity.class);
+                ExperimentActivity.this.startActivity(intent);
+            }
+        });
 
-    }
+        // CLICK ON TRIALS BUTTON
+        final Button trialButton = findViewById(R.id.trialButton);
+        trialButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent trialIntent = new Intent(ExperimentActivity.this, TrialActivity.class);
+                ExperimentActivity.this.startActivity(trialIntent);
+            }
+        });
+
+    } // end of onCreate()
+
+
 
     public void openQuestionActivity() {
         Intent intent = new Intent(this, QuestionActivity.class);
         startActivityForResult(intent,1);
     }
+
     public void  openTrialActivity() {
         Intent intent = new Intent(this, TrialActivity.class);
         startActivityForResult(intent,2);
     }
 }
+
