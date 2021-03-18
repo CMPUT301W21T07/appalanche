@@ -31,8 +31,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Functionally, this is a list whose
+ * This is a list whose
  * reply elements are displayed under the printed question.
+ * Users can add replies to that list using an EditText or
+ * they can return to QuestionActivity using the back button.
  */
 public class ReplyActivity extends AppCompatActivity {
 
@@ -44,99 +46,91 @@ public class ReplyActivity extends AppCompatActivity {
     private ArrayList<Reply> replyDataList;
     private FirebaseFirestore db;
     private ReplyListController replyListController;
+    private String TAG = "Sample";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reply);
 
-
-       
-
-
-
         replyMessage = findViewById(R.id.reply_message);
         replyListView = findViewById(R.id.reply_list);
 
+        ///////////////////////RECEIVING INTENTS//////////////////////////////////////
         Intent intent = getIntent();
         Question question = (Question) intent.getSerializableExtra("Question");
         User replyingUser = (User) intent.getSerializableExtra("Replying User");
         int index = intent.getIntExtra("Index", 0);
+        //////////////////////////////////////////////////////////////////////////////
 
+
+        ///////////////////////REPLY LIST BUILDING////////////////////////////////////
         replyListController = new ReplyListController(question);
-
-
         replyAdapter = new ReplyCustomList(this, replyListController.getQuestion().getReplies());
         replyListView = findViewById(R.id.reply_list);
         replyListView.setAdapter(replyAdapter);
+        //////////////////////////////////////////////////////////////////////////////
 
 
-        // DISPLAY QUESTION
+        /////////////////// DISPLAY QUESTION//////////////////////////////////////////
         TextView displayQuestion = findViewById(R.id.display_question);
-
         String questionString = question.getContent();
-
         displayQuestion.setText(questionString);
+        //////////////////////////////////////////////////////////////////////////////
 
+
+        /////////////////////////////////FIRESTORE///////////////////////////////////
+        db = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = db.collection("Replies");
         final ImageButton replyButton = findViewById(R.id.reply_button);
         replyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (replyMessage != null){
                     String replyString = replyMessage.getText().toString();
-                    Reply newReply = new Reply(replyString, replyingUser, new Date());
+//                    Reply newReply = new Reply(replyString, replyingUser, new Date());
                     replyMessage.getText().clear();
-                    replyListController.getQuestion().addReply(newReply);
-                    replyAdapter.notifyDataSetChanged();
+//                    replyListController.getQuestion().addReply(newReply);
+//                    replyAdapter.notifyDataSetChanged();
+
+
+                    collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                            for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                                replyListController.addReply(new Reply(replyString, new User(replyingUser.getId(), replyingUser.getProfile()), new Date()));
+                            }
+                            replyAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.
+                        }
+                    });
                 }
+                //end of if statement
             }
+            // end of onClick
         });
+        //end of listener
+
+        //////////////////////////////////////////////////////////////////////////////
 
 
-        // Firestore stuff
-        db = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = db.collection("Replies");
-
-
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                // clear the old list
-//                replyListController.clearReplyList();
-//                if (e != null){
-//                    //Toast.makeText(QuestionActivity.this, " deleted", Toast.LENGTH_SHORT).show();
-//                    return;
-//                } else {
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
-                    Log.d(TAG, String.valueOf(doc.getData().get("user_posted_question")));
-                    String question = doc.getId();
-                    String user = (String) doc.getData().get("user_posted_reply");
-                    String reply = (String) doc.getData().get("user_posted_reply");
-                    replyListController.addReply(new Reply(replyString, new User(user, null), new Date()));}
-
-                //}
-                replyAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.
-            }
-        });
-
-
-
-
+        ////////////////////////BACK BUTTON///////////////////////////////////////////
         final ImageButton backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent backIntent = new Intent();
+
+                // only need to send question (and its index) back since replies are attached to it
                 backIntent.putExtra("Question", question);
                 backIntent.putExtra("Index", index);
-                // ^^^only need to send question (and its index) back since replies are attached to it
+
+                // go back to QuestionActivity
                 setResult(RESULT_OK, backIntent);
                 finish();
             }
         });
+        //////////////////////////////////////////////////////////////////////////////
 
 
     }
 }
-
-//    Reply newReply = new Reply("", currentUser); <= use somewhere

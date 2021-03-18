@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Appalanche">
+        <activity android:name=".view.TrialActivity"></activity>
         <activity android:name=".view.ReplyActivity" />
         <activity android:name=".view.QuestionActivity" />
         <activity android:name=".view.ExperimentActivity" />
