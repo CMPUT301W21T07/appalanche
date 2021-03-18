@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Appalanche">
-        <activity android:name=".view.ReplyActivity"></activity>
+        <activity android:name=".view.ReplyActivity" />
         <activity android:name=".view.QuestionActivity" />
         <activity android:name=".view.ExperimentActivity" />
         <activity android:name=".view.MainActivity">
@@ -23,6 +24,5 @@
             </intent-filter>
         </activity>
     </application>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
 </manifest>

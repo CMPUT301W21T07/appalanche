@@ -1,7 +1,8 @@
 package com.team007.appalanche.Experiment;
 
 import com.team007.appalanche.User.User;
-import com.team007.appalanche.qrcode.CountBasedQRCode;
+import com.team007.appalanche.scannableCode.BinomialScannableCode;
+import com.team007.appalanche.scannableCode.CountBasedScannableCode;
 
 public class CountBasedExperiment extends Experiment implements ExperimentInterface {
     /**
@@ -25,7 +26,7 @@ public class CountBasedExperiment extends Experiment implements ExperimentInterf
      * function to obtain experiment statistics
      */
     @Override
-    public void ObtainStatistics() {
+    public void obtainStatistics() {
         // TODO: implement
     }
 
@@ -62,14 +63,18 @@ public class CountBasedExperiment extends Experiment implements ExperimentInterf
     }
 
     /**
-     * function to get experiment QR code
+     * function to create a barcode
+     * @param barcode
+     *  The barcode that I want to register
      */
-    @Override
-    public void obtainQR() {
-        // TODO: implement
+    public CountBasedScannableCode registerBarcode(int barcode) {
+        return new CountBasedScannableCode(this, barcode);
     }
 
-    public CountBasedQRCode generateQRCode(int intendedResult) {
-        return new CountBasedQRCode(this, intendedResult);
+    /**
+     * function to create a barcode
+     */
+    public CountBasedScannableCode generateQRcode() {
+        return new CountBasedScannableCode(this);
     }
 }

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Appalanche</string>
+    <string name="owned_tab">Owned</string>
+    <string name="subscribed_tab">Subscribed</string>
+    <string name="profile_button">Profile</string>
+    <string name="search_button">Search</string>
 </resources>
