@@ -46,11 +46,6 @@ public class ExperimentActivity extends AppCompatActivity {
             case R.id.generate_qr_code:
                 // TODO: implement generating QR Code
                 return true;
-            //selecting "Scan QR Code" menu item
-            case R.id.scan_qr_code:
-                // TODO: implement scanning QR Code
-                // Hindle answer my question pls I'm so confused
-                return true;
             // selecting "Scan QR Code" menu item
             case R.id.scan_barcode:
                 // TODO: implement scanning barcode

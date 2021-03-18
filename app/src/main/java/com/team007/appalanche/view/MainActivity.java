@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 // import com.google.firebase.firestore.FirebaseFirestore; TODO: hook up firebase
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter<Experiment> expAdapter;
     ArrayList<Experiment> ExperimentDataList;
     // FirebaseFirestore db; // TODO: hook up firebase
-
+    Button btnScanQRCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 openExperimentActivity();
+
+            }
+        });
+
+        btnScanQRCode = findViewById(R.id.scan_qr_code);
+        btnScanQRCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
             }
         });
