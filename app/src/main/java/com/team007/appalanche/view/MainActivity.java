@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
     }
     public void openExperimentActivity() {
         Intent intent = new Intent(this, ExperimentActivity.class);

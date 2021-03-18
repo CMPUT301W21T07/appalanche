@@ -31,7 +31,7 @@ public class AddMeasurementTrialFragment extends DialogFragment  {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.measurement_trial_fragment,null);
 
 
-        EditText result = view.findViewById(R.id.addMeasurementResult;
+        EditText result = view.findViewById(R.id.addMeasurementResult);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
