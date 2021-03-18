@@ -16,6 +16,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+
 
 import com.google.gson.Gson;
 import com.team007.appalanche.R;
@@ -24,6 +29,7 @@ import com.team007.appalanche.view.ui.main.SectionsPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
     // FirebaseFirestore db; // TODO: hook up firebase
+    Button btnScanQRCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +60,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 scanCode();
+            }
+        });
+
+        btnScanQRCode = findViewById(R.id.scan_qr_code);
+        btnScanQRCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }

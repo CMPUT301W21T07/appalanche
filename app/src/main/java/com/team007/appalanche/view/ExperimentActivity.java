@@ -4,12 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.team007.appalanche.Experiment.Experiment;
 import com.team007.appalanche.R;
 
 public class ExperimentActivity extends AppCompatActivity {
+
+    // needed a way to check for the current experiment's type so someone will def have to change this
+    Experiment experiment;
 
     Button questionButton;
     @Override
@@ -27,8 +34,42 @@ public class ExperimentActivity extends AppCompatActivity {
         });
     }
 
+    //When the 3-dot options menu is selected on an experiment page
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.experiment_settings, menu);
+        return true;
+    }
+
+    // Direct user depending on which menu item they select
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemID = item.getItemId();
+        switch (itemID) {
+            //selecting "Generate CR Code" menu item
+            case R.id.generate_qr_code:
+                String expType = experiment.getTrialType();
+                openQRCodeFragment(expType);
+                return true;
+            // selecting "Scan QR Code" menu item
+            case R.id.scan_barcode:
+                // TODO: implement scanning barcode
+                return true;
+            default:
+                return false;
+        }
+    }
+
     public void openQuestionActivity() {
         Intent intent = new Intent(this, QuestionActivity.class);
         startActivityForResult(intent,1);
+    }
+
+    // This method starts the QR Code Fragment, passing the experiment type as a string
+    // @param experimentType is a string representing the type of the current experiment
+    public void openQRCodeFragment(String experimentType) {
+        Intent intent = new Intent(this, QRCodeFragment.class);
+        intent.putExtra("type", experimentType);
+        startActivity(intent);
     }
 }

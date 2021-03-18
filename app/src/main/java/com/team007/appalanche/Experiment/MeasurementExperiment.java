@@ -1,6 +1,8 @@
 package com.team007.appalanche.Experiment;
 
+import com.team007.appalanche.Trial.MeasurementTrial;
 import com.team007.appalanche.User.User;
+
 import com.team007.appalanche.scannableCode.BinomialScannableCode;
 import com.team007.appalanche.scannableCode.MeasurementScannableCode;
 
@@ -81,4 +83,5 @@ public class MeasurementExperiment extends Experiment implements ExperimentInter
     public MeasurementScannableCode generateQRcode(float intendedResult) {
         return new MeasurementScannableCode(this, intendedResult);
     }
+
 }

@@ -1,6 +1,7 @@
 package com.team007.appalanche.Experiment;
 
 import com.team007.appalanche.User.User;
+
 import com.team007.appalanche.scannableCode.BinomialScannableCode;
 import com.team007.appalanche.scannableCode.NonNegScannableCode;
 
