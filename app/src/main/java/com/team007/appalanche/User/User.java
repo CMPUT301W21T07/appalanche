@@ -3,7 +3,7 @@ package com.team007.appalanche.User;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class User implements Serializable {
+public class User implements Serializable {
     private String ID;
     private Profile profile;
     private ArrayList<Object> subscribedExperiments;
@@ -14,7 +14,7 @@ public abstract class User implements Serializable {
      * @param ID
      * @param profile
      */
-    User(String ID, Profile profile) {
+    public User(String ID, Profile profile) {
         this.ID = ID;
         this.profile = profile;
 
