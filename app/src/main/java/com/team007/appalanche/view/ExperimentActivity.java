@@ -9,9 +9,13 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.team007.appalanche.R;
+import com.team007.appalanche.Trial.*;
 
 public class ExperimentActivity extends AppCompatActivity {
 
+    Button questionButton;
+    Button addTrialButton;
+    String experimentType = "binomial";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,14 @@ public class ExperimentActivity extends AppCompatActivity {
                 openQuestionActivity();
             }
         });
+
+//        addTrialButton = findViewById(R.id.addTrialButton);
+//        addTrialButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                openAddTrialActivity();
+//            }
+//        });
 
         // CLICK ON BACK BUTTON
         final ImageButton backButton = findViewById(R.id.backButton);
@@ -55,12 +67,28 @@ public class ExperimentActivity extends AppCompatActivity {
 
     } // end of onCreate()
 
-
-
     public void openQuestionActivity() {
         Intent intent = new Intent(this, QuestionActivity.class);
         startActivityForResult(intent,1);
     }
+
+
+//    public void openAddTrialActivity() {
+//        switch(experimentType) {
+//            case "binomial":
+//                new AddBinomialTrialFragment().show(getSupportFragmentManager(), "Add_Trial");
+//                break;
+//            case "count":
+//                new AddCountTrialFragment().show(getSupportFragmentManager(), "Add_Trial");
+//                break;
+//            case "Measurement":
+//                new AddMeasurementTrialFragment().show(getSupportFragmentManager(), "Add_trial");
+//                break;
+//            case "nonNegative":
+//                new AddNonNegTrialFragment().show(getSupportFragmentManager(), "Add_Trial");
+//                break;
+//        }
+//    }
 
     public void  openTrialActivity() {
         Intent intent = new Intent(this, TrialActivity.class);
