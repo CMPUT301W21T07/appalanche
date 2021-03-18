@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,12 +25,11 @@ import com.team007.appalanche.controller.QuestionListController;
 
 public class QuestionActivity extends AppCompatActivity implements AskQuestionFragment.OnFragmentInteractionListener {
 
-    Button askQuestionButton;
-    QuestionListController questionList;
-    ListView questionListView;
-    ArrayAdapter<Question> questionAdapter;
-    FirebaseFirestore db;
-    String TAG = "Sample";
+    private QuestionListController questionList;
+    private ListView questionListView;
+    private ArrayAdapter<Question> questionAdapter;
+    private FirebaseFirestore db;
+    private String TAG = "Sample";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,11 +71,48 @@ public class QuestionActivity extends AppCompatActivity implements AskQuestionFr
 //                questionAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.
 //            }
 //        });
+//
+
+        // CLICK ON BACK BUTTON
+        final ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(QuestionActivity.this, ExperimentActivity.class);
+                QuestionActivity.this.startActivity(intent);
+            }
+        });
+
+        // CLICK ON MENU IMAGE
+        final ImageView optionButton = findViewById(R.id.optionButton);
+        optionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // FILL IN HERE
+            }
+        });
+        // CLICK ON OVERVIEW BUTTON
+        final Button overviewButton = findViewById(R.id.overviewButton);
+        overviewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               //FILL IN HERE
+            }
+        });
 
 
-
+        // CLICK ON TRIALS BUTTON
+        final Button trialButton = findViewById(R.id.trialButton);
+        trialButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //FILL IN HERE
+            }
+        });
+        // WE'RE AT QUESTION LIST PAGE, NO NEED TO SET UP QUESTION BUTTON
 
         // CLICK BUTTON ASK QUESTION TO ASK A NEW QUESTION
+        final Button askQuestionButton;
         askQuestionButton = findViewById(R.id.question);
         askQuestionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +122,6 @@ public class QuestionActivity extends AppCompatActivity implements AskQuestionFr
         });
 
         User currentUser = null;
-
         //reply to a question
         questionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -104,6 +141,5 @@ public class QuestionActivity extends AppCompatActivity implements AskQuestionFr
         //questionList.addQuestionToDb(question, db);
         questionList.addQuestion(question);
         questionAdapter.notifyDataSetChanged();
-
     }
 }

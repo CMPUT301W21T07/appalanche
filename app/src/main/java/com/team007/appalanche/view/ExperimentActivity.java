@@ -17,7 +17,7 @@ public class ExperimentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experiment);
 
-        questionButton = findViewById(R.id.question);
+        questionButton = findViewById(R.id.questionButton);
 
         questionButton.setOnClickListener(new View.OnClickListener() {
             @Override
