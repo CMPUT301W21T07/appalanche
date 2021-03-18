@@ -1,6 +1,7 @@
 package com.team007.appalanche.Experiment;
 
 import com.team007.appalanche.User.User;
+import com.team007.appalanche.qrcode.BinomialQRCode;
 
 public class BinomialExperiment extends Experiment implements ExperimentInterface {
     public String trialType;
@@ -69,5 +70,10 @@ public class BinomialExperiment extends Experiment implements ExperimentInterfac
     @Override
     public void obtainQR() {
         // TODO: implement
+    }
+
+    //generateQRCode()
+    public BinomialQRCode generateQRCode(boolean intendedResult) {
+        return new BinomialQRCode(this, intendedResult);
     }
 }

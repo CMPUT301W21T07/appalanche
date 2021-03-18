@@ -1,6 +1,8 @@
 package com.team007.appalanche.Experiment;
 
+import com.team007.appalanche.Trial.MeasurementTrial;
 import com.team007.appalanche.User.User;
+import com.team007.appalanche.qrcode.MeasurementQRCode;
 
 public class MeasurementExperiment extends Experiment implements ExperimentInterface {
     /**
@@ -66,5 +68,10 @@ public class MeasurementExperiment extends Experiment implements ExperimentInter
     @Override
     public void obtainQR() {
         // TODO: implement
+    }
+
+    //generateQRCode()
+    public MeasurementQRCode generateQRCode(double intendedResult) {
+        return new MeasurementQRCode(this, intendedResult);
     }
 }

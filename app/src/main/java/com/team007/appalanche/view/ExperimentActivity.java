@@ -10,9 +10,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.team007.appalanche.Experiment.Experiment;
 import com.team007.appalanche.R;
 
 public class ExperimentActivity extends AppCompatActivity {
+
+    // needed a way to check for the current experiment's type so someone will def have to change this
+    Experiment experiment;
 
     Button questionButton;
     @Override
@@ -44,7 +48,8 @@ public class ExperimentActivity extends AppCompatActivity {
         switch (itemID) {
             //selecting "Generate CR Code" menu item
             case R.id.generate_qr_code:
-                // TODO: implement generating QR Code
+                String expType = experiment.getTrialType();
+                openQRCodeFragment(expType);
                 return true;
             // selecting "Scan QR Code" menu item
             case R.id.scan_barcode:
@@ -58,5 +63,13 @@ public class ExperimentActivity extends AppCompatActivity {
     public void openQuestionActivity() {
         Intent intent = new Intent(this, QuestionActivity.class);
         startActivityForResult(intent,1);
+    }
+
+    // This method starts the QR Code Fragment, passing the experiment type as a string
+    // @param experimentType is a string representing the type of the current experiment
+    public void openQRCodeFragment(String experimentType) {
+        Intent intent = new Intent(this, QRCodeFragment.class);
+        intent.putExtra("type", experimentType);
+        startActivity(intent);
     }
 }

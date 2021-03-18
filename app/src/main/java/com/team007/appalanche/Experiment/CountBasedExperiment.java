@@ -1,6 +1,7 @@
 package com.team007.appalanche.Experiment;
 
 import com.team007.appalanche.User.User;
+import com.team007.appalanche.qrcode.CountBasedQRCode;
 
 public class CountBasedExperiment extends Experiment implements ExperimentInterface {
     /**
@@ -66,5 +67,9 @@ public class CountBasedExperiment extends Experiment implements ExperimentInterf
     @Override
     public void obtainQR() {
         // TODO: implement
+    }
+
+    public CountBasedQRCode generateQRCode(int intendedResult) {
+        return new CountBasedQRCode(this, intendedResult);
     }
 }

@@ -1,6 +1,7 @@
 package com.team007.appalanche.Experiment;
 
 import com.team007.appalanche.User.User;
+import com.team007.appalanche.qrcode.NonNegQRCode;
 
 public class NonNegativeCountExperiment extends Experiment implements ExperimentInterface {
     public String trialType = "NonNegativeCount";
@@ -67,5 +68,10 @@ public class NonNegativeCountExperiment extends Experiment implements Experiment
     @Override
     public void obtainQR() {
         // TODO: implement
+    }
+
+    // generateQRCode()
+    public NonNegQRCode generateQRCode(int intendedResult) {
+        return new NonNegQRCode(this, intendedResult);
     }
 }

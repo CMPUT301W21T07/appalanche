@@ -1,5 +1,6 @@
 package com.team007.appalanche.qrcode;
 
+import com.google.gson.Gson;
 import com.team007.appalanche.Location;
 import com.team007.appalanche.Experiment.*;
 import com.team007.appalanche.Trial.*;
@@ -26,5 +27,9 @@ public class CountBasedQRCode extends QRCode {
         Date date = new Date();
         CountBasedTrial trial = new CountBasedTrial(experimenter, location, date);
         return trial;
+    }
+
+    public String serialize() {
+        return new Gson().toJson(this);
     }
 }
