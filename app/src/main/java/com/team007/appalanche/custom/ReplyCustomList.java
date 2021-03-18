@@ -9,15 +9,15 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.team007.appalanche.R;
-import com.team007.appalanche.model.Reply;
+import com.team007.appalanche.question.Reply;
 
 import java.util.ArrayList;
 
 public class ReplyCustomList extends ArrayAdapter<Reply> {
     private ArrayList<Reply> replies;
     private Context context;
-    public ReplyCustomList(Context context, ArrayList<Reply> Replies) {
-        super(context, 0, Replies);
+    public ReplyCustomList(Context context, ArrayList<Reply> replies) {
+        super(context, 0, replies);
         this.context = context;
         this.replies = replies;
     }

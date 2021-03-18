@@ -9,8 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 
+import com.team007.appalanche.Experiment.Experiment;
 import com.team007.appalanche.R;
-import com.team007.appalanche.model.Experiment;
 
 import java.util.ArrayList;
 

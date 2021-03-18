@@ -1,4 +1,6 @@
-package com.team007.appalanche.model;
+package com.team007.appalanche.question;
+
+import com.team007.appalanche.User.User;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ public class Question implements Serializable {
     /**
      * This is a getter method for content attribute, we obtain the question content through this method
      * @return
+     *  content
      */
     public String getContent() {
         return content;
@@ -44,6 +47,11 @@ public class Question implements Serializable {
     }
 
 
+    /**
+     * Returns all replies belonging to a Question instance.
+     * @return
+     *  replies
+     */
     public ArrayList<Reply> getReplies() {
         return replies;
     }
