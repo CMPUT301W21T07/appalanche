@@ -2,7 +2,6 @@ package com.team007.appalanche.view;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -17,16 +16,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import com.team007.appalanche.Experiment.Experiment;
+import com.google.gson.Gson;
 import com.team007.appalanche.R;
-import com.team007.appalanche.custom.CustomList;
+import com.team007.appalanche.scannableCode.ScannableCode;
 import com.team007.appalanche.view.ui.main.SectionsPagerAdapter;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     // FirebaseFirestore db; // TODO: hook up firebase
@@ -59,10 +53,17 @@ public class MainActivity extends AppCompatActivity {
         scanCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Im a QR scanner", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                scanCode();
             }
         });
+    }
+
+    private void scanCode() {
+        // scan the code from the zxing library
+        // deserialize
+        // get the trial from the deserialization
+        // add the trial to the appropriate experiment
+        // go to that experiment
     }
 
     @Override
@@ -95,6 +96,16 @@ public class MainActivity extends AppCompatActivity {
                 throw new IllegalStateException("Unexpected value: " + item.getItemId());
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Takes in the serialized string of a barcode and returns the barcode object
+     * @param serialBarcode
+     * @return Returns the deserialized barcode object
+     */
+    private ScannableCode deserialize(String serialBarcode) {
+        Gson gson = new Gson();
+        return gson.fromJson(serialBarcode, ScannableCode.class);
     }
 
     private void openProfileActivity() {
