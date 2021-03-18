@@ -5,11 +5,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ListView;
 
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.team007.appalanche.R;
+import com.team007.appalanche.Trial.CountBasedTrial;
+import com.team007.appalanche.Trial.Trial;
+import com.team007.appalanche.controller.QuestionListController;
+import com.team007.appalanche.custom.QuestionCustomList;
+import com.team007.appalanche.question.Question;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TrialActivity extends AppCompatActivity {
+
+    private ListView trialListView;
+    private ArrayAdapter<Trial> trialAdapter;
+    private ArrayList<Trial> trialDataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,34 +33,77 @@ public class TrialActivity extends AppCompatActivity {
         setContentView(R.layout.activity_trial);
 
 
+        // CLICK ON BACK BUTTON
+        final ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backToMainActivity();
+            }
+        });
+
+        //NO NEED TO SET UP FOR OPTION BUTTON, WE'RE AT THE TRIAL PAGE
+
+        // CLICK ON OVERVIEW BUTTON
+        final Button overviewButton = findViewById(R.id.overviewButton);
+        overviewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openOverviewActivity();
+            }
+        });
+
+        // NO NEED FOR TRIAL BUTTON
+
+        // CLICK ON QUESTION BUTTON
+        final Button questionButton = findViewById(R.id.questionButton);
+        questionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openQuestionActivity();
+            }
+        });
+
+        //CLICK ON ADD TRIAL BUTTON -> GO TO FRAGMENT
+        final Button addTrialButton = findViewById(R.id.addTrialButton);
+        addTrialButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //FILL IN HERE -> GO TO FRAGMENT
+            }
+        });
+
+//         SET UP LISTVIEW
+//         A LIST VIEW OF QUESTION LIST
+//         MIGHT USE A CONTROLLER HERE TO ADD ITEM INTO THE LIST
+//        trialDataList = new ArrayList<Trial>();
+//
+//        // set adapter to the new TrialCustomList
+//        trialAdapter = new TrialCustomList(this, trialDataList);
+//        // Obtain id from layout for Trial List View
+//        trialListView = findViewById(R.id.trialList);
+//        // Set the content for TrialListView
+//        trialListView.setAdapter(trialAdapter);
+//
+
     }
+
+
+    public void backToMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivityForResult(intent,1);
+    }
+    public void openQuestionActivity() {
+        Intent intent = new Intent(this, QuestionActivity.class);
+        startActivityForResult(intent,1);
+    }
+    public void openOverviewActivity() {
+        Intent intent = new Intent(this, ExperimentActivity.class);
+        startActivityForResult(intent,1);
+    }
+
 }
 
 
 
 
-
-
-
-
-// trial XML is not set up for these buttons yet. When ready, move into onCreate().
-
-//        // CLICK ON OVERVIEW BUTTON
-//        final Button overviewButton = findViewById(R.id.overviewButton);
-//        overviewButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent overviewIntent = new Intent(TrialActivity.this, ExperimentActivity.class);
-//                TrialActivity.this.startActivity(overviewIntent);
-//            }
-//        });
-//
-//        // CLICK ON QUESTION BUTTON
-//        final Button questionButton = findViewById(R.id.questionButton);
-//        questionButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent questionIntent = new Intent(TrialActivity.this, QuestionActivity.class);
-//                TrialActivity.this.startActivity(questionIntent);
-//            }
-//        });

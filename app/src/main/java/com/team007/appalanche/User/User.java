@@ -22,6 +22,9 @@ public class User implements Serializable {
         this.ownedExperiments = new ArrayList<Object>();
     }
 
+    public User(String ID) {
+        this.ID = ID;
+    }
     /**
      * get user ID
      * @return

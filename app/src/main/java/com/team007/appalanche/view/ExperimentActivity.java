@@ -12,14 +12,20 @@ import com.team007.appalanche.R;
 
 public class ExperimentActivity extends AppCompatActivity {
 
-    Button questionButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experiment);
 
-        questionButton = findViewById(R.id.questionButton);
 
+
+        // NO NEED TO SET UP OVERVIEW, WE'RE ON OVERVIEW PAGE
+
+
+        // IF QUESTION BUTTON IS CLICKED
+        final Button questionButton;
+        questionButton = findViewById(R.id.questionButton);
         questionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,10 +56,15 @@ public class ExperimentActivity extends AppCompatActivity {
     } // end of onCreate()
 
 
+
     public void openQuestionActivity() {
         Intent intent = new Intent(this, QuestionActivity.class);
         startActivityForResult(intent,1);
     }
 
+    public void  openTrialActivity() {
+        Intent intent = new Intent(this, TrialActivity.class);
+        startActivityForResult(intent,2);
+    }
+}
 
-} // end of ExperimentActivity

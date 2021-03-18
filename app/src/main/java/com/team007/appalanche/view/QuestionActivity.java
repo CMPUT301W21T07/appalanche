@@ -56,30 +56,33 @@ public class QuestionActivity extends AppCompatActivity implements AskQuestionFr
         questionListView.setAdapter(questionAdapter);
 
 
-        // Access a Cloud Firestore instance from your Activity
-        db = FirebaseFirestore.getInstance();
-        // Get a top-level reference to the collection.
-        final CollectionReference collectionReference = db.collection("Questions");
-
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,@Nullable FirebaseFirestoreException e) {
-                // clear the old list
-                questionList.clearQuestionList();
-//                if (e != null){
-//                    //Toast.makeText(QuestionActivity.this, " deleted", Toast.LENGTH_SHORT).show();
-//                    return;
-//                } else {
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
-                    Log.d(TAG, String.valueOf(doc.getData().get("user_posted_question")));
-                    String question = doc.getId();
-                    String user = (String) doc.getData().get("user_posted_question");
-                    questionList.addQuestion(new Question(question, new User(user, null), new Date()));}
-
-                //}
-                questionAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.
-            }
-        });
+//        // Access a Cloud Firestore instance from your Activity
+//        db = FirebaseFirestore.getInstance();
+//        // Get a top-level reference to the collection.
+//        final CollectionReference collectionReference = db.collection("Questions");
+//
+//        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//
+//            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+//                // clear the old list
+//                questionList.clearQuestionList();
+////                if (e != null){
+////                    //Toast.makeText(QuestionActivity.this, " deleted", Toast.LENGTH_SHORT).show();
+////                    return;
+////                } else {
+//                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+//                    Log.d(TAG, String.valueOf(doc.getData().get("user_posted_question")));
+//                    String question = doc.getId();
+//                    String user = (String) doc.getData().get("user_posted_question");
+//
+//                    questionList.addQuestion(new Question(question, new User(user, null), new Date()));}
+//
+//
+//                //}
+//                questionAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.
+//            }
+//        });
 
 
         // CLICK ON BACK BUTTON
@@ -87,7 +90,7 @@ public class QuestionActivity extends AppCompatActivity implements AskQuestionFr
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(QuestionActivity.this, ExperimentActivity.class);
+                Intent intent = new Intent(QuestionActivity.this, MainActivity.class);
                 QuestionActivity.this.startActivity(intent);
             }
         });
