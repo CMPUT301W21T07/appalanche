@@ -1,8 +1,13 @@
-package com.team007.appalanche.experiment;
+package com.team007.appalanche.Experiment;
 
+import com.team007.appalanche.Experiment.Experiment;
 import com.team007.appalanche.scannableCode.MeasurementScannableCode;
 
-public class MeasurementExperiment extends Experiment implements ExperimentInterface {
+/**
+ * This class that extends Experiment handles the creation of measurement-based trials.
+ */
+
+public class MeasurementExperiment extends Experiment implements com.team007.appalanche.experiment.ExperimentInterface {
     /**
      * Constructor function for measurement experiment class
      * @param description

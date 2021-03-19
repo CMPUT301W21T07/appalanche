@@ -6,6 +6,10 @@ import com.team007.appalanche.user.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * This class is composed of unit tests for asserting the proper functionality of experiments.
+ */
+
 public class ExperimentTest {
     ContactInfo contact = new ContactInfo(123, "link");
     Profile profile = new Profile("user", contact);

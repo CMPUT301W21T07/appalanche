@@ -10,17 +10,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
-import com.team007.appalanche.experiment.Experiment;
+import com.team007.appalanche.Experiment.Experiment;
 import com.team007.appalanche.R;
 
+import com.team007.appalanche.Trial.BinomialTrial;
 import com.team007.appalanche.question.Question;
-import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.view.AskQuestionFragment;
 import com.team007.appalanche.view.QRCodeActivity;
-import com.team007.appalanche.view.QRCodeFragment;
 import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
 
 import static com.team007.appalanche.view.experimentActivity.QuestionFragment.questionAdapter;
@@ -87,9 +84,7 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         questionAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void addTrial(Trial trial) {
-        // TODO: implement and write result to firestore
+    public void addTrial(BinomialTrial trial) {
     }
 
     @Override

@@ -25,6 +25,12 @@ import com.team007.appalanche.question.Question;
 
 import java.util.Date;
 
+/**
+ * This Fragment is created when a user wants to create an experiment.
+ * The user can select attributes such as the minimum number of trials,
+ * the region of the experiment, and the experiment's description.
+ */
+
 
 public class AddExperimentFragment extends DialogFragment {
 
@@ -35,7 +41,7 @@ public class AddExperimentFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_add_experiment,null);
 
 
-        EditText experimntDescription = view.findViewById(R.id.textView2);
+        EditText experimentDescription = view.findViewById(R.id.textView2);
         EditText experimentregion = view.findViewById(R.id.textView3);
         EditText numberoftrials = view.findViewById(R.id.textView4);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -47,7 +53,7 @@ public class AddExperimentFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
-                        CountBasedExperiment newExperiment = new CountBasedExperiment(experimntDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, "123");
+                        CountBasedExperiment newExperiment = new CountBasedExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, "123");
                     }
                 })
 

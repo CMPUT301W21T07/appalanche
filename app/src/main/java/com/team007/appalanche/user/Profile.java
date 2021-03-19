@@ -1,6 +1,13 @@
 package com.team007.appalanche.user;
 
+import com.team007.appalanche.User.ContactInfo;
+
 import java.io.Serializable;
+
+/**
+ * This class represents the profile of a User in the app. It contains
+ * the user's name and contact information.
+ */
 
 public class Profile implements Serializable {
     private String userName;

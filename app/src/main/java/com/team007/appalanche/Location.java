@@ -1,5 +1,11 @@
 package com.team007.appalanche;
 
+/**
+ * This class represents an experiment's geolocation;
+ * this is done by using latitude and longitude,
+ * and a String describing the location.
+ */
+
 public class Location {
     private String latitude;
     private String longitude;
@@ -12,7 +18,7 @@ public class Location {
         this.longitude = longitude;
         this.locationString = locationstring;
     }
-    /*This fuction returns the location of the experiment*/
+    /*This function returns the location of the experiment*/
     public String getLocation(){
     return locationString;
     }
