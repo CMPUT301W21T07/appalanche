@@ -69,7 +69,7 @@ public class CountBasedExperiment extends com.team007.appalanche.Experiment.Expe
      * @param barcode
      *  The barcode that I want to register
      */
-    public CountBasedScannableCode registerBarcode(int barcode) {
+    public CountBasedScannableCode registerBarcode(String barcode) {
         return new CountBasedScannableCode(this, barcode);
     }
 

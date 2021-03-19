@@ -72,7 +72,7 @@ public class MeasurementExperiment extends Experiment implements com.team007.app
      * @param intendedResult
      *  The result that I want the registered  to encode
      */
-    public MeasurementScannableCode registerBarcode(int barcode, float intendedResult) {
+    public MeasurementScannableCode registerBarcode(String barcode, float intendedResult) {
         return new MeasurementScannableCode(this, intendedResult, barcode);
     }
 

@@ -5,7 +5,6 @@
     <string name="profile_button">Profile</string>
     <string name="search_button">Search</string>
     <string name="saved_user_key">com.team007.Appalanche.user_key</string>
-    <string name="title_activity_experiment2">ExperimentActivity2</string>
     <string name="overview_text">Overview</string>
     <string name="trials_Text">Trials</string>
     <string name="question_Text">Questions</string>
