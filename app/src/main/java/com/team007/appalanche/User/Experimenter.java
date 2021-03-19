@@ -1,7 +1,6 @@
 package com.team007.appalanche.User;
 
-import com.team007.appalanche.qrcode.*;
-import com.team007.appalanche.barcode.*;
+import com.team007.appalanche.scannableCode.ScannableCode;
 import com.team007.appalanche.Trial.*;
 
 public class Experimenter extends User{
@@ -10,11 +9,11 @@ public class Experimenter extends User{
         super(ID, profile);
     }
 
-    public void scanQR(QRCode code) {
+    public void scan(ScannableCode code) {
         // TODO: implement function
     }
 
-    public void registerBarCode(Barcode barCode) {
+    public void registerBarCode(ScannableCode barCode) {
         // TODO: implement
     }
 
