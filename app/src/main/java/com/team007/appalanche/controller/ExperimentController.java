@@ -75,7 +75,7 @@ public class ExperimentController extends ViewModel {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 currentUser[0] = documentSnapshot.toObject(User.class);
 //                //ADDED THIS
-                currentUser[0].setID(currentUserKey);
+//                currentUser[0].setID(currentUserKey);
 
             }
         });

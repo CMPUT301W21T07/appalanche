@@ -1,5 +1,6 @@
 package com.team007.appalanche.view;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
@@ -36,9 +37,6 @@ import com.team007.appalanche.scannableCode.NonNegScannableCode;
  */
 
 public class QRCodeActivity extends AppCompatActivity {
-    //Intent intent = getIntent();
-    //String type = intent.getExtras().getString("type");
-
     // TESTING PURPOSES ONLY
     // refactor code once we worry about persistent data
     // figure out how to pass experiment information onto this activity
@@ -54,9 +52,12 @@ public class QRCodeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        String type = intent.getStringExtra("type");
         ImageView ivOutput;
         Button btnGenerate;
-        switch (binomialExp.getTrialType()) {
+
+        switch (type) {
             case "binomial":
                 setContentView(R.layout.fragment_binomial_qr_layout);
                 Button btnPass = findViewById(R.id.btn_pass);

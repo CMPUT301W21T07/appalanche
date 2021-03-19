@@ -45,6 +45,9 @@ public class Experiment implements Serializable {
     // No argument constructor for firebase
     public Experiment() {}
 
+    public Experiment(String hello) {
+    }
+
     /**
      * function to get exp. description
      * @return

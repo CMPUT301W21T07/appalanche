@@ -55,7 +55,6 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         getMenuInflater().inflate(R.menu.experiment_settings, menu);
         return true;
     }
-
     // Direct user depending on which menu item they select
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -65,6 +64,7 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
             //selecting "Generate CR Code" menu item
             case R.id.generate_qr_code:
                 if (experiment != null) expType = experiment.getTrialType();
+                if (expType == null) expType = "binomial";
                 openQRCodeActivity(expType);
                 return true;
             // selecting "Scan QR Code" menu item
@@ -82,7 +82,7 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
      */
     public void openQRCodeActivity(String expType) {
         Intent intent = new Intent(this, QRCodeActivity.class);
-        //intent.putExtra("type", expType);
+        intent.putExtra("type", expType);
         startActivityForResult(intent,3);
     }
 

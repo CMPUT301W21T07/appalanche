@@ -76,6 +76,7 @@ public class MainTabFragment extends Fragment {
         // Load the experiments
 
 //        // FOR DEBUGGING THE NEW TABBED LAYOUT
+
         ExperimentDataList = new ArrayList<Experiment>();
         Experiment test = new Experiment("How many jelly mans can a jelly bean fit in its mouth",
                 "Edmonton", "NonNegative", 4, false, true, null);
