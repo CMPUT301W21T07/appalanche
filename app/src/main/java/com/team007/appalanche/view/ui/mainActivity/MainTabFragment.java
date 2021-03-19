@@ -82,8 +82,8 @@ public class MainTabFragment extends Fragment {
 //        ExperimentDataList.add(test);
 
         ExperimentDataList = experimentController.getExperiments();
-        String context = ExperimentDataList.get(0).getDescription();
-        Toast.makeText(getActivity(), context, Toast.LENGTH_LONG).show();
+//        String context = ExperimentDataList.get(0).getDescription();
+//        Toast.makeText(getActivity(), context, Toast.LENGTH_LONG).show();
 
         // Set up the adapter for Experiment List View
         expAdapter = new CustomList(this.getActivity(), ExperimentDataList);
