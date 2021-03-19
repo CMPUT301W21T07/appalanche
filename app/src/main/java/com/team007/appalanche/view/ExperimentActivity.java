@@ -88,8 +88,8 @@ public class ExperimentActivity extends AppCompatActivity {
         switch (itemID) {
             //selecting "Generate CR Code" menu item
             case R.id.generate_qr_code:
-                String expType = experiment.getTrialType();
-                openQRCodeFragment(expType);
+                //String expType = experiment.getTrialType();
+                openQRCodeFragment(experimentType);
                 return true;
             // selecting "Scan QR Code" menu item
             case R.id.scan_barcode:
@@ -110,7 +110,7 @@ public class ExperimentActivity extends AppCompatActivity {
     public void openQRCodeFragment(String experimentType) {
         Intent intent = new Intent(this, QRCodeFragment.class);
         intent.putExtra("type", experimentType);
-        startActivity(intent);
+        startActivityForResult(intent, 3);
     }
 
     public void  openTrialActivity() {
