@@ -9,6 +9,8 @@ public class User implements Serializable {
     private ArrayList<Object> subscribedExperiments;
     private ArrayList<Object> ownedExperiments;
 
+    public User() {}
+
     /**
      * constructor function for User object
      * @param ID
@@ -62,7 +64,18 @@ public class User implements Serializable {
         // TODO: implement this function
     }
 
-    // TODO: create browseQuestions() function, this may not exist in this class
+    public String getID() {
+        return ID;
+    }
+
+    public ArrayList<Object> getSubscribedExperiments() {
+        return subscribedExperiments;
+    }
+
+    public ArrayList<Object> getOwnedExperiments() {
+        return ownedExperiments;
+    }
+// TODO: create browseQuestions() function, this may not exist in this class
 
     // TODO: create replyToQuestion() function, this may not exist in this class
 
