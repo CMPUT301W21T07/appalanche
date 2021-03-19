@@ -43,7 +43,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+
         ViewPager viewPager = findViewById(R.id.view_pager);
+
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
@@ -51,14 +53,12 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton scanCodeButton = findViewById(R.id.scanCodeButton);
 
         AccountManager am = AccountManager.get(this); // "this" references the current Context
-
         Account[] accounts = am.getAccountsByType("com.google");
 
         addExperimentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Im a new experiment", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                new AddExperimentFragment().show(getSupportFragmentManager(), "New ");;
             }
         });
 
