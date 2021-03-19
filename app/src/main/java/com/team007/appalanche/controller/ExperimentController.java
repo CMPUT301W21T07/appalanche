@@ -1,34 +1,16 @@
 package com.team007.appalanche.controller;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.arch.core.util.Function;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.team007.appalanche.Experiment.Experiment;
-import com.team007.appalanche.R;
-import com.team007.appalanche.User.Profile;
-import com.team007.appalanche.User.User;
-import com.team007.appalanche.view.MainActivity;
+import com.team007.appalanche.experiment.Experiment;
+import com.team007.appalanche.user.User;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * This view model maps the type of experiment to display (owned or subscribed) based on the index

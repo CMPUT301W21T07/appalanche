@@ -3,7 +3,7 @@ package com.team007.appalanche.question;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.team007.appalanche.User.User;
+import com.team007.appalanche.user.User;
 
 /**
  * This class represents a reply whenever a user wants to add a reply to a specific experiment question

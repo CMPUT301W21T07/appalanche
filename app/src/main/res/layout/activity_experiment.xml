@@ -171,7 +171,5 @@
             android:paddingLeft="15dp"
             android:textColor="@color/black" />
 
-
-
     </LinearLayout>
 </ScrollView>

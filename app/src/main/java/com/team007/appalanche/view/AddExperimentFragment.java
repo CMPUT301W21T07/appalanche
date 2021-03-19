@@ -15,12 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.team007.appalanche.Experiment.CountBasedExperiment;
+import com.team007.appalanche.experiment.CountBasedExperiment;
 import com.team007.appalanche.R;
-import com.team007.appalanche.User.ContactInfo;
-import com.team007.appalanche.User.Experimenter;
-import com.team007.appalanche.User.Profile;
-import com.team007.appalanche.User.User;
+import com.team007.appalanche.user.ContactInfo;
+import com.team007.appalanche.user.Experimenter;
+import com.team007.appalanche.user.Profile;
+import com.team007.appalanche.user.User;
 import com.team007.appalanche.question.Question;
 
 import java.util.Date;

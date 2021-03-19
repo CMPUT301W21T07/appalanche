@@ -1,4 +1,4 @@
-package com.team007.appalanche.view;
+package com.team007.appalanche.view.addTrialFragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -14,47 +14,50 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.team007.appalanche.Location;
 import com.team007.appalanche.R;
+import com.team007.appalanche.trial.*;
 import com.team007.appalanche.user.Experimenter;
-import com.team007.appalanche.question.Question;
 
 import java.util.Date;
 
 
-public class AskQuestionFragment extends DialogFragment {
+public class AddBinomialTrialFragment extends DialogFragment  {
     private OnFragmentInteractionListener listener;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_ask_question,null);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.binomial_trial_fragment,null);
 
-        EditText askQuestion = view.findViewById(R.id.askQuestion);
+
+        EditText result = view.findViewById(R.id.addBinomialResult);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
         return builder
                 .setView(view)
-                .setTitle("NEW QUESTION")
+                .setTitle("ADD TRIAL")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Post", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
-                        Question newQuestion = new Question(askQuestion.getText().toString(), new Experimenter("123", null), new Date());
-                        listener.askQuestion(newQuestion);
+                        Trial newBinomialTrial = new BinomialTrial(new Experimenter("123", null), new Location(), new Date());
+                        // newTrial.setOutcome(Boolean.valueOf(result.toString())); TODO: set trial result for trial object
+                        listener.addTrial(newBinomialTrial);
                     }
                 })
+
                 .create();
     }
 
     public interface OnFragmentInteractionListener {
-        void askQuestion(Question question);
+        void addTrial(Trial trial);
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
+        if (context instanceof OnFragmentInteractionListener){
             listener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()

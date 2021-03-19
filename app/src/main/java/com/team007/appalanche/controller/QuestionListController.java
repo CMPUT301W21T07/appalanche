@@ -7,7 +7,6 @@ import java.util.ArrayList;
 public class QuestionListController {
     private ArrayList<Question> questionList = new ArrayList<Question>();
 
-
     public ArrayList<Question> getQuestionList() {
         return questionList;
     }
@@ -19,6 +18,7 @@ public class QuestionListController {
     public void addQuestion(Question newQuestion) {
         questionList.add(newQuestion);
     }
+
 //    public void addQuestionToDb(Question newQuestion, FirebaseFirestore db) {
 //        //questionList.add(newQuestion);
 //
