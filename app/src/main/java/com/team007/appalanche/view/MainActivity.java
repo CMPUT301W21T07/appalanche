@@ -2,6 +2,8 @@ package com.team007.appalanche.view;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -9,6 +11,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,16 +24,18 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
 import com.google.gson.Gson;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.team007.appalanche.R;
 import com.team007.appalanche.scannableCode.ScannableCode;
 import com.team007.appalanche.view.ui.main.SectionsPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
-    // FirebaseFirestore db; // TODO: hook up firebase
-    Button btnScanQRCode;
+    // // TODO: hook up firebase
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,18 +69,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnScanQRCode = findViewById(R.id.scan_qr_code);
-        btnScanQRCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
     }
 
     private void scanCode() {
         // scan the code from the zxing library
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setPrompt("For flash, use volume up key");
+        integrator.setBeepEnabled(true);
+        integrator.setOrientationLocked(true);
+        integrator.setCaptureActivity(Capture.class);
+        integrator.initiateScan();
+
         // deserialize
         // get the trial from the deserialization
         // add the trial to the appropriate experiment
@@ -111,6 +117,29 @@ public class MainActivity extends AppCompatActivity {
                 throw new IllegalStateException("Unexpected value: " + item.getItemId());
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode,
+                data);
+        if (scanResult.getContents() != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("Result");
+            builder.setMessage("The barcode scanned is:" + scanResult.getContents());
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Oops, you didnt scan anything",
+                    Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     /**
