@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -54,11 +55,13 @@ public class MainTabFragment extends Fragment {
         }
 
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        String userKey = getResources().getString(R.string.saved_user_key);
+        //String userKey = getResources().getString(R.string.saved_user_key);
+        String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
 
         experimentController.setCurrentUser(userKey);
         experimentController.setExperimentType(index);
         experimentController.loadExperiments();
+
     }
 
     @Override
@@ -71,13 +74,16 @@ public class MainTabFragment extends Fragment {
         expList = root.findViewById(R.id.expList);
 
         // Load the experiments
-//        ExperimentDataList = experimentController.getExperiments();
 
-        // Testing the new tabbed layout
-        ExperimentDataList = new ArrayList<Experiment>();
-        Experiment test = new Experiment("How many jelly mans can a jelly bean fit in its mouth",
-                "Edmonton", "NonNegative", 4, false, true, null);
-        ExperimentDataList.add(test);
+//        // FOR DEBUGGING THE NEW TABBED LAYOUT
+//        ExperimentDataList = new ArrayList<Experiment>();
+//        Experiment test = new Experiment("How many jelly mans can a jelly bean fit in its mouth",
+//                "Edmonton", "NonNegative", 4, false, true, null);
+//        ExperimentDataList.add(test);
+
+        ExperimentDataList = experimentController.getExperiments();
+        String context = ExperimentDataList.get(0).getDescription();
+        Toast.makeText(getActivity(), context, Toast.LENGTH_LONG).show();
 
         // Set up the adapter for Experiment List View
         expAdapter = new CustomList(this.getActivity(), ExperimentDataList);

@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class User implements Serializable {
     private String ID;
     private Profile profile;
-    private ArrayList<Experiment> subscribedExperiments;
-    private ArrayList<Experiment> ownedExperiments;
+    private ArrayList<Experiment> subscribedExperiments = new ArrayList<Experiment>();
+    private ArrayList<Experiment> ownedExperiments=  new ArrayList<Experiment>();
 
     public User() {}
 
@@ -35,6 +35,10 @@ public class User implements Serializable {
      * returns the user ID
      */
     public String getId() { return ID; }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
 
     /**
      * set the profile of the user
