@@ -15,13 +15,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.team007.appalanche.R;
-import com.team007.appalanche.User.Experimenter;
+import com.team007.appalanche.user.Experimenter;
 import com.team007.appalanche.question.Question;
 
 import java.util.Date;
 
 
-public class AskQuestionFragment extends DialogFragment  {
+public class AskQuestionFragment extends DialogFragment {
     private OnFragmentInteractionListener listener;
 
     @NonNull
@@ -29,9 +29,9 @@ public class AskQuestionFragment extends DialogFragment  {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_ask_question,null);
 
-
         EditText askQuestion = view.findViewById(R.id.askQuestion);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
         return builder
                 .setView(view)
                 .setTitle("NEW QUESTION")
@@ -44,7 +44,6 @@ public class AskQuestionFragment extends DialogFragment  {
                         listener.askQuestion(newQuestion);
                     }
                 })
-
                 .create();
     }
 
@@ -55,7 +54,7 @@ public class AskQuestionFragment extends DialogFragment  {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener){
+        if (context instanceof OnFragmentInteractionListener) {
             listener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
