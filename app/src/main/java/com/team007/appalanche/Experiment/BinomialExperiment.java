@@ -21,7 +21,7 @@ public class BinomialExperiment extends Experiment implements ExperimentInterfac
                               Integer minNumTrials,
                               Boolean locationRequired,
                               Boolean status,
-                              User experimentOwner) {
+                              String experimentOwner) {
         super(description, region, "binomial", minNumTrials, locationRequired, status, experimentOwner);
     }
 

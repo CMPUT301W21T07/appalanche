@@ -1,6 +1,8 @@
 package com.team007.appalanche.view.ui.main;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +52,11 @@ public class MainTabFragment extends Fragment {
         if (getArguments() != null) {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
         }
+
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        String userKey = getResources().getString(R.string.saved_user_key);
+
+        experimentController.setCurrentUser(userKey);
         experimentController.setExperimentType(index);
         experimentController.loadExperiments();
     }
@@ -63,9 +70,9 @@ public class MainTabFragment extends Fragment {
         // Obtain the IDs
         expList = root.findViewById(R.id.expList);
 
-        ExperimentDataList = new ArrayList<>();
-        Experiment newExp = new Experiment("How many jelly beans can I fit in my mouth?", "Alberta", "NonNegTrial",2, false, true, null);
-        ExperimentDataList.add(newExp);
+        // Load the experiments
+        ExperimentDataList = experimentController.getExperiments();
+
         // Set up the adapter for Experiment List View
         expAdapter = new CustomList(this.getActivity(), ExperimentDataList);
         expList.setAdapter(expAdapter);
@@ -77,6 +84,7 @@ public class MainTabFragment extends Fragment {
                 openExperimentActivity();
             }
         });
+
         return root;
     }
 

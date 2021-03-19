@@ -28,7 +28,11 @@
             app:tabSelectedTextColor="#FFFFFF"
             app:tabTextColor="@color/purple_200" />
 
-
+    <Button
+        android:id="@+id/scan_qr_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scan QR Code" />
     </androidx.viewpager.widget.ViewPager>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
