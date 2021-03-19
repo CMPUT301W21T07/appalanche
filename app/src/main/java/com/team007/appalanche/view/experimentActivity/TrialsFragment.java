@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.team007.appalanche.R;
-import com.team007.appalanche.trial.Trial;
+import com.team007.appalanche.Trial.Trial;
 import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddCountTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddMeasurementTrialFragment;
