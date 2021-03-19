@@ -117,4 +117,5 @@ public class ExperimentActivity extends AppCompatActivity {
         Intent intent = new Intent(this, TrialActivity.class);
         startActivityForResult(intent,2);
     }
+
 }
