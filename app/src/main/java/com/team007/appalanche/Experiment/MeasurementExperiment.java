@@ -20,7 +20,7 @@ public class MeasurementExperiment extends Experiment implements ExperimentInter
                                  Integer minNumTrials,
                                  Boolean locationRequired,
                                  Boolean status,
-                                 User experimentOwner) {
+                                 String experimentOwner) {
         super(description, region, "measurement", minNumTrials, locationRequired, status, experimentOwner);
     }
 

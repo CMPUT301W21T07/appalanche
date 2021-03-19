@@ -21,11 +21,12 @@ import com.team007.appalanche.question.Question;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrialActivity extends AppCompatActivity {
+public class TrialActivity extends AppCompatActivity implements AddBinomialTrialFragment.OnFragmentInteractionListener {
 
     private ListView trialListView;
     private ArrayAdapter<Trial> trialAdapter;
     private ArrayList<Trial> trialDataList;
+    private String experimentType = "binomial"; //TODO: hook this up to the actual experiment type, not hard coded value
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +70,7 @@ public class TrialActivity extends AppCompatActivity {
         addTrialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //FILL IN HERE -> GO TO FRAGMENT
+                openAddTrialActivity();
             }
         });
 
@@ -101,7 +102,28 @@ public class TrialActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ExperimentActivity.class);
         startActivityForResult(intent,1);
     }
+    public void openAddTrialActivity() {
+        switch(experimentType) {
+            case "binomial":
+                new AddBinomialTrialFragment().show(getSupportFragmentManager(), "Add_Trial");
+                break;
+            case "count":
+                new AddCountTrialFragment().show(getSupportFragmentManager(), "Add_Trial");
+                break;
+            case "Measurement":
+                new AddMeasurementTrialFragment().show(getSupportFragmentManager(), "Add_trial");
+                break;
+            case "nonNegative":
+                new AddNonNegTrialFragment().show(getSupportFragmentManager(), "Add_Trial");
+                break;
+        }
+        // TODO: hook fragment result to update experiment and create trial
+    }
 
+    @Override
+    public void addTrial(Trial trial) {
+        // TODO: implement and write result to firestore
+    }
 }
 
 

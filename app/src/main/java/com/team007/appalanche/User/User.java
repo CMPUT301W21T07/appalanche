@@ -1,13 +1,17 @@
 package com.team007.appalanche.User;
 
+import com.team007.appalanche.Experiment.Experiment;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class User implements Serializable {
     private String ID;
     private Profile profile;
-    private ArrayList<Object> subscribedExperiments;
-    private ArrayList<Object> ownedExperiments;
+    private ArrayList<Experiment> subscribedExperiments;
+    private ArrayList<Experiment> ownedExperiments;
+
+    public User() {}
 
     /**
      * constructor function for User object
@@ -17,20 +21,20 @@ public class User implements Serializable {
     public User(String ID, Profile profile) {
         this.ID = ID;
         this.profile = profile;
-
-        this.subscribedExperiments = new ArrayList<Object>();
-        this.ownedExperiments = new ArrayList<Object>();
+        this.subscribedExperiments = new ArrayList<Experiment>();
+        this.ownedExperiments = new ArrayList<Experiment>();
     }
 
     public User(String ID) {
         this.ID = ID;
     }
+
     /**
      * get user ID
      * @return
      * returns the user ID
      */
-    public String getId() { return this.ID; }
+    public String getId() { return ID; }
 
     /**
      * set the profile of the user
@@ -45,12 +49,11 @@ public class User implements Serializable {
      */
     public Profile getProfile() { return this.profile; }
 
-
     /**
      * function to subscribe user to an experiment
      * @param experiment
      */
-    public void subscribeToExperiment(Object experiment) {
+    public void subscribeToExperiment(Experiment experiment) {
         this.subscribedExperiments.add(experiment);
     }
 
@@ -62,9 +65,20 @@ public class User implements Serializable {
         // TODO: implement this function
     }
 
+    public ArrayList<Experiment> getSubscribedExperiments() {
+        return subscribedExperiments;
+    }
+
+    public ArrayList<Experiment> getOwnedExperiments() {
+        return ownedExperiments;
+    }
     // TODO: create browseQuestions() function, this may not exist in this class
 
     // TODO: create replyToQuestion() function, this may not exist in this class
 
     // TODO: create askQuestion() function, this may not exist in this class
+
+    public void addOwnedExperiment(Experiment experiment) {
+        ownedExperiments.add(experiment);
+    }
 }
