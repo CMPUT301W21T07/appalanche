@@ -1,7 +1,10 @@
 package com.team007.appalanche.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -74,6 +77,7 @@ public class ExperimentActivity extends AppCompatActivity {
 
     } // end of onCreate()
 
+    // add tutorial link
     //When the 3-dot options menu is selected on an experiment page
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -89,7 +93,7 @@ public class ExperimentActivity extends AppCompatActivity {
             //selecting "Generate CR Code" menu item
             case R.id.generate_qr_code:
                 //String expType = experiment.getTrialType();
-                openQRCodeFragment(experimentType);
+                openQRCodeActivity(experimentType);
                 return true;
             // selecting "Scan QR Code" menu item
             case R.id.scan_barcode:
@@ -107,10 +111,10 @@ public class ExperimentActivity extends AppCompatActivity {
 
     // This method starts the QR Code Fragment, passing the experiment type as a string
     // @param experimentType is a string representing the type of the current experiment
-    public void openQRCodeFragment(String experimentType) {
-        Intent intent = new Intent(this, QRCodeFragment.class);
-        intent.putExtra("type", experimentType);
-        startActivityForResult(intent, 3);
+    public void openQRCodeActivity(String expType) {
+        Intent intent = new Intent(this, QRCodeActivity.class);
+        //intent.putExtra("type", expType);
+        startActivityForResult(intent,3);
     }
 
     public void  openTrialActivity() {

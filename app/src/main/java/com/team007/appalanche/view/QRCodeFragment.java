@@ -29,6 +29,8 @@ import com.team007.appalanche.scannableCode.BinomialScannableCode;
 
 import static androidx.core.content.ContextCompat.getSystemService;
 
+// NOT IN USE, but keep until the QR/barcode stuff are 100% ready
+
 public class QRCodeFragment extends DialogFragment {
     Intent intent = getActivity().getIntent();
     String type = intent.getStringExtra("type");

@@ -18,6 +18,7 @@
         <activity android:name=".view.ReplyActivity" />
         <activity android:name=".view.QuestionActivity" />
         <activity android:name=".view.ExperimentActivity" />
+        <activity android:name=".view.QRCodeActivity" />
         <activity android:name=".view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

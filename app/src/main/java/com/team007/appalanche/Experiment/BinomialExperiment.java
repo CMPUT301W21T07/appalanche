@@ -5,7 +5,7 @@ import com.team007.appalanche.User.User;
 import com.team007.appalanche.scannableCode.BinomialScannableCode;
 
 public class BinomialExperiment extends Experiment implements ExperimentInterface {
-    public String trialType;
+    //public String trialType;
 
     /**
      * Constructor function for binomial experiment class
