@@ -1,11 +1,7 @@
 package com.team007.appalanche.view;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Environment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,22 +15,16 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-import com.team007.appalanche.Experiment.BinomialExperiment;
-import com.team007.appalanche.Experiment.CountBasedExperiment;
-import com.team007.appalanche.Experiment.MeasurementExperiment;
-import com.team007.appalanche.Experiment.NonNegativeCountExperiment;
+import com.team007.appalanche.experiment.BinomialExperiment;
+import com.team007.appalanche.experiment.CountBasedExperiment;
+import com.team007.appalanche.experiment.MeasurementExperiment;
+import com.team007.appalanche.experiment.NonNegativeCountExperiment;
 import com.team007.appalanche.R;
-import com.team007.appalanche.Trial.MeasurementTrial;
-import com.team007.appalanche.User.User;
+import com.team007.appalanche.user.User;
 import com.team007.appalanche.scannableCode.BinomialScannableCode;
 import com.team007.appalanche.scannableCode.CountBasedScannableCode;
 import com.team007.appalanche.scannableCode.MeasurementScannableCode;
 import com.team007.appalanche.scannableCode.NonNegScannableCode;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class QRCodeActivity extends AppCompatActivity {
     //Intent intent = getIntent();
@@ -43,10 +33,14 @@ public class QRCodeActivity extends AppCompatActivity {
     // TESTING PURPOSES ONLY
     // refactor code once we worry about persistent data
     // figure out how to pass experiment information onto this activity
-    BinomialExperiment binomialExp = new BinomialExperiment("Can I do a handstand?", "region", "binomial", 5, false, true, new User());
-    CountBasedExperiment countExp = new CountBasedExperiment("How many times have you cried listening to driver's license?", "region", 2, false, true, new User());
-    MeasurementExperiment measurementExp = new MeasurementExperiment("How many litres of water did you drink today?", "region", 2, false, true, new User());
-    NonNegativeCountExperiment nonNegExp = new NonNegativeCountExperiment("How many jelly beans cna I fit in my mouth?", "region", 1, false, false, new User());
+    BinomialExperiment binomialExp = new BinomialExperiment("Can I do a handstand?", "region",
+            "binomial", 5, false, true, null);
+    CountBasedExperiment countExp = new CountBasedExperiment("How many times have you cried " +
+            "listening to driver's license?", "region", 2, false, true, null);
+    MeasurementExperiment measurementExp = new MeasurementExperiment("How many litres of water " +
+            "did you drink today?", "region", 2, false, true, null);
+    NonNegativeCountExperiment nonNegExp = new NonNegativeCountExperiment("How many jelly beans " +
+            "cna I fit in my mouth?", "region", 1, false, false, null);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

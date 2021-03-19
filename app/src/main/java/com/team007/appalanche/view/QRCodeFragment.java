@@ -3,31 +3,24 @@ package com.team007.appalanche.view;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-
-import androidx.annotation.NonNull;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-import com.team007.appalanche.Experiment.BinomialExperiment;
+import com.team007.appalanche.experiment.BinomialExperiment;
 import com.team007.appalanche.R;
-import com.team007.appalanche.User.User;
+import com.team007.appalanche.user.User;
 import com.team007.appalanche.scannableCode.BinomialScannableCode;
-
-import static androidx.core.content.ContextCompat.getSystemService;
 
 // NOT IN USE, but keep until the QR/barcode stuff are 100% ready
 
@@ -37,7 +30,8 @@ public class QRCodeFragment extends DialogFragment {
 
     // TESTING PURPOSES ONLY
     // refactor code once we worry about persistent data
-    BinomialExperiment binomialExp = new BinomialExperiment("Can I do a handstand?", "region", "binomial", 5, false, true, new User());
+    BinomialExperiment binomialExp = new BinomialExperiment("Can I do a handstand?", "region",
+            "binomial", 5, false, true, null);
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
