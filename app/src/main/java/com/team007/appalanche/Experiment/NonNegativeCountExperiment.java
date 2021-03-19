@@ -6,7 +6,7 @@ import com.team007.appalanche.scannableCode.BinomialScannableCode;
 import com.team007.appalanche.scannableCode.NonNegScannableCode;
 
 public class NonNegativeCountExperiment extends Experiment implements ExperimentInterface {
-    public String trialType = "NonNegativeCount";
+    //public String trialType = "NonNegativeCount";
     /**
      * Constructor function for non negative count experiment class
      * @param description

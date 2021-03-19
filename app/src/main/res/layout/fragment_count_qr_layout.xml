@@ -25,10 +25,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/count_qrcode_output" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_save"
-        android:text="Save QR Code" />
+<!--    <Button-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:id="@+id/btn_save"-->
+<!--        android:text="Save QR Code" />-->
 
 </LinearLayout>

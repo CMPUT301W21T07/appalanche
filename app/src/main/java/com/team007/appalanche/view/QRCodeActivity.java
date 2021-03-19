@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,32 +31,34 @@ import com.team007.appalanche.scannableCode.CountBasedScannableCode;
 import com.team007.appalanche.scannableCode.MeasurementScannableCode;
 import com.team007.appalanche.scannableCode.NonNegScannableCode;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class QRCodeActivity extends AppCompatActivity {
     //Intent intent = getIntent();
     //String type = intent.getExtras().getString("type");
 
     // TESTING PURPOSES ONLY
     // refactor code once we worry about persistent data
-    //figure out how to pass experiment information onto this
+    // figure out how to pass experiment information onto this activity
     BinomialExperiment binomialExp = new BinomialExperiment("Can I do a handstand?", "region", "binomial", 5, false, true, new User());
     CountBasedExperiment countExp = new CountBasedExperiment("How many times have you cried listening to driver's license?", "region", 2, false, true, new User());
     MeasurementExperiment measurementExp = new MeasurementExperiment("How many litres of water did you drink today?", "region", 2, false, true, new User());
-    NonNegativeCountExperiment nonNegExp = new NonNegativeCountExperiment("How many jelly beans cna I fit in my mouth?", "region", 2, false, true, new User());
+    NonNegativeCountExperiment nonNegExp = new NonNegativeCountExperiment("How many jelly beans cna I fit in my mouth?", "region", 1, false, false, new User());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ImageView ivOutput;
-        Button btnSave;
         Button btnGenerate;
-        switch (nonNegExp.getTrialType()) {
+        switch (binomialExp.getTrialType()) {
             case "binomial":
                 setContentView(R.layout.fragment_binomial_qr_layout);
                 Button btnPass = findViewById(R.id.btn_pass);
                 Button btnFail = findViewById(R.id.btn_fail);
                 ivOutput = findViewById(R.id.binomial_qrcode_output);
-                btnSave = findViewById(R.id.btn_save);
-                btnSave.setVisibility(View.INVISIBLE);
                 btnFail.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -63,7 +67,6 @@ public class QRCodeActivity extends AppCompatActivity {
                         BinomialScannableCode binomialQRCode = binomialExp.generateQRcode(intendedBinomial);
                         String toEncode = binomialQRCode.serialize();
                         createQRCode(ivOutput, toEncode);
-                        btnSave.setVisibility(View.VISIBLE);
                     }
                 });
                 btnPass.setOnClickListener(new View.OnClickListener() {
@@ -74,46 +77,30 @@ public class QRCodeActivity extends AppCompatActivity {
                         BinomialScannableCode binomialQRCode = binomialExp.generateQRcode(intendedBinomial);
                         String toEncode = binomialQRCode.serialize();
                         createQRCode(ivOutput, toEncode);
-                        btnSave.setVisibility(View.VISIBLE);
                     }
                 });
-                btnSave.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                });
-
                 break;
             case "count":
+                setContentView(R.layout.fragment_count_qr_layout);
                 final EditText inputCount = findViewById(R.id.count_qr_intended_result);
                 ivOutput = findViewById(R.id.count_qrcode_output);
-                btnSave = findViewById(R.id.btn_save);
-                btnSave.setVisibility(View.INVISIBLE);
                 btnGenerate = findViewById(R.id.btn_generate);
                 btnGenerate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         int intendedCount = Integer.parseInt(inputCount.getText().toString());
                         // call the generateQRCode method from CountBasedExperiment and pass intendedCount as the intended result and save as a CountBasedScannableCode
+                        // ask how to included intendedCount???
                         CountBasedScannableCode countQRCode = countExp.generateQRcode();
                         String toEncode = countQRCode.serialize();
                         createQRCode(ivOutput, toEncode);
-                        btnSave.setVisibility(View.VISIBLE);
-                    }
-                });
-                btnSave.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
                     }
                 });
                 break;
             case "measurement":
+                setContentView(R.layout.fragment_measurement_qr_layout);
                 final EditText inputMeasurement = findViewById(R.id.measurement_qr_intended_result);
                 ivOutput = findViewById(R.id.measurement_qrcode_output);
-                btnSave = findViewById(R.id.btn_save);
-                btnSave.setVisibility(View.INVISIBLE);
                 btnGenerate = findViewById(R.id.btn_generate);
                 btnGenerate.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -123,21 +110,13 @@ public class QRCodeActivity extends AppCompatActivity {
                         MeasurementScannableCode measurementQRCode = measurementExp.generateQRcode(intendedMeasurement);
                         String toEncode = measurementQRCode.serialize();
                         createQRCode(ivOutput, toEncode);
-                        btnSave.setVisibility(View.VISIBLE);
-                    }
-                });
-                btnSave.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
                     }
                 });
                 break;
             case "nonNegativeCount":
+                setContentView(R.layout.fragment_nonneg_qr_layout);
                 final EditText inputNonNeg = findViewById(R.id.nonneg_qr_intended_result);
                 ivOutput = findViewById(R.id.nonneg_qrcode_output);
-                btnSave = findViewById(R.id.btn_save);
-                btnSave.setVisibility(View.INVISIBLE);
                 btnGenerate = findViewById(R.id.btn_generate);
                 btnGenerate.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -147,18 +126,11 @@ public class QRCodeActivity extends AppCompatActivity {
                         NonNegScannableCode nonnegQRCode = nonNegExp.generateQRcode(intendedNonNeg);
                         String toEncode = nonnegQRCode.serialize();
                         createQRCode(ivOutput, toEncode);
-                        btnSave.setVisibility(View.VISIBLE);
-                    }
-                });
-                btnSave.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
                     }
                 });
                 break;
             default:
-                //exit return to ExperimentActivity
+                //exit
                 break;
         }
     }
@@ -175,10 +147,12 @@ public class QRCodeActivity extends AppCompatActivity {
             Bitmap bitmap = encoder.createBitmap(matrix);
             // set bitmap on image view
             iv.setImageBitmap(bitmap);
+
+            //save onto device??
         } catch (WriterException e) {
             e.printStackTrace();
         }
+        Toast.makeText(getApplicationContext(),"Your QR code has been created! Screenshot it to save.",Toast.LENGTH_SHORT).show();
     }
-
-
 }
+
