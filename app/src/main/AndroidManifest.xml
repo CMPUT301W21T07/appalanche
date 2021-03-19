@@ -21,6 +21,7 @@
                 android:value=".view.ui.mainActivity.MainActivity" />
         </activity>
         <activity android:name=".view.ReplyActivity" />
+        <activity android:name=".view.QRCodeActivity" />
         <activity android:name=".view.ui.mainActivity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

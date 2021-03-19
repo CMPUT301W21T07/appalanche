@@ -9,15 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.team007.appalanche.Location;
 import com.team007.appalanche.R;
-import com.team007.appalanche.trial.*;
 import com.team007.appalanche.user.Experimenter;
+import com.team007.appalanche.Trial.*;
 
 import java.util.Date;
 

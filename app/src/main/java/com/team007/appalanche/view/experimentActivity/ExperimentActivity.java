@@ -19,6 +19,7 @@ import com.team007.appalanche.R;
 import com.team007.appalanche.question.Question;
 import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.view.AskQuestionFragment;
+import com.team007.appalanche.view.QRCodeActivity;
 import com.team007.appalanche.view.QRCodeFragment;
 import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
 
@@ -60,7 +61,7 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
             //selecting "Generate CR Code" menu item
             case R.id.generate_qr_code:
                 String expType = experiment.getTrialType();
-                openQRCodeFragment(expType);
+                openQRCodeActivity(expType);
                 return true;
             // selecting "Scan QR Code" menu item
             case R.id.scan_barcode:
@@ -73,10 +74,10 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
 
     // This method starts the QR Code Fragment, passing the experiment type as a string
     // @param experimentType is a string representing the type of the current experiment
-    public void openQRCodeFragment(String experimentType) {
-        Intent intent = new Intent(this, QRCodeFragment.class);
-        intent.putExtra("type", experimentType);
-        startActivity(intent);
+    public void openQRCodeActivity(String expType) {
+        Intent intent = new Intent(this, QRCodeActivity.class);
+        //intent.putExtra("type", expType);
+        startActivityForResult(intent,3);
     }
 
     @Override
@@ -89,5 +90,10 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
     @Override
     public void addTrial(Trial trial) {
         // TODO: implement and write result to firestore
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }
