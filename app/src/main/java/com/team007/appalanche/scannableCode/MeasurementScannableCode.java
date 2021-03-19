@@ -2,9 +2,9 @@ package com.team007.appalanche.scannableCode;
 
 import com.google.gson.Gson;
 import com.team007.appalanche.Location;
-import com.team007.appalanche.Experiment.*;
-import com.team007.appalanche.User.*;
-import com.team007.appalanche.Trial.*;
+import com.team007.appalanche.experiment.*;
+import com.team007.appalanche.user.*;
+import com.team007.appalanche.trial.*;
 
 import java.util.Date;
 
@@ -51,6 +51,19 @@ public class MeasurementScannableCode extends ScannableCode {
     public MeasurementTrial scan(Experimenter experimenter, Location location) {
         Date date = new Date();
         MeasurementTrial trial = new MeasurementTrial(experimenter, location, date);
+        trial.setValue(result);
+        return trial;
+    }
+
+    /**
+     * Based on the scanned code, this method creates a measurement trial and returns it.
+     * @param experimenter The experimenter who scanned the code
+     * @return Returns the constructed measurement trial
+     */
+    public MeasurementTrial scan(User experimenter) {
+        Date date = new Date();
+        MeasurementTrial trial = new MeasurementTrial(experimenter, date);
+        trial.setValue(result);
         return trial;
     }
 

@@ -2,9 +2,9 @@ package com.team007.appalanche.scannableCode;
 
 import com.google.gson.Gson;
 import com.team007.appalanche.Location;
-import com.team007.appalanche.Experiment.*;
-import com.team007.appalanche.User.*;
-import com.team007.appalanche.Trial.*;
+import com.team007.appalanche.experiment.*;
+import com.team007.appalanche.user.*;
+import com.team007.appalanche.trial.*;
 
 import java.util.Date;
 
@@ -50,6 +50,19 @@ public class BinomialScannableCode extends ScannableCode {
     public BinomialTrial scan(Experimenter experimenter, Location location) {
         Date date = new Date();
         BinomialTrial trial = new BinomialTrial(experimenter, location, date);
+        trial.setOutcome(result);
+        return trial;
+    }
+
+    /**
+     * Based on the scanned code, this method creates a binomial trial and returns it.
+     * @param experimenter The experimenter who scanned the code
+     * @return Returns the constructed binomial trial
+     */
+    public BinomialTrial scan(User experimenter) {
+        Date date = new Date();
+        BinomialTrial trial = new BinomialTrial(experimenter, date);
+        trial.setOutcome(result);
         return trial;
     }
 

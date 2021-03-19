@@ -1,7 +1,6 @@
 package com.team007.appalanche.view;
 
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,10 +22,12 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.team007.appalanche.R;
-import com.team007.appalanche.User.User;
 import com.team007.appalanche.controller.QuestionListController;
 import com.team007.appalanche.custom.QuestionCustomList;
 import com.team007.appalanche.question.Question;
+import com.team007.appalanche.user.User;
+import com.team007.appalanche.view.experimentActivity.ExperimentActivity;
+import com.team007.appalanche.view.ui.mainActivity.MainActivity;
 
 import java.util.Date;
 
@@ -113,15 +114,15 @@ public class QuestionActivity extends AppCompatActivity implements AskQuestionFr
         });
 
 
-        // CLICK ON TRIALS BUTTON
-        final Button trialButton = findViewById(R.id.trialButton);
-        trialButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent trialIntent = new Intent(QuestionActivity.this, TrialActivity.class);
-                QuestionActivity.this.startActivity(trialIntent);
-            }
-        });
+//        // CLICK ON TRIALS BUTTON
+//        final Button trialButton = findViewById(R.id.trialButton);
+//        trialButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent trialIntent = new Intent(QuestionActivity.this, TrialActivity.class);
+//                QuestionActivity.this.startActivity(trialIntent);
+//            }
+//        });
         // WE'RE AT QUESTION LIST PAGE, NO NEED TO SET UP QUESTION BUTTON
 
         // CLICK BUTTON "ASK QUESTION" TO ASK A NEW QUESTION

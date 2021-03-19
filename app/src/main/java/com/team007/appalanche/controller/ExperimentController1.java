@@ -13,7 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.team007.appalanche.Experiment.Experiment;
+import com.team007.appalanche.experiment.Experiment;
 
 import java.util.ArrayList;
 
