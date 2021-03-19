@@ -20,7 +20,7 @@ public class NonNegativeCountExperiment extends Experiment implements Experiment
                                       Integer minNumTrials,
                                       Boolean locationRequired,
                                       Boolean status,
-                                      User experimentOwner) {
+                                      String experimentOwner) {
         super(description, region, "nonNegativeCount", minNumTrials, locationRequired, status, experimentOwner);
     }
 
