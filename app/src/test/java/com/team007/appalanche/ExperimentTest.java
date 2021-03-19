@@ -1,7 +1,7 @@
 package com.team007.appalanche;
 
-import com.team007.appalanche.Experiment.*;
-import com.team007.appalanche.User.*;
+import com.team007.appalanche.experiment.*;
+import com.team007.appalanche.user.*;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,8 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ExperimentTest {
     ContactInfo contact = new ContactInfo(123, "link");
     Profile profile = new Profile("user", contact);
-    User user = new User("testId", profile);
-    Experiment exp = new Experiment("description", "Alberta", "binomial", 1, false, true, user);
+    Experiment exp = new Experiment("description", "Alberta", "binomial", 1, false, true, "testId");
 
     @Test
     void testGetDescription() {
@@ -80,7 +79,7 @@ public class ExperimentTest {
     }
 
     @Test
-    void testGetOwner() {
-        assertEquals(exp.getExperimentOwner(), user);
+    void testGetOwnerId() {
+        assertEquals(exp.getExperimentOwnerID(), "testId");
     }
 }
