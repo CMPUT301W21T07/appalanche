@@ -16,7 +16,7 @@ import androidx.fragment.app.DialogFragment;
 import com.team007.appalanche.Location;
 import com.team007.appalanche.R;
 import com.team007.appalanche.user.Experimenter;
-import com.team007.appalanche.Trial.*;
+import com.team007.appalanche.trial.*;
 
 import java.util.Date;
 

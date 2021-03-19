@@ -10,8 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.R;
@@ -20,7 +18,6 @@ import com.team007.appalanche.question.Question;
 import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.view.AskQuestionFragment;
 import com.team007.appalanche.view.QRCodeActivity;
-import com.team007.appalanche.view.QRCodeFragment;
 import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
 
 import static com.team007.appalanche.view.experimentActivity.QuestionFragment.questionAdapter;
