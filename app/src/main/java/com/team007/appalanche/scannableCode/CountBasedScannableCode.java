@@ -21,8 +21,8 @@ public class CountBasedScannableCode extends ScannableCode {
      * @param barcode
      *  This is the code number encodes the count based trial
      */
-    public CountBasedScannableCode(Experiment experiment, int barcode) {
-        super(experiment,"CountBased", barcode);
+    public CountBasedScannableCode(Experiment experiment, String barcode) {
+        super(experiment,experiment.getTrialType(), barcode);
     }
 
     /**
@@ -31,7 +31,7 @@ public class CountBasedScannableCode extends ScannableCode {
      *  This is the count based experiment whose trial the code encodes
      */
     public CountBasedScannableCode(Experiment experiment) {
-        super(experiment,"CountBased", -1);
+        super(experiment, experiment.getTrialType(), null);
     }
 
     /**

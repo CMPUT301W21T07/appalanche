@@ -25,8 +25,8 @@ public class NonNegScannableCode extends ScannableCode {
      * @param result
      *  This is the integer result that the code encodes
      */
-    public NonNegScannableCode(Experiment experiment, int result, int barcode) {
-        super(experiment, "NonNegative", barcode);
+    public NonNegScannableCode(Experiment experiment, int result, String barcode) {
+        super(experiment, experiment.getTrialType(), barcode);
         this.result = result;
     }
 
@@ -38,7 +38,7 @@ public class NonNegScannableCode extends ScannableCode {
      *  This is the integer result that the code encodes
      */
     public NonNegScannableCode(Experiment experiment, int result) {
-        super(experiment, "NonNegative", -1);
+        super(experiment, experiment.getTrialType(), null);
         this.result = result;
     }
 

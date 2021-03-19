@@ -70,7 +70,7 @@ public class BinomialExperiment extends Experiment implements ExperimentInterfac
      * @param intendedResult
      *  The result that I want the registered  to encode
      */
-    public BinomialScannableCode registerBarcode(int barcode, boolean intendedResult) {
+    public BinomialScannableCode registerBarcode(String barcode, boolean intendedResult) {
         return new BinomialScannableCode(this, intendedResult, barcode);
     }
 

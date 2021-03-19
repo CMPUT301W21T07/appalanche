@@ -65,7 +65,7 @@ public class CountBasedExperiment extends Experiment implements ExperimentInterf
      * @param barcode
      *  The barcode that I want to register
      */
-    public CountBasedScannableCode registerBarcode(int barcode) {
+    public CountBasedScannableCode registerBarcode(String barcode) {
         return new CountBasedScannableCode(this, barcode);
     }
 

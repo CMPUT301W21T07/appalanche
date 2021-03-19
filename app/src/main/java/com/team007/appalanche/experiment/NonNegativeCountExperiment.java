@@ -68,7 +68,7 @@ public class NonNegativeCountExperiment extends Experiment implements Experiment
      * @param intendedResult
      *  The result that I want the registered  to encode
      */
-    public NonNegScannableCode registerBarcode(int barcode, int intendedResult) {
+    public NonNegScannableCode registerBarcode(String barcode, int intendedResult) {
         return new NonNegScannableCode(this, intendedResult, barcode);
     }
 
