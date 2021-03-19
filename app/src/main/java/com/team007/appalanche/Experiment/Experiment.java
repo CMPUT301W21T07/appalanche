@@ -1,7 +1,5 @@
 package com.team007.appalanche.Experiment;
 
-import com.team007.appalanche.User.User;
-
 /**
  * abstract class representing an experiment object
  */
@@ -41,6 +39,7 @@ public class Experiment {
     // No argument constructor for firebase
     public Experiment() {}
 
+    public Experiment(String description) {this.description = description;}
     /**
      * function to get exp. description
      * @return

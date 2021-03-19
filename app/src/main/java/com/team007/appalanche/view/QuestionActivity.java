@@ -2,9 +2,6 @@ package com.team007.appalanche.view;
 
 
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,18 +13,20 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.team007.appalanche.User.User;
-import com.team007.appalanche.question.Question;
-import com.team007.appalanche.custom.QuestionCustomList;
 import com.team007.appalanche.R;
-
+import com.team007.appalanche.User.User;
 import com.team007.appalanche.controller.QuestionListController;
+import com.team007.appalanche.custom.QuestionCustomList;
+import com.team007.appalanche.question.Question;
 
 import java.util.Date;
 
@@ -56,33 +55,33 @@ public class QuestionActivity extends AppCompatActivity implements AskQuestionFr
         questionListView.setAdapter(questionAdapter);
 
 
-//        // Access a Cloud Firestore instance from your Activity
-//        db = FirebaseFirestore.getInstance();
-//        // Get a top-level reference to the collection.
-//        final CollectionReference collectionReference = db.collection("Questions");
-//
-//        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//
-//            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-//                // clear the old list
-//                questionList.clearQuestionList();
-////                if (e != null){
-////                    //Toast.makeText(QuestionActivity.this, " deleted", Toast.LENGTH_SHORT).show();
-////                    return;
-////                } else {
-//                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
-//                    Log.d(TAG, String.valueOf(doc.getData().get("user_posted_question")));
-//                    String question = doc.getId();
-//                    String user = (String) doc.getData().get("user_posted_question");
-//
-//                    questionList.addQuestion(new Question(question, new User(user, null), new Date()));}
-//
-//
-//                //}
-//                questionAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.
-//            }
-//        });
+        // Access a Cloud Firestore instance from your Activity
+        db = FirebaseFirestore.getInstance();
+        // Get a top-level reference to the collection.
+        final CollectionReference collectionReference = db.collection("Questions");
+
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                // clear the old list
+                questionList.clearQuestionList();
+//                if (e != null){
+//                    //Toast.makeText(QuestionActivity.this, " deleted", Toast.LENGTH_SHORT).show();
+//                    return;
+//                } else {
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                    Log.d(TAG, String.valueOf(doc.getData().get("user_posted_question")));
+                    String question = doc.getId();
+                    String user = (String) doc.getData().get("user_posted_question");
+
+                    questionList.addQuestion(new Question(question, new User(user, null), new Date()));}
+
+
+                //}
+                questionAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.
+            }
+        });
 
 
         // CLICK ON BACK BUTTON

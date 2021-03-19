@@ -1,97 +1,86 @@
 package com.team007.appalanche.controller;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import android.util.Log;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
+
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.team007.appalanche.Experiment.Experiment;
 import com.team007.appalanche.User.User;
-import com.team007.appalanche.User.UserDocument;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
-/**
- * This view model maps the type of experiment to display (owned or subscribed) based on the index
- * - 0 maps to owned experiments
- * - 1 maps to subscribed experiments
- */
+import static android.content.ContentValues.TAG;
 
-@SuppressWarnings("UnusedAssignment")
-public class ExperimentController extends ViewModel {
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+public class ExperimentController {
+    User currentUser;
+    FirebaseFirestore db;
     private MutableLiveData<Integer> experimentType = new MutableLiveData<>();
-    private ArrayList<Experiment> ownedExperiments = new ArrayList<Experiment>();
-    private ArrayList<Experiment> subscribedExperiments = new ArrayList<Experiment>();
-    private String currentUserKey;
+    public ExperimentController(User currentUser) {
+        this.currentUser = currentUser;
+    };
 
     public void setExperimentType(int index) {
         experimentType.setValue(index);
     }
 
-    public ArrayList<Experiment> getExperiments () {
-        if (experimentType.getValue() == 0) {
-            return ownedExperiments;
-        } else {
-            return subscribedExperiments;
-        }
-    }
-
     public void loadExperiments() {
-        // do firebase stuff by loading in the owned and subscribed experiments
-        DocumentReference userDoc = db.collection("Users").document(currentUserKey);
-        final User[] currentUser = new User[1];
-
-//        userDoc.addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-//                // clear the old list
-//                ownedExperiments.clear();
-//                subscribedExperiments.clear();
-//                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-//                    Log.d(TAG, String.valueOf(doc.getData().get("user_posted_question")));
-//                    ownedExperiments =  (ArrayList<Experiment>) userDoc.get("ownedExperiments");
-//                    subscribedExperiments = (ArrayList<Experiment>) userDoc.get("subsribedExperiments");
-//
-//                    questionList.addQuestion(new Question(question, new User(user, null), new Date()));
-//                }
-//            }});
-        userDoc.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    ownedExperiments = document.toObject(UserDocument.class).users;
-                    //subscribedExperiments = document.toObject(UserDocument.class).users;
-                }
-            }
-        });
-
-
-        userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        //DocumentReference userDoc = db.collection("Users").document(currentUser.getId());
+        db = FirebaseFirestore.getInstance();
+        //final CollectionReference ownedCol = db.collection("Users/"+currentUser.getId()+"/OwnedExperiments");
+        final CollectionReference ownedCol = db.collection("Experiments");
+        ownedCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                currentUser[0] = documentSnapshot.toObject(User.class);
-//                //ADDED THIS
-                currentUser[0].setID(currentUserKey);
 
-            }
-        });
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                // clear the old list
+                currentUser.getOwnedExperiments().clear();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                    Log.d(TAG, String.valueOf(doc.getData().get("description")));
+                    String exp = doc.getId();
+                    String description = (String) doc.getData().get("description");
 
-        if (currentUser[0] != null) {
-            ownedExperiments = (ArrayList<Experiment>) currentUser[0].getOwnedExperiments();
-            subscribedExperiments = (ArrayList<Experiment>) currentUser[0].getSubscribedExperiments();
-        }
+                    currentUser.addOwnedExperiment(new Experiment(exp));
+                    currentUser.addOwnedExperiment(new Experiment("Hi"));
+
+                }}});
+
+        //        // Access a Cloud Firestore instance from your Activity
+//        db = FirebaseFirestore.getInstance();
+//        // Get a top-level reference to the collection.
+//        final CollectionReference collectionReference = db.collection("Questions");
+//
+//        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//
+
 
     }
-    public void setCurrentUser(String userKey) {
-        this.currentUserKey = userKey;
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
     }
 
+    public User getCurrentUser() {
+        return currentUser;
+    }
     public void addExperiment(Experiment experiment) {
-        DocumentReference newExperiment = db.collection("Experiments").document();
-        newExperiment.set(experiment);
+        db = FirebaseFirestore.getInstance();
+        final CollectionReference ownedCol = db.collection("Users/"+currentUser.getId()+"/OwnedExperiments");
+
+        currentUser.addOwnedExperiment(experiment);
+
+        // We use a HashMap to store a key-value pair in firestore.
+        HashMap<String, String> data = new HashMap<>();
+        data.put("user_posted_question", experiment.getDescription());
+        ownedCol
+                .document("newExp")
+                .set(data);
     }
 }

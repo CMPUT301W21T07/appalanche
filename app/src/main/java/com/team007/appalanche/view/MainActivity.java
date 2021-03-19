@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Create a new collection in firebase and store the generated id to userKey
 
-            currentUser = db.collection("Users").document();
+            currentUser = db.collection("Users1").document();
             userKey = currentUser.getId();
 
             // Create a new instance of a user object
@@ -94,13 +94,14 @@ public class MainActivity extends AppCompatActivity {
             editor.apply();
         } else {
             currentUser = db.collection("Users").document(userKey);
-            //Toast.makeText(MainActivity.this, userKey, Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, userKey, Toast.LENGTH_LONG).show();
         }
 
 //        Toast.makeText(MainActivity.this, userKey, Toast.LENGTH_LONG).show();
 
 
-//        /// TESTTTT
+//
+        /// TESTTTT
 //        final User[] us = new User[1];
 //        currentUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
 //            @Override
@@ -119,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
 //                currentUser.set(us[0]);
 //            }
 //        });
-
 
         addExperimentButton.setOnClickListener(new View.OnClickListener() {
             @Override

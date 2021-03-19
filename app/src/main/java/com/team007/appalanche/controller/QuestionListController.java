@@ -19,7 +19,7 @@ public class QuestionListController {
     public void addQuestion(Question newQuestion) {
         questionList.add(newQuestion);
     }
-//    public void addQuestionToDb(Question newQuestion, FirebaseFirestore db) {
+//  public void addQuestionToDb(Question newQuestion, FirebaseFirestore db) {
 //        //questionList.add(newQuestion);
 //
 //        final CollectionReference collectionReference = db.collection("questions");
