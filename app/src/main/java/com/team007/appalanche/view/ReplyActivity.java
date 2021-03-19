@@ -31,11 +31,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * This is a list whose
- * reply elements are displayed under the printed question.
- * Users can add replies to that list using an EditText or
- * they can return to QuestionActivity using the back button.
+ * This activity is opened from QuestionActivity when a user wants to reply to
+ * a question. It displays a list whose reply elements are
+ * displayed under the printed question. Users can add replies
+ * to that list using an EditText or they can return to
+ * QuestionActivity using the back button.
  */
+
 public class ReplyActivity extends AppCompatActivity {
 
     private EditText replyMessage;

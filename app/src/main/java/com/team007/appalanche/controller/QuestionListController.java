@@ -4,6 +4,12 @@ import com.team007.appalanche.question.Question;
 
 import java.util.ArrayList;
 
+/**
+ * This controller serves as an interface between the model for creating questions and the
+ * UI for viewing questions. When a user requests the creation of a question, their message
+ * is routed to this controller and added to that current experiment's question-list.
+ */
+
 public class QuestionListController {
     private ArrayList<Question> questionList = new ArrayList<Question>();
 

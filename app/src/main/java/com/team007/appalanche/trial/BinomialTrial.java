@@ -1,11 +1,15 @@
-package com.team007.appalanche.trial;
+package com.team007.appalanche.Trial;
 
 import com.team007.appalanche.Location;
 import com.team007.appalanche.user.User;
 
 import java.util.Date;
 
-public class BinomialTrial extends Trial{
+/**
+ * This class represents a binomial trial; values are measured as either true or false.
+ */
+
+public class BinomialTrial extends com.team007.appalanche.trial.Trial {
     private boolean outcome;
 
     /*Constructor function for the binomial trial class*/

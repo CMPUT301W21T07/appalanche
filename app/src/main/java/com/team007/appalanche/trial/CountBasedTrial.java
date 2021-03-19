@@ -5,7 +5,11 @@ import com.team007.appalanche.user.User;
 
 import java.util.Date;
 
-public class  CountBasedTrial extends Trial{
+/**
+ * This class represents a count-based trial; values are measured by incremented counts.
+ */
+
+public class  CountBasedTrial extends com.team007.appalanche.trial.Trial {
     private int count;
 
     /*constructor function for the count based trial class*/

@@ -13,6 +13,10 @@ import com.team007.appalanche.question.Question;
 
 import java.util.ArrayList;
 
+/**
+ * Allows for the proper display of an Question item and its attributes in a ListView display of experiments.
+ */
+
 public class QuestionCustomList extends ArrayAdapter<Question> {
     private ArrayList<Question> questions;
     private Context context;

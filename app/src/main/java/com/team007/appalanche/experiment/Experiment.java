@@ -1,4 +1,4 @@
-package com.team007.appalanche.experiment;
+package com.team007.appalanche.Experiment;
 
 import com.team007.appalanche.trial.Trial;
 

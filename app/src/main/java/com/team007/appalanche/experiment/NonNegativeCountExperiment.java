@@ -1,8 +1,12 @@
-package com.team007.appalanche.experiment;
+package com.team007.appalanche.Experiment;
 
 import com.team007.appalanche.scannableCode.NonNegScannableCode;
 
-public class NonNegativeCountExperiment extends Experiment implements ExperimentInterface {
+/**
+ * This class that extends Experiment handles the creation of non-negative count trials.
+ */
+
+public class NonNegativeCountExperiment extends Experiment implements com.team007.appalanche.experiment.ExperimentInterface {
     //public String trialType = "NonNegativeCount";
     /**
      * Constructor function for non negative count experiment class
