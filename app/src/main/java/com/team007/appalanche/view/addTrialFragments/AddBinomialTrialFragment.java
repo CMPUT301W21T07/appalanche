@@ -15,8 +15,10 @@ import androidx.fragment.app.DialogFragment;
 
 import com.team007.appalanche.Location;
 import com.team007.appalanche.R;
+import com.team007.appalanche.trial.BinomialTrial;
 import com.team007.appalanche.user.Experimenter;
-import com.team007.appalanche.trial.*;
+import com.team007.appalanche.trial.Trial;
+import com.team007.appalanche.user.User;
 
 import java.util.Date;
 
@@ -40,7 +42,9 @@ public class AddBinomialTrialFragment extends DialogFragment  {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
-                        Trial newBinomialTrial = new BinomialTrial(new Experimenter("123", null), new Location(), new Date());
+                        Trial newBinomialTrial =
+                                new BinomialTrial(new User("123", null), new Location(),
+                                        new Date());
                         // newTrial.setOutcome(Boolean.valueOf(result.toString())); TODO: set trial result for trial object
                         listener.addTrial(newBinomialTrial);
                     }

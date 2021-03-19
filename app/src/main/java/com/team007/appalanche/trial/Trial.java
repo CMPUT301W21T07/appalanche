@@ -1,6 +1,5 @@
 package com.team007.appalanche.trial;
 
-import com.team007.appalanche.user.Experimenter;
 import com.team007.appalanche.Location;
 import com.team007.appalanche.user.User;
 
@@ -44,7 +43,7 @@ public abstract class Trial {
         this.location = location;
     }
 
-    public void setUserAddedTrial(Experimenter userAddedTrial) {
+    public void setUserAddedTrial(User userAddedTrial) {
         this.userAddedTrial = userAddedTrial;
     }
 }
