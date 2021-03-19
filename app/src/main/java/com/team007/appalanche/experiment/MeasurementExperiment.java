@@ -2,6 +2,10 @@ package com.team007.appalanche.experiment;
 
 import com.team007.appalanche.scannableCode.MeasurementScannableCode;
 
+/**
+ * This class that extends Experiment handles the creation of measurement-based trials.
+ */
+
 public class MeasurementExperiment extends Experiment implements ExperimentInterface {
     /**
      * Constructor function for measurement experiment class
@@ -67,7 +71,7 @@ public class MeasurementExperiment extends Experiment implements ExperimentInter
      * @param intendedResult
      *  The result that I want the registered  to encode
      */
-    public MeasurementScannableCode registerBarcode(int barcode, float intendedResult) {
+    public MeasurementScannableCode registerBarcode(String barcode, float intendedResult) {
         return new MeasurementScannableCode(this, intendedResult, barcode);
     }
 

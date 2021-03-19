@@ -2,6 +2,10 @@ package com.team007.appalanche.experiment;
 
 import com.team007.appalanche.scannableCode.BinomialScannableCode;
 
+/**
+ * This class that extends Experiment handles the creation of binomial trials.
+ */
+
 public class BinomialExperiment extends Experiment implements ExperimentInterface {
     //public String trialType;
 
@@ -70,7 +74,7 @@ public class BinomialExperiment extends Experiment implements ExperimentInterfac
      * @param intendedResult
      *  The result that I want the registered  to encode
      */
-    public BinomialScannableCode registerBarcode(int barcode, boolean intendedResult) {
+    public BinomialScannableCode registerBarcode(String barcode, boolean intendedResult) {
         return new BinomialScannableCode(this, intendedResult, barcode);
     }
 

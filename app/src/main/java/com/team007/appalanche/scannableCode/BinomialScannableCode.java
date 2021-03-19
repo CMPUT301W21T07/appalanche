@@ -24,8 +24,8 @@ public class BinomialScannableCode extends ScannableCode {
      * @param result
      *  This is the boolean result that the code encodes
      */
-    public BinomialScannableCode(Experiment experiment, boolean result, int barcode) {
-        super(experiment, "Binomial", barcode);
+    public BinomialScannableCode(Experiment experiment, boolean result, String barcode) {
+        super(experiment, experiment.getTrialType(), barcode);
         this.result = result;
     }
 
@@ -37,7 +37,7 @@ public class BinomialScannableCode extends ScannableCode {
      *  This is the boolean result that the code encodes
      */
     public BinomialScannableCode(Experiment experiment, boolean result) {
-        super(experiment, "Binomial", -1);
+        super(experiment, experiment.getTrialType(), null);
         this.result = result;
     }
 
@@ -47,7 +47,7 @@ public class BinomialScannableCode extends ScannableCode {
      * @param location The location that the code was scanned at
      * @return Returns the constructed binomial trial
      */
-    public BinomialTrial scan(Experimenter experimenter, Location location) {
+    public BinomialTrial scan(User experimenter, Location location) {
         Date date = new Date();
         BinomialTrial trial = new BinomialTrial(experimenter, location, date);
         trial.setOutcome(result);

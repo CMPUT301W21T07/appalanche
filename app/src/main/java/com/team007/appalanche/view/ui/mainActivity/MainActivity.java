@@ -7,8 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -29,6 +32,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.team007.appalanche.experiment.Experiment;
@@ -39,6 +43,7 @@ import com.team007.appalanche.user.User;
 import com.team007.appalanche.scannableCode.ScannableCode;
 import com.team007.appalanche.view.AddExperimentFragment;
 import com.team007.appalanche.view.Capture;
+import com.team007.appalanche.view.experimentActivity.ExperimentActivity;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseFirestore db;
@@ -57,9 +62,6 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-
-        FloatingActionButton addExperimentButton = findViewById(R.id.addExperimentButton);
-        FloatingActionButton scanCodeButton = findViewById(R.id.scanCodeButton);
 
         /* Create the current user in the shared preferences, if the user does not already exist */
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
@@ -110,30 +112,8 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-//        Toast.makeText(MainActivity.this, userKey, Toast.LENGTH_LONG).show();
-
-        AccountManager am = AccountManager.get(this); // "this" references the current Context
-        Account[] accounts = am.getAccountsByType("com.google");
-
-        /// TESTTTT
-//        final User[] us = new User[1];
-//        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//            @Override
-//            public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                us[0] = documentSnapshot.toObject(User.class);
-//                Experiment newExp = new Experiment("How many jelly beans can I fit in my mouth?",
-//                        "Alberta", "NonNegTrial",2, false, true, us[0].getId());
-////                Toast.makeText(MainActivity.this, us[0].getId(), Toast.LENGTH_LONG).show();
-//                us[0].addOwnedExperiment(newExp);
-//                docRef.set(us[0]);
-//            }
-//        });
-//        Experiment newExp = new Experiment("How many jelly beans can I fit in my mouth?",
-//                "Alberta", "NonNegTrial",2, false, true, currentUser.getId());
-////                Toast.makeText(MainActivity.this, us[0].getId(), Toast.LENGTH_LONG).show();
-//        currentUser.addOwnedExperiment(newExp);
-//        docRef.set(currentUser);
-
+        // Add floating action button click listeners
+        FloatingActionButton addExperimentButton = findViewById(R.id.addExperimentButton);
         addExperimentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        FloatingActionButton scanCodeButton = findViewById(R.id.scanCodeButton);
         scanCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -191,31 +172,34 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * This is overwritten here to obtain the result of the QR/Barcode scanning
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode,
                 data);
         if (scanResult.getContents() != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setTitle("Result");
-            builder.setMessage("The barcode scanned is:" + scanResult.getContents());
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            builder.show();
-
-            getScannedTrial(scanResult.getContents());
+            if (scanResult.getFormatName() == BarcodeFormat.QR_CODE.toString()) {
+                // We have scanned a QR code
+                getScannedTrialQR(scanResult.getContents());
+            } else {
+                // We have scanned a barcode
+                getScannedTrialBarcode(scanResult.getContents());
+            }
         } else {
             Toast.makeText(getApplicationContext(), "Oops, you didn't scan anything",
                     Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void getScannedTrial(String contents) {
+    /**
+     * This takes in a scanned QR code, deserializes it, adds a trial to the corresponding
+     * experiment class, and navigates to it.
+     * @param contents This is the serialized QR code class.
+     */
+    private void getScannedTrialQR(String contents) {
         // deserialize
         ScannableCode scannedCode = deserialize(contents);
 
@@ -227,6 +211,45 @@ public class MainActivity extends AppCompatActivity {
         experiment.addTrial(trial);
 
         // go to that experiment
+        openExperimentActivity(experiment);
+    }
+
+    /**
+     * This takes in a scanned barcode, queries the database for it, and based on the result it
+     * will either resolve to no trial or add a trial to the corresponding experiment class and
+     * navigate to it.
+     * @param barcode This is the scanned barcode
+     */
+    private void getScannedTrialBarcode(String barcode) {
+        db.collection("Barcodes").document(barcode).get()
+            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            ScannableCode scannedCode = document.toObject(ScannableCode.class);
+                            // get the trial from the deserialization
+                            Trial trial = scannedCode.scan(currentUser);
+
+                            // add the trial to the appropriate experiment
+                            Experiment experiment = scannedCode.getExperiment();
+                            experiment.addTrial(trial);
+
+                            // go to that experiment
+                            openExperimentActivity(experiment);
+                        } else {
+                            Toast.makeText(MainActivity.this, "This barcode is not registered to " +
+                                            "anything",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(MainActivity.this, "There was an error fetching the result" +
+                                        " of this barcode",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
     }
 
     /**
@@ -237,6 +260,17 @@ public class MainActivity extends AppCompatActivity {
     private ScannableCode deserialize(String serialBarcode) {
         Gson gson = new Gson();
         return gson.fromJson(serialBarcode, ScannableCode.class);
+    }
+
+    /**
+     * This opens the experiment activity.
+     * @param experiment This is the experiment activity to open.
+     */
+    private void openExperimentActivity(Experiment experiment) {
+        Intent intent = new Intent(this, ExperimentActivity.class);
+        intent.putExtra("Experiment", experiment);
+        startActivity(intent);
+        startActivityForResult(intent,1);
     }
 
     private void openProfileActivity() {

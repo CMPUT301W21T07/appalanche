@@ -5,7 +5,12 @@ import com.team007.appalanche.user.User;
 
 import java.util.Date;
 
-public class  NonNegativeCountTrial extends Trial{
+/**
+ * This class represents a non-negative count-based trial. In comparison to CountBasedTrial,
+ * it cannot be incremented and is set by a non-negative number of the user's choice.
+ */
+
+public class  NonNegativeCountTrial extends Trial {
     private Integer count;
     /*constructor function for the count based trial class*/
     public NonNegativeCountTrial(User userAddedTrial, Location location, Date date) {

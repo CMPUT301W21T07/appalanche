@@ -2,6 +2,10 @@ package com.team007.appalanche.experiment;
 
 import com.team007.appalanche.scannableCode.NonNegScannableCode;
 
+/**
+ * This class that extends Experiment handles the creation of non-negative count trials.
+ */
+
 public class NonNegativeCountExperiment extends Experiment implements ExperimentInterface {
     //public String trialType = "NonNegativeCount";
     /**
@@ -68,7 +72,7 @@ public class NonNegativeCountExperiment extends Experiment implements Experiment
      * @param intendedResult
      *  The result that I want the registered  to encode
      */
-    public NonNegScannableCode registerBarcode(int barcode, int intendedResult) {
+    public NonNegScannableCode registerBarcode(String barcode, int intendedResult) {
         return new NonNegScannableCode(this, intendedResult, barcode);
     }
 

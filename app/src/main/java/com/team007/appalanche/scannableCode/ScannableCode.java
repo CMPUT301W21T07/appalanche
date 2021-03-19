@@ -8,7 +8,7 @@ import com.team007.appalanche.experiment.*;
  */
 public abstract class ScannableCode implements scannable {
     private final Experiment experiment;
-    private final int barcode;
+    private final String barcode;
     private final String experimentType;
 
     /**
@@ -20,7 +20,7 @@ public abstract class ScannableCode implements scannable {
      * @param experimentType
      *  This is the type of experiment
      */
-    public ScannableCode(Experiment experiment, String experimentType, int barcode) {
+    public ScannableCode(Experiment experiment, String experimentType, String barcode) {
         this.experiment = experiment;
         this.barcode = barcode;
         this.experimentType = experimentType;
@@ -31,7 +31,7 @@ public abstract class ScannableCode implements scannable {
         return experiment;
     }
 
-    public int getBarcode() {
+    public String getBarcode() {
         return barcode;
     }
 
@@ -40,6 +40,6 @@ public abstract class ScannableCode implements scannable {
     }
 
     public boolean isBarcode() {
-        return barcode != -1;
+        return barcode != null;
     }
 }

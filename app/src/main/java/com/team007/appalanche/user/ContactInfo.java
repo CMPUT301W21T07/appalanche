@@ -1,4 +1,9 @@
-package com.team007.appalanche.user;
+package com.team007.appalanche.User;
+
+/**
+ * This class represents a user's contact information, which is comprised
+ * of their phone number and a link to their GitHub page.
+ */
 
 public class ContactInfo {
     private Integer phoneNumber;

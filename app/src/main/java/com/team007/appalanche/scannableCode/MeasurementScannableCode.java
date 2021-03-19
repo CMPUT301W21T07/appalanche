@@ -25,8 +25,8 @@ public class MeasurementScannableCode extends ScannableCode {
      * @param result
      *  This is the double result that the code encodes
      */
-    public MeasurementScannableCode(Experiment experiment, double result, int barcode) {
-        super(experiment, "Measurement", barcode);
+    public MeasurementScannableCode(Experiment experiment, double result, String barcode) {
+        super(experiment, experiment.getTrialType(), barcode);
         this.result = result;
     }
 
@@ -38,7 +38,7 @@ public class MeasurementScannableCode extends ScannableCode {
      *  This is the double result that the code encodes
      */
     public MeasurementScannableCode(Experiment experiment, double result) {
-        super(experiment, "Measurement", -1);
+        super(experiment, experiment.getTrialType(), null);
         this.result = result;
     }
 
@@ -48,7 +48,7 @@ public class MeasurementScannableCode extends ScannableCode {
      * @param location The location that the code was scanned at
      * @return Returns the constructed measurement trial
      */
-    public MeasurementTrial scan(Experimenter experimenter, Location location) {
+    public MeasurementTrial scan(User experimenter, Location location) {
         Date date = new Date();
         MeasurementTrial trial = new MeasurementTrial(experimenter, location, date);
         trial.setValue(result);

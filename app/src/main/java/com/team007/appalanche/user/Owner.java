@@ -2,7 +2,12 @@ package com.team007.appalanche.user;
 
 import com.team007.appalanche.experiment.*;
 
-public class Owner extends User {
+/**
+ * This class represents an owner of an experiment; they have exclusive privileges
+ * for the experiments they own: they can unpublish/publish them or end/open them.
+ */
+
+public class Owner extends com.team007.appalanche.user.User {
     public Owner(String ID, Profile profile) {
         super(ID, profile);
     }
@@ -15,7 +20,7 @@ public class Owner extends User {
         // TODO: implement function
     }
 
-    public void ignoreResults(Experimenter experimenter) {
+    public void ignoreResults(User experimenter) {
         // TODO: implement function
     }
 

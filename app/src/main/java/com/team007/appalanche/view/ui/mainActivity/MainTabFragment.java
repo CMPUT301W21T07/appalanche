@@ -76,14 +76,13 @@ public class MainTabFragment extends Fragment {
         // Load the experiments
 
 //        // FOR DEBUGGING THE NEW TABBED LAYOUT
-//        ExperimentDataList = new ArrayList<Experiment>();
-//        Experiment test = new Experiment("How many jelly mans can a jelly bean fit in its mouth",
-//                "Edmonton", "NonNegative", 4, false, true, null);
-//        ExperimentDataList.add(test);
-        ExperimentDataList = new ArrayList<Experiment>();
-        ExperimentDataList.add(new Experiment("Hello"));
 
-        //ExperimentDataList = experimentController.getExperiments();
+        ExperimentDataList = new ArrayList<Experiment>();
+        Experiment test = new Experiment("How many jelly mans can a jelly bean fit in its mouth",
+                "Edmonton", "NonNegative", 4, false, true, null);
+        ExperimentDataList.add(test);
+
+//        ExperimentDataList = experimentController.getExperiments();
 //        String context = ExperimentDataList.get(0).getDescription();
 //        Toast.makeText(getActivity(), context, Toast.LENGTH_LONG).show();
 
@@ -103,7 +102,11 @@ public class MainTabFragment extends Fragment {
         return root;
     }
 
-    public void openExperimentActivity(Experiment experiment) {
+    /**
+     * This opens the experiment activity.
+     * @param experiment This is the experiment activity to open.
+     */
+    private void openExperimentActivity(Experiment experiment) {
         Intent intent = new Intent(getContext(), ExperimentActivity.class);
         intent.putExtra("Experiment", experiment);
         startActivity(intent);

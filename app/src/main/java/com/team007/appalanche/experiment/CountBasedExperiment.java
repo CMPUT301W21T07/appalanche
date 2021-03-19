@@ -2,6 +2,10 @@ package com.team007.appalanche.experiment;
 
 import com.team007.appalanche.scannableCode.CountBasedScannableCode;
 
+/**
+ * This class that extends Experiment handles the creation of count-based trials.
+ */
+
 public class CountBasedExperiment extends Experiment implements ExperimentInterface {
     /**
      * Constructor function for count based experiment class
@@ -65,7 +69,7 @@ public class CountBasedExperiment extends Experiment implements ExperimentInterf
      * @param barcode
      *  The barcode that I want to register
      */
-    public CountBasedScannableCode registerBarcode(int barcode) {
+    public CountBasedScannableCode registerBarcode(String barcode) {
         return new CountBasedScannableCode(this, barcode);
     }
 

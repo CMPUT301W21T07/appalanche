@@ -1,9 +1,15 @@
 package com.team007.appalanche.user;
 
+import com.team007.appalanche.User.ContactInfo;
 import com.team007.appalanche.experiment.Experiment;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
+/**
+ * This class represents a user using the app. A user can be an Experimenter or an
+ * Owner.
+ */
 
 public class User implements Serializable {
     private String ID;

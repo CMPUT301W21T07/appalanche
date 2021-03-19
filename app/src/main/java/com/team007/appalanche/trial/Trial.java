@@ -5,6 +5,12 @@ import com.team007.appalanche.user.User;
 
 import java.util.Date;
 
+/**
+ * This abstract class is the building-block for any Trial; a BinomialTrial,
+ * CountBasedTrial, MeasurementTrial, or NonNegativeCountTrial is built from
+ * this class.
+ */
+
 public abstract class Trial {
     private Date date;
     private Location location = new Location();

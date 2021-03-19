@@ -27,6 +27,15 @@ import com.team007.appalanche.scannableCode.CountBasedScannableCode;
 import com.team007.appalanche.scannableCode.MeasurementScannableCode;
 import com.team007.appalanche.scannableCode.NonNegScannableCode;
 
+/**
+ * This activity is opened when a user wants to create a QR-code.
+ * It creates a QR-code for the user to save to their camera roll.
+ *
+ * Outstanding issues:
+ * - User needs to screenshot the QR-code for it to be saved to their camera roll,
+ * rather than the app doing it for them.
+ */
+
 public class QRCodeActivity extends AppCompatActivity {
     // TESTING PURPOSES ONLY
     // refactor code once we worry about persistent data
@@ -47,6 +56,7 @@ public class QRCodeActivity extends AppCompatActivity {
         String type = intent.getStringExtra("type");
         ImageView ivOutput;
         Button btnGenerate;
+
         switch (type) {
             case "binomial":
                 setContentView(R.layout.fragment_binomial_qr_layout);
