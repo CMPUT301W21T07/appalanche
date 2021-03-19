@@ -1,8 +1,12 @@
-package com.team007.appalanche.experiment;
+package com.team007.appalanche.Experiment;
 
 import com.team007.appalanche.scannableCode.CountBasedScannableCode;
 
-public class CountBasedExperiment extends Experiment implements ExperimentInterface {
+/**
+ * This class that extends Experiment handles the creation of count-based trials.
+ */
+
+public class CountBasedExperiment extends com.team007.appalanche.Experiment.Experiment implements com.team007.appalanche.experiment.ExperimentInterface {
     /**
      * Constructor function for count based experiment class
      * @param description

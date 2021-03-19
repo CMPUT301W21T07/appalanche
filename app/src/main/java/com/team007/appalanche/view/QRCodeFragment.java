@@ -22,7 +22,13 @@ import com.team007.appalanche.R;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.scannableCode.BinomialScannableCode;
 
-// NOT IN USE, but keep until the QR/barcode stuff are 100% ready
+/**
+ * [NOT IN USE, but keep until the QR/barcode stuff are 100% ready]
+ *
+ * This fragment is opened when a user wants to create a QR-code.
+ * It creates a QR-code for the user to save to their camera roll.
+ */
+
 
 public class QRCodeFragment extends DialogFragment {
     Intent intent = getActivity().getIntent();

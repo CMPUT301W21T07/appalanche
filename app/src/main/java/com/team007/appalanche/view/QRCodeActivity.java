@@ -15,16 +15,25 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-import com.team007.appalanche.experiment.BinomialExperiment;
-import com.team007.appalanche.experiment.CountBasedExperiment;
-import com.team007.appalanche.experiment.MeasurementExperiment;
-import com.team007.appalanche.experiment.NonNegativeCountExperiment;
+import com.team007.appalanche.Experiment.BinomialExperiment;
+import com.team007.appalanche.Experiment.CountBasedExperiment;
+import com.team007.appalanche.Experiment.MeasurementExperiment;
+import com.team007.appalanche.Experiment.NonNegativeCountExperiment;
 import com.team007.appalanche.R;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.scannableCode.BinomialScannableCode;
 import com.team007.appalanche.scannableCode.CountBasedScannableCode;
 import com.team007.appalanche.scannableCode.MeasurementScannableCode;
 import com.team007.appalanche.scannableCode.NonNegScannableCode;
+
+/**
+ * This activity is opened when a user wants to create a QR-code.
+ * It creates a QR-code for the user to save to their camera roll.
+ *
+ * Outstanding issues:
+ * - User needs to screenshot the QR-code for it to be saved to their camera roll,
+ * rather than the app doing it for them.
+ */
 
 public class QRCodeActivity extends AppCompatActivity {
     //Intent intent = getIntent();

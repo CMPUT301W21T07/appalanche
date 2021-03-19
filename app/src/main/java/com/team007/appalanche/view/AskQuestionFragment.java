@@ -20,6 +20,12 @@ import com.team007.appalanche.question.Question;
 
 import java.util.Date;
 
+/**
+ * This fragment is created when a user wants to ask a question about
+ * an experiment. It contains a text field where the user can enter their question,
+ * and it also contains two buttons: Cancel and Post.
+ */
+
 
 public class AskQuestionFragment extends DialogFragment {
     private OnFragmentInteractionListener listener;

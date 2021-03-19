@@ -13,6 +13,10 @@ import com.team007.appalanche.question.Reply;
 
 import java.util.ArrayList;
 
+/**
+ * Allows for the proper display of a Reply item and its attributes in a ListView display of experiments.
+ */
+
 public class ReplyCustomList extends ArrayAdapter<Reply> {
     private ArrayList<Reply> replies;
     private Context context;

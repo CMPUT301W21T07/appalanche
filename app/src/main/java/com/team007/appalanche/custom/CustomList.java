@@ -9,10 +9,14 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 
-import com.team007.appalanche.experiment.Experiment;
+import com.team007.appalanche.Experiment.Experiment;
 import com.team007.appalanche.R;
 
 import java.util.ArrayList;
+
+/**
+ * Allows for the proper display of an Experiment item and its attributes in a ListView display of experiments.
+ */
 
 public class CustomList extends ArrayAdapter<Experiment> {
     private ArrayList<Experiment> experiments;

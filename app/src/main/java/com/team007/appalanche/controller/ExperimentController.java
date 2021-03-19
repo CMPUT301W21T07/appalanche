@@ -7,7 +7,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.team007.appalanche.experiment.Experiment;
+import com.team007.appalanche.Experiment.Experiment;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.user.UserDocument;
 

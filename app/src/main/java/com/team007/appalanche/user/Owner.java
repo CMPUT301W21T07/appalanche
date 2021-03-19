@@ -1,8 +1,13 @@
-package com.team007.appalanche.user;
+package com.team007.appalanche.User;
 
 import com.team007.appalanche.experiment.*;
 
-public class Owner extends User {
+/**
+ * This class represents an owner of an experiment; they have exclusive privileges
+ * for the experiments they own: they can unpublish/publish them or end/open them.
+ */
+
+public class Owner extends com.team007.appalanche.user.User {
     public Owner(String ID, Profile profile) {
         super(ID, profile);
     }
