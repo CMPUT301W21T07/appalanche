@@ -12,7 +12,7 @@ public class Experiment {
     private Integer minNumTrials;
     private Boolean locationRequired;
     private Boolean status;
-    private User experimentOwner;
+    private String experimentOwnerID;
 
     /**
      * Constructor function for abstract experiment class
@@ -28,15 +28,18 @@ public class Experiment {
                       Integer minNumTrials,
                       Boolean locationRequired,
                       Boolean status,
-                      User experimentOwner) {
+                      String experimentOwnerID) {
         this.description = description;
         this.region = region;
         this.trialType = trialType;
         this.minNumTrials = minNumTrials;
         this.locationRequired = locationRequired;
         this.status = status;
-        this.experimentOwner = experimentOwner;
+        this.experimentOwnerID = experimentOwnerID;
     }
+
+    // No argument constructor for firebase
+    public Experiment() {}
 
     /**
      * function to get exp. description
@@ -120,5 +123,5 @@ public class Experiment {
      * @return
      *  return profile object of the individual who created the experiment
      */
-    public User getExperimentOwner(){ return this.experimentOwner; }
+    public String getExperimentOwnerID(){ return this.experimentOwnerID; }
 }

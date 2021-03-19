@@ -18,7 +18,7 @@ public class CountBasedExperiment extends Experiment implements ExperimentInterf
                                 Integer minNumTrials,
                                 Boolean locationRequired,
                                 Boolean status,
-                                User experimentOwner) {
+                                String experimentOwner) {
         super(description, region, "count", minNumTrials, locationRequired, status, experimentOwner);
     }
 
