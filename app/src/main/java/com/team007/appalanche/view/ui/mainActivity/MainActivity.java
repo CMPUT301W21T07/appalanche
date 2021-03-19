@@ -11,7 +11,6 @@ import android.os.Bundle;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.NonNull;
@@ -40,6 +39,7 @@ import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.Profile;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.scannableCode.ScannableCode;
+import com.team007.appalanche.view.AddExperimentFragment;
 import com.team007.appalanche.view.Capture;
 
 public class MainActivity extends AppCompatActivity {
@@ -53,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+
         ViewPager viewPager = findViewById(R.id.view_pager);
+
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
@@ -113,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
 //        Toast.makeText(MainActivity.this, userKey, Toast.LENGTH_LONG).show();
 
         AccountManager am = AccountManager.get(this); // "this" references the current Context
-
         Account[] accounts = am.getAccountsByType("com.google");
 
         /// TESTTTT
@@ -138,8 +139,7 @@ public class MainActivity extends AppCompatActivity {
         addExperimentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Im a new experiment", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                new AddExperimentFragment().show(getSupportFragmentManager(), "New ");;
             }
         });
 
@@ -167,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This sets up a custom menu
      */
-
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);

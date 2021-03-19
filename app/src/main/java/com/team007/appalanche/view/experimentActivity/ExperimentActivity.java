@@ -17,13 +17,15 @@ import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.R;
 
 import com.team007.appalanche.question.Question;
+import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.view.AskQuestionFragment;
 import com.team007.appalanche.view.QRCodeFragment;
+import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
 
 import static com.team007.appalanche.view.experimentActivity.QuestionFragment.questionAdapter;
 import static com.team007.appalanche.view.experimentActivity.QuestionFragment.questionList;
 
-public class ExperimentActivity extends AppCompatActivity implements AskQuestionFragment.OnFragmentInteractionListener {
+public class ExperimentActivity extends AppCompatActivity implements AskQuestionFragment.OnFragmentInteractionListener, AddBinomialTrialFragment.OnFragmentInteractionListener {
     Experiment experiment;
 
     @Override
@@ -82,5 +84,10 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         //questionList.addQuestionToDb(question, db);
         questionList.addQuestion(question);
         questionAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void addTrial(Trial trial) {
+        // TODO: implement and write result to firestore
     }
 }
