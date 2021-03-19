@@ -22,7 +22,11 @@ public class  NonNegativeCountTrial extends Trial{
     }
 
     public void setCount(Integer count) {
-        this.count = count;
+        if (count >= 0) {
+            this.count = count;
+        } else {
+            throw new Error("NonNegativeCountTrial cannot set a negative value");
+        }
     }
 
 }
