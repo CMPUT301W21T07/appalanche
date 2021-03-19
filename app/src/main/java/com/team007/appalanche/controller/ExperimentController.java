@@ -1,4 +1,4 @@
-package com.team007.appalanche.view.ui.main;
+package com.team007.appalanche.controller;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.team007.appalanche.Experiment.Experiment;
 
 import java.util.List;
@@ -19,7 +20,8 @@ import java.util.List;
  * - 1 maps to subscribed experiments
  */
 
-public class PageViewModel extends ViewModel {
+public class ExperimentController extends ViewModel {
+    FirebaseFirestore db;
 
     private MutableLiveData<Integer> experimentType = new MutableLiveData<>();
     private LiveData<List<Experiment>> ownedExperiments;
@@ -35,5 +37,13 @@ public class PageViewModel extends ViewModel {
         } else {
             return subscribedExperiments;
         }
+    }
+
+    public void loadExperiments() {
+        // do firebase stuff by loading in the owned and subscribed experiments
+    }
+
+    public void addExperiment() {
+
     }
 }

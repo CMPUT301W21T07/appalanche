@@ -8,16 +8,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.team007.appalanche.Experiment.Experiment;
 import com.team007.appalanche.R;
+import com.team007.appalanche.controller.ExperimentController;
 import com.team007.appalanche.custom.CustomList;
 import com.team007.appalanche.view.ExperimentActivity;
 
@@ -30,7 +28,7 @@ public class MainTabFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    private PageViewModel pageViewModel;
+    private ExperimentController experimentController;
 
     ListView expList;
     ArrayAdapter<Experiment> expAdapter;
@@ -47,12 +45,13 @@ public class MainTabFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pageViewModel = new ViewModelProvider(this).get(PageViewModel.class);
+        experimentController = new ViewModelProvider(this).get(ExperimentController.class);
         int index = 1;
         if (getArguments() != null) {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
         }
-        pageViewModel.setExperimentType(index);
+        experimentController.setExperimentType(index);
+        experimentController.loadExperiments();
     }
 
     @Override
