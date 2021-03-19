@@ -1,6 +1,6 @@
 package com.team007.appalanche;
 
-import com.team007.appalanche.User.*;
+import com.team007.appalanche.user.*;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,7 +13,7 @@ public class UserTest {
 
     @Test
     void testGetId() {
-        assertEquals(user.getID(), "testId");
+        assertEquals(user.getId(), "testId");
     }
 
     @Test
