@@ -9,7 +9,7 @@ public class ContactInfo {
      * @param phoneNumber
      * @param githubLink
      */
-    ContactInfo(Integer phoneNumber, String githubLink) {
+    public ContactInfo(Integer phoneNumber, String githubLink) {
         this.phoneNumber = phoneNumber;
         this.githubLink = githubLink;
     }
