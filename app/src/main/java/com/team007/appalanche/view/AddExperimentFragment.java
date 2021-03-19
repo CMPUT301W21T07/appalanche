@@ -47,7 +47,7 @@ public class AddExperimentFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
-                        CountBasedExperiment newExperiment = new CountBasedExperiment(experimntDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, new User("123", null));
+                        CountBasedExperiment newExperiment = new CountBasedExperiment(experimntDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, "123");
                     }
                 })
 
