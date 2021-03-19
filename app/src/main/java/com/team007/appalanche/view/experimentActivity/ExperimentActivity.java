@@ -18,7 +18,7 @@ import com.google.zxing.integration.android.IntentResult;
 import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.R;
 
-import com.team007.appalanche.Trial.BinomialTrial;
+import com.team007.appalanche.trial.BinomialTrial;
 import com.team007.appalanche.question.Question;
 import com.team007.appalanche.view.AskQuestionFragment;
 import com.team007.appalanche.view.Capture;

@@ -1,4 +1,4 @@
-package com.team007.appalanche.User;
+package com.team007.appalanche.user;
 
 import com.team007.appalanche.experiment.*;
 
@@ -20,7 +20,7 @@ public class Owner extends com.team007.appalanche.user.User {
         // TODO: implement function
     }
 
-    public void ignoreResults(Experimenter experimenter) {
+    public void ignoreResults(User experimenter) {
         // TODO: implement function
     }
 

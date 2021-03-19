@@ -48,7 +48,7 @@ public class MeasurementScannableCode extends ScannableCode {
      * @param location The location that the code was scanned at
      * @return Returns the constructed measurement trial
      */
-    public MeasurementTrial scan(Experimenter experimenter, Location location) {
+    public MeasurementTrial scan(User experimenter, Location location) {
         Date date = new Date();
         MeasurementTrial trial = new MeasurementTrial(experimenter, location, date);
         trial.setValue(result);

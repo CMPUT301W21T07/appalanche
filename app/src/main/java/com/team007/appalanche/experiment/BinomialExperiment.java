@@ -1,4 +1,4 @@
-package com.team007.appalanche.Experiment;
+package com.team007.appalanche.experiment;
 
 import com.team007.appalanche.scannableCode.BinomialScannableCode;
 
@@ -6,7 +6,7 @@ import com.team007.appalanche.scannableCode.BinomialScannableCode;
  * This class that extends Experiment handles the creation of binomial trials.
  */
 
-public class BinomialExperiment extends com.team007.appalanche.Experiment.Experiment implements com.team007.appalanche.experiment.ExperimentInterface {
+public class BinomialExperiment extends Experiment implements ExperimentInterface {
     //public String trialType;
 
     /**

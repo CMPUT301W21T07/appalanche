@@ -1,4 +1,4 @@
-package com.team007.appalanche.Experiment;
+package com.team007.appalanche.experiment;
 
 /**
  * This interface serves as the interface for all experiment-types, and contains

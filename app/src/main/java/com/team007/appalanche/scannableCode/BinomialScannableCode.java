@@ -47,7 +47,7 @@ public class BinomialScannableCode extends ScannableCode {
      * @param location The location that the code was scanned at
      * @return Returns the constructed binomial trial
      */
-    public BinomialTrial scan(Experimenter experimenter, Location location) {
+    public BinomialTrial scan(User experimenter, Location location) {
         Date date = new Date();
         BinomialTrial trial = new BinomialTrial(experimenter, location, date);
         trial.setOutcome(result);

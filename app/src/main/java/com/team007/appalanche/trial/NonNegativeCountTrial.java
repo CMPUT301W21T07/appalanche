@@ -1,4 +1,4 @@
-package com.team007.appalanche.Trial;
+package com.team007.appalanche.trial;
 
 import com.team007.appalanche.Location;
 import com.team007.appalanche.user.User;
@@ -10,7 +10,7 @@ import java.util.Date;
  * it cannot be incremented and is set by a non-negative number of the user's choice.
  */
 
-public class  NonNegativeCountTrial extends com.team007.appalanche.trial.Trial {
+public class  NonNegativeCountTrial extends Trial {
     private Integer count;
     /*constructor function for the count based trial class*/
     public NonNegativeCountTrial(User userAddedTrial, Location location, Date date) {
