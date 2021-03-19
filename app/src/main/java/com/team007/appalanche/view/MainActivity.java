@@ -1,52 +1,38 @@
 package com.team007.appalanche.view;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
-
-
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.team007.appalanche.Experiment.Experiment;
 import com.team007.appalanche.R;
 import com.team007.appalanche.User.Profile;
 import com.team007.appalanche.User.User;
 import com.team007.appalanche.scannableCode.ScannableCode;
 import com.team007.appalanche.view.ui.main.SectionsPagerAdapter;
-
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseFirestore db;
@@ -108,27 +94,32 @@ public class MainActivity extends AppCompatActivity {
             editor.apply();
         } else {
             currentUser = db.collection("Users").document(userKey);
+            //Toast.makeText(MainActivity.this, userKey, Toast.LENGTH_LONG).show();
         }
 
 //        Toast.makeText(MainActivity.this, userKey, Toast.LENGTH_LONG).show();
 
-        AccountManager am = AccountManager.get(this); // "this" references the current Context
 
-        Account[] accounts = am.getAccountsByType("com.google");
+//        /// TESTTTT
+//        final User[] us = new User[1];
+//        currentUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//            @Override
+//            public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                // WE NEVER SET THE ID FOR THE USER INSIDE us[0] because the default constructor was called inside us[0] = (User) (documentSnapshot.toObject(User.class));
+//                us[0] = (documentSnapshot.toObject(User.class));
+//                // SO WE NEED TO USE A SETTER TO SET THAT
+//                us[0].setID(currentUser.getId());
+//                if ( us[0].getId() == null)
+//                Toast.makeText(MainActivity.this, "true", Toast.LENGTH_LONG).show();
+//                //String ExpUserID = us[0].getId();
+//                Experiment newExp = new Experiment("How many jelly beans can I fit in my mouth?",
+//                        "Alberta", "NonNegTrial",2, false, true, us[0].getId());
+//                //Toast.makeText(MainActivity.this, us[0].getId(), Toast.LENGTH_LONG).show();
+//                us[0].addOwnedExperiment(newExp);
+//                currentUser.set(us[0]);
+//            }
+//        });
 
-        /// TESTTTT
-        final User[] us = new User[1];
-        currentUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                us[0] = documentSnapshot.toObject(User.class);
-                Experiment newExp = new Experiment("How many jelly beans can I fit in my mouth?",
-                        "Alberta", "NonNegTrial",2, false, true, us[0].getId());
-                Toast.makeText(MainActivity.this, us[0].getId(), Toast.LENGTH_LONG).show();
-                us[0].addOwnedExperiment(newExp);
-                currentUser.set(us[0]);
-            }
-        });
 
         addExperimentButton.setOnClickListener(new View.OnClickListener() {
             @Override
