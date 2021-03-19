@@ -4,4 +4,5 @@
     <string name="subscribed_tab">Subscribed</string>
     <string name="profile_button">Profile</string>
     <string name="search_button">Search</string>
+    <string name="saved_user_key">com.team007.Appalanche.user_key</string>
 </resources>
