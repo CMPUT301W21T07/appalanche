@@ -9,6 +9,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.user.User;
+import com.team007.appalanche.user.UserDocument;
 
 import java.util.ArrayList;
 
@@ -44,21 +45,49 @@ public class ExperimentController extends ViewModel {
         DocumentReference userDoc = db.collection("Users").document(currentUserKey);
         final User[] currentUser = new User[1];
 
+//        userDoc.addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+//                // clear the old list
+//                ownedExperiments.clear();
+//                subscribedExperiments.clear();
+//                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+//                    Log.d(TAG, String.valueOf(doc.getData().get("user_posted_question")));
+//                    ownedExperiments =  (ArrayList<Experiment>) userDoc.get("ownedExperiments");
+//                    subscribedExperiments = (ArrayList<Experiment>) userDoc.get("subsribedExperiments");
+//
+//                    questionList.addQuestion(new Question(question, new User(user, null), new Date()));
+//                }
+//            }});
+        userDoc.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    ownedExperiments = document.toObject(UserDocument.class).users;
+                    //subscribedExperiments = document.toObject(UserDocument.class).users;
+                }
+            }
+        });
+
+
         userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 currentUser[0] = documentSnapshot.toObject(User.class);
+//                //ADDED THIS
+                currentUser[0].setID(currentUserKey);
+
             }
         });
 
         if (currentUser[0] != null) {
-            ownedExperiments = currentUser[0].getOwnedExperiments();
-            subscribedExperiments = currentUser[0].getSubscribedExperiments();
+            ownedExperiments = (ArrayList<Experiment>) currentUser[0].getOwnedExperiments();
+            subscribedExperiments = (ArrayList<Experiment>) currentUser[0].getSubscribedExperiments();
         }
-    }
 
+    }
     public void setCurrentUser(String userKey) {
-        currentUserKey = userKey;
+        this.currentUserKey = userKey;
     }
 
     public void addExperiment(Experiment experiment) {
