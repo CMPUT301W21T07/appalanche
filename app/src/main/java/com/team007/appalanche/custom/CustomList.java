@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 
-import com.team007.appalanche.Experiment.Experiment;
+import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.R;
 
 import java.util.ArrayList;

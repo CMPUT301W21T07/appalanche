@@ -13,23 +13,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Appalanche">
-
-        <activity android:name=".view.TrialActivity" />
+        <activity
+            android:name=".view.experimentActivity.ExperimentActivity"
+            android:parentActivityName=".view.ui.mainActivity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.ui.mainActivity.MainActivity" />
+        </activity>
         <activity android:name=".view.ReplyActivity" />
-        <activity android:name=".view.QuestionActivity" />
-        <activity android:name=".view.ExperimentActivity" />
-        <activity android:name=".view.MainActivity">
+        <activity android:name=".view.ui.mainActivity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.Capture"
+        <activity
+            android:name=".view.Capture"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
-            android:theme="@style/zxing_CaptureTheme"/>
-
+            android:theme="@style/zxing_CaptureTheme" />
     </application>
 
 </manifest>

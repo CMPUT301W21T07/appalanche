@@ -2,9 +2,9 @@ package com.team007.appalanche.scannableCode;
 
 import com.google.gson.Gson;
 import com.team007.appalanche.Location;
-import com.team007.appalanche.Experiment.*;
-import com.team007.appalanche.User.*;
-import com.team007.appalanche.Trial.*;
+import com.team007.appalanche.experiment.*;
+import com.team007.appalanche.user.*;
+import com.team007.appalanche.trial.*;
 
 import java.util.Date;
 
@@ -43,6 +43,17 @@ public class CountBasedScannableCode extends ScannableCode {
     public CountBasedTrial scan(Experimenter experimenter, Location location) {
         Date date = new Date();
         CountBasedTrial trial = new CountBasedTrial(experimenter, location, date);
+        return trial;
+    }
+
+    /**
+     * Based on the scanned code, this method creates a count-based trial and returns it.
+     * @param experimenter The experimenter who scanned the code
+     * @return Returns the constructed count-based trial
+     */
+    public CountBasedTrial scan(User experimenter) {
+        Date date = new Date();
+        CountBasedTrial trial = new CountBasedTrial(experimenter, date);
         return trial;
     }
 

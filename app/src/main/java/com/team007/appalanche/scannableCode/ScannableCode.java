@@ -1,8 +1,6 @@
 package com.team007.appalanche.scannableCode;
 
-import androidx.annotation.Nullable;
-
-import com.team007.appalanche.Experiment.*;
+import com.team007.appalanche.experiment.*;
 
 /**
  * This is the ScannableCode abstract class that represents a QR code or a barcode.

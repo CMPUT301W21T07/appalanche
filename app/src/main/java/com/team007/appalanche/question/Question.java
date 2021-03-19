@@ -1,6 +1,6 @@
 package com.team007.appalanche.question;
 
-import com.team007.appalanche.User.User;
+import com.team007.appalanche.user.User;
 
 import java.io.Serializable;
 import java.util.ArrayList;
