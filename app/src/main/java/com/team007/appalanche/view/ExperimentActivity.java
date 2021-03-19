@@ -113,24 +113,6 @@ public class ExperimentActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-//    public void openAddTrialActivity() {
-//        switch(experimentType) {
-//            case "binomial":
-//                new AddBinomialTrialFragment().show(getSupportFragmentManager(), "Add_Trial");
-//                break;
-//            case "count":
-//                new AddCountTrialFragment().show(getSupportFragmentManager(), "Add_Trial");
-//                break;
-//            case "Measurement":
-//                new AddMeasurementTrialFragment().show(getSupportFragmentManager(), "Add_trial");
-//                break;
-//            case "nonNegative":
-//                new AddNonNegTrialFragment().show(getSupportFragmentManager(), "Add_Trial");
-//                break;
-//        }
-//    }
-
     public void  openTrialActivity() {
         Intent intent = new Intent(this, TrialActivity.class);
         startActivityForResult(intent,2);
