@@ -1,7 +1,7 @@
-package com.team007.appalanche.User;
+package com.team007.appalanche.user;
 
 import com.team007.appalanche.scannableCode.ScannableCode;
-import com.team007.appalanche.Trial.*;
+import com.team007.appalanche.trial.*;
 
 /**
  * This class represents an experimenter using the app; experimenters

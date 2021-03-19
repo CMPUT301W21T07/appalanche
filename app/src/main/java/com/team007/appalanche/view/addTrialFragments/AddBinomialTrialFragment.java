@@ -15,7 +15,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.team007.appalanche.Location;
 import com.team007.appalanche.R;
-import com.team007.appalanche.Trial.BinomialTrial;
+import com.team007.appalanche.trial.BinomialTrial;
 import com.team007.appalanche.user.User;
 
 import java.util.Date;

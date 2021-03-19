@@ -1,4 +1,4 @@
-package com.team007.appalanche.Trial;
+package com.team007.appalanche.trial;
 
 import com.team007.appalanche.Location;
 import com.team007.appalanche.user.User;

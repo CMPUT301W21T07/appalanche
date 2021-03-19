@@ -1,5 +1,6 @@
 package com.team007.appalanche.view.experimentActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,12 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.team007.appalanche.R;
-import com.team007.appalanche.Trial.Trial;
+import com.team007.appalanche.experiment.Experiment;
+import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddCountTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddMeasurementTrialFragment;
@@ -29,7 +32,7 @@ public class TrialsFragment extends Fragment {
     private ListView trialListView;
     private ArrayAdapter<Trial> trialAdapter;
     private ArrayList<Trial> trialDataList;
-    private String experimentType = "binomial"; //TODO: hook this up to the actual experiment type, not hard coded value
+    private Experiment experiment;
 
     public static TrialsFragment newInstance(int index) {
         TrialsFragment fragment = new TrialsFragment();
@@ -42,6 +45,8 @@ public class TrialsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getActivity().getIntent();
+        experiment = (Experiment) intent.getSerializableExtra("Experiment");
     }
 
     @Override
@@ -50,7 +55,10 @@ public class TrialsFragment extends Fragment {
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_experiment_trials, container, false);
 
-        final Button addTrialButton = root.findViewById(R.id.addTrialButton);
+        TextView description = root.findViewById(R.id.description);
+        description.setText(experiment.getDescription());
+
+        Button addTrialButton = root.findViewById(R.id.addTrialButton);
         addTrialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,17 +69,17 @@ public class TrialsFragment extends Fragment {
     }
 
     public void openAddTrialActivity() {
-        switch(experimentType) {
+        switch("binomial") {
             case "binomial":
                 new AddBinomialTrialFragment().show(getFragmentManager(), "Add_Trial");
                 break;
             case "count":
                 new AddCountTrialFragment().show(getFragmentManager(), "Add_Trial");
                 break;
-            case "Measurement":
+            case "measurement":
                 new AddMeasurementTrialFragment().show(getFragmentManager(), "Add_trial");
                 break;
-            case "nonNegative":
+            default:
                 new AddNonNegTrialFragment().show(getFragmentManager(), "Add_Trial");
                 break;
         }

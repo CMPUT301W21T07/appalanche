@@ -17,7 +17,7 @@ import android.widget.EditText;
 
 import com.team007.appalanche.experiment.CountBasedExperiment;
 import com.team007.appalanche.R;
-import com.team007.appalanche.user.ContactInfo;
+
 import com.team007.appalanche.user.Experimenter;
 import com.team007.appalanche.user.Profile;
 import com.team007.appalanche.user.User;

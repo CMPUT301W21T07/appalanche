@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,6 +18,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.team007.appalanche.R;
+import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.controller.QuestionListController;
 import com.team007.appalanche.custom.QuestionCustomList;
@@ -38,6 +40,7 @@ public class QuestionFragment extends Fragment {
     public static QuestionListController questionList;
     public static ArrayAdapter<Question> questionAdapter;
     public static ListView questionListView;
+    private Experiment experiment;
 
     public static QuestionFragment newInstance(int index) {
         QuestionFragment fragment = new QuestionFragment();
@@ -50,6 +53,8 @@ public class QuestionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getActivity().getIntent();
+        experiment = (Experiment) intent.getSerializableExtra("Experiment");
     }
 
     @Override
@@ -57,6 +62,9 @@ public class QuestionFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_experiment_question, container, false);
+
+        TextView description = root.findViewById(R.id.description);
+        description.setText(experiment.getDescription());
 
         // A LIST VIEW OF QUESTION LIST
         questionList = new QuestionListController();

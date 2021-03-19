@@ -40,7 +40,7 @@ public class CountBasedScannableCode extends ScannableCode {
      * @param location The location that the code was scanned at
      * @return Returns the constructed count-based trial
      */
-    public CountBasedTrial scan(Experimenter experimenter, Location location) {
+    public CountBasedTrial scan(User experimenter, Location location) {
         Date date = new Date();
         CountBasedTrial trial = new CountBasedTrial(experimenter, location, date);
         return trial;
