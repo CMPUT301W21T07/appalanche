@@ -55,5 +55,8 @@ public class Question implements Serializable {
     public ArrayList<Reply> getReplies() {
         return replies;
     }
-    
+
+    public User getUserPostedQuestion() {
+        return userPostedQuestion;
+    }
 }

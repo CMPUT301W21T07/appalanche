@@ -99,8 +99,8 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
     @Override
     public void askQuestion(Question question) {
         //questionList.addQuestionToDb(question, db);
-        questionList.addQuestion(question);
-        questionAdapter.notifyDataSetChanged();
+        questionList.addQuestionToDb(question);
+        //questionAdapter.notifyDataSetChanged();
     }
 
     public void addTrial(BinomialTrial trial) {

@@ -35,6 +35,7 @@ import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.team007.appalanche.controller.ExperimentController;
 import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.R;
 import com.team007.appalanche.trial.Trial;
@@ -45,10 +46,13 @@ import com.team007.appalanche.view.AddExperimentFragment;
 import com.team007.appalanche.view.Capture;
 import com.team007.appalanche.view.experimentActivity.ExperimentActivity;
 
-public class MainActivity extends AppCompatActivity {
+import static com.team007.appalanche.view.ui.mainActivity.MainTabFragment.experimentController;
+
+public class MainActivity extends AppCompatActivity  implements AddExperimentFragment.OnFragmentInteractionListener{
     FirebaseFirestore db;
     public static User currentUser;
     private static final String TAG = "Fragment Activity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         DocumentReference docRef;
 
         if (userKey == null) {
+
             // if we don't have a stored user, then create a user account in firebase and set the
             // user key to the user document ID
 
@@ -102,22 +107,27 @@ public class MainActivity extends AppCompatActivity {
 
             editor.putString("com.team007.Appalanche.user_key", userKey);
             editor.apply();
+            Toast.makeText(MainActivity.this, "hello", Toast.LENGTH_LONG).show();
         } else {
             docRef = db.collection("Users").document(userKey);
+
             docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     currentUser = documentSnapshot.toObject(User.class);
                 }
             });
+            Toast.makeText(MainActivity.this, "hello", Toast.LENGTH_LONG).show();
+
         }
 
         // Add floating action button click listeners
         FloatingActionButton addExperimentButton = findViewById(R.id.addExperimentButton);
+        String finalUserKey = userKey;
         addExperimentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AddExperimentFragment().show(getSupportFragmentManager(), "New ");;
+                new AddExperimentFragment().show(getSupportFragmentManager(), "New ");
             }
         });
 
@@ -129,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void scanCode() {
         // scan the code from the zxing library
@@ -281,4 +292,9 @@ public class MainActivity extends AppCompatActivity {
         //TODO: Implement
     }
 
+
+    @Override
+    public void addExperiment(Experiment newExp) {
+        experimentController.addExperiment(newExp);
+    }
 }

@@ -2,6 +2,7 @@ package com.team007.appalanche.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -21,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.team007.appalanche.R;
+import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.controller.ReplyListController;
 import com.team007.appalanche.custom.ReplyCustomList;
@@ -51,6 +53,7 @@ public class ReplyActivity extends AppCompatActivity {
     private String TAG = "Sample";
     private Question question;
     private User replyingUser;
+    private Experiment experiment;
     private int index;
 
     @Override
@@ -69,10 +72,36 @@ public class ReplyActivity extends AppCompatActivity {
         Intent intent = getIntent();
         question = (Question) intent.getSerializableExtra("Question");
         replyingUser = (User) intent.getSerializableExtra("Replying User");
+        experiment = (Experiment) intent.getSerializableExtra("Experiment");
         index = intent.getIntExtra("Index", 0);
         //////////////////////////////////////////////////////////////////////////////
 
+        replyListController = new ReplyListController(question);
 
+        ///////FIRESTORE////////
+        // Access a Cloud Firestore instance from your Activity
+        db = FirebaseFirestore.getInstance();
+        // Get a top-level reference to the collection.
+        final CollectionReference collectionReference = db.collection("Experiments/" + experiment.getDescription()+"/Questions/"+question.getContent()+"/Replies");
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                // clear the old list
+                replyListController.clearReplyList();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                    Log.d(TAG, String.valueOf(doc.getData().get("user_posted_question")));
+                    String content = doc.getId();
+                    String user = (String) doc.getData().get("user_posted_question");
+
+                    replyListController.addReply(new Reply(content, new User(user, null), new Date()));}
+                replyAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.
+            }
+        });
+
+
+        //TEST
+
+        replyListController.addReplyToDb(new Reply("it is a very enjoyable way to carry out experiment", new User("12345",null),new Date()), collectionReference);
         ///////////////////////REPLY LIST BUILDING////////////////////////////////////
         replyListController = new ReplyListController(question);
         replyAdapter = new ReplyCustomList(this, replyListController.getQuestion().getReplies());
@@ -88,30 +117,17 @@ public class ReplyActivity extends AppCompatActivity {
         //////////////////////////////////////////////////////////////////////////////
 
 
-        /////////////////////////////////FIRESTORE///////////////////////////////////
-        db = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = db.collection("Replies");
+        /////////////////////////////////Reply Button///////////////////////////////////
         final ImageButton replyButton = findViewById(R.id.reply_button);
         replyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (replyMessage != null){
                     String replyString = replyMessage.getText().toString();
-//                    Reply newReply = new Reply(replyString, replyingUser, new Date());
+                    Reply newReply = new Reply(replyString, replyingUser, new Date());
                     replyMessage.getText().clear();
-//                    replyListController.getQuestion().addReply(newReply);
-//                    replyAdapter.notifyDataSetChanged();
-
-
-                    collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                            for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
-                                replyListController.addReply(new Reply(replyString, new User(replyingUser.getId(), replyingUser.getProfile()), new Date()));
-                            }
-                            replyAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.
-                        }
-                    });
+                    replyListController.addReplyToDb(newReply, collectionReference);
+                    replyAdapter.notifyDataSetChanged();
                 }
                 //end of if statement
             }

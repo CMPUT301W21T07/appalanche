@@ -3,6 +3,7 @@ package com.team007.appalanche.view.experimentActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +14,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.team007.appalanche.R;
 import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.user.User;
@@ -26,6 +33,11 @@ import com.team007.appalanche.question.Question;
 import com.team007.appalanche.view.AskQuestionFragment;
 import com.team007.appalanche.view.ReplyActivity;
 import com.team007.appalanche.view.ui.mainActivity.MainActivity;
+
+import java.util.ArrayList;
+import java.util.Date;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -38,6 +50,7 @@ public class QuestionFragment extends Fragment {
     private String TAG = "Sample";
 
     public static QuestionListController questionList;
+    public static ArrayList<Question> questionDataList;
     public static ArrayAdapter<Question> questionAdapter;
     public static ListView questionListView;
     private Experiment experiment;
@@ -55,6 +68,28 @@ public class QuestionFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Intent intent = getActivity().getIntent();
         experiment = (Experiment) intent.getSerializableExtra("Experiment");
+        questionList = new QuestionListController(experiment);
+        // Access a Cloud Firestore instance from your Activity
+        db = FirebaseFirestore.getInstance();
+        // Get a top-level reference to the collection.
+        final CollectionReference collectionReference = db.collection("Experiments/" + experiment.getDescription()+"/Questions");
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                // clear the old list
+                questionList.clearQuestionList();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                    Log.d(TAG, String.valueOf(doc.getData().get("user_posted_question")));
+                    String content = doc.getId();
+                    String user = (String) doc.getData().get("user_posted_question");
+
+                    questionList.addQuestion(new Question(content, new User(user, null), new Date()));}
+                questionAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.
+            }
+        });
+
+        //TEST
+        questionList.addQuestionToDb(new Question("what is the significance of using your own mouth?", new User("12345",null),new Date()));
     }
 
     @Override
@@ -67,10 +102,9 @@ public class QuestionFragment extends Fragment {
         description.setText(experiment.getDescription());
 
         // A LIST VIEW OF QUESTION LIST
-        questionList = new QuestionListController();
+        questionDataList = questionList.getExperiment().getQuestions();
         // set adapter to the new QuestionCustomList
-        questionAdapter = new QuestionCustomList(this.getContext(),
-                questionList.getQuestionList());
+        questionAdapter = new QuestionCustomList(this.getContext(), questionDataList);
         // Obtain id from layout for Question List View
         questionListView = root.findViewById(R.id.questionListView);
         // Set the content for QuestionListView
@@ -93,9 +127,10 @@ public class QuestionFragment extends Fragment {
         questionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Question questionToReply = questionList.getQuestionList().get(position);
+                Question questionToReply = questionDataList.get(position);
 
                 Intent intent = new Intent(getActivity(), ReplyActivity.class);
+                intent.putExtra("Experiment", experiment);
                 intent.putExtra("Question", questionToReply);
                 intent.putExtra("Replying User", currentUser);
                 getActivity().startActivity(intent);

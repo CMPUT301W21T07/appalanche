@@ -1,5 +1,6 @@
 package com.team007.appalanche.experiment;
 
+import com.team007.appalanche.question.Question;
 import com.team007.appalanche.trial.Trial;
 
 import java.io.Serializable;
@@ -17,7 +18,15 @@ public class Experiment implements Serializable {
     private Boolean status;
     private String experimentOwnerID;
     private ArrayList<Trial> trials = new ArrayList<Trial>();
+    private ArrayList<Question> questions = new ArrayList<Question>();
 
+    public ArrayList<Question> getQuestions() {
+        return questions;
+    }
+
+    public void addQuestion( Question question) {
+        questions.add(question);
+    }
     /**
      * Constructor function for abstract experiment class
      * @param description
