@@ -15,8 +15,12 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.team007.appalanche.experiment.Experiment;
+import com.team007.appalanche.question.Question;
+import com.team007.appalanche.trial.CountBasedTrial;
+import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import static android.content.ContentValues.TAG;
@@ -54,6 +58,8 @@ public class ExperimentController {
         data.put("minNumTrials", experiment.getMinNumTrials());
         data.put("region",experiment.getRegion());
         data.put("locationRequired",experiment.getLocationRequired());
+        experiment.addTrial(new CountBasedTrial(new User(), new Date(), 5));
+        data.put("trialList", experiment.getTrials());
 
         ownedCol
                 .document(experiment.getDescription())

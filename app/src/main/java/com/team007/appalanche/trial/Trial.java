@@ -3,6 +3,7 @@ package com.team007.appalanche.trial;
 import com.team007.appalanche.Location;
 import com.team007.appalanche.user.User;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Date;
  * this class.
  */
 
-public abstract class Trial {
+public abstract class Trial implements Serializable {
     private Date date;
     private Location location = new Location();
     private User userAddedTrial;

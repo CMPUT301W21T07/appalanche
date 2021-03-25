@@ -1,12 +1,14 @@
 package com.team007.appalanche;
 
+import java.io.Serializable;
+
 /**
  * This class represents an experiment's geolocation;
  * this is done by using latitude and longitude,
  * and a String describing the location.
  */
 
-public class Location {
+public class Location implements Serializable {
     private String latitude;
     private String longitude;
     private String locationString;

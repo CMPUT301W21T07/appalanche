@@ -3,13 +3,14 @@ package com.team007.appalanche.trial;
 import com.team007.appalanche.Location;
 import com.team007.appalanche.user.User;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * This class represents a binomial trial; values are measured as either true or false.
  */
 
-public class BinomialTrial extends com.team007.appalanche.trial.Trial {
+public class BinomialTrial extends com.team007.appalanche.trial.Trial implements Serializable {
     private boolean outcome;
 
     /*Constructor function for the binomial trial class*/

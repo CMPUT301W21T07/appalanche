@@ -3,6 +3,7 @@ package com.team007.appalanche.trial;
 import com.team007.appalanche.Location;
 import com.team007.appalanche.user.User;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Date;
  * such as temperature or distance, is attributed to this trial-type.
  */
 
-public class MeasurementTrial extends Trial {
+public class MeasurementTrial extends Trial implements Serializable {
     private double value;
     /*Constructor for the measurement trial class*/
     public MeasurementTrial(User userAddedTrial, Location location, Date date) {

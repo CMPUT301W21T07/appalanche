@@ -78,6 +78,10 @@ public class Experiment implements Serializable {
      */
     public String getRegion() { return this.region; }
 
+    public void setTrials(ArrayList<Trial> trials) {
+        this.trials = trials;
+    }
+
     /**
      * function to set exp. region
      * @param region

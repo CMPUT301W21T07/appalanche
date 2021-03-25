@@ -20,16 +20,20 @@ import com.team007.appalanche.R;
 
 import com.team007.appalanche.trial.BinomialTrial;
 import com.team007.appalanche.question.Question;
+import com.team007.appalanche.trial.CountBasedTrial;
+import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.view.AskQuestionFragment;
 import com.team007.appalanche.view.Capture;
 import com.team007.appalanche.view.QRCodeActivity;
 import com.team007.appalanche.view.RegisterBarcodeActivity;
 import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
+import com.team007.appalanche.view.addTrialFragments.AddCountTrialFragment;
 
 import static com.team007.appalanche.view.experimentActivity.QuestionFragment.questionAdapter;
 import static com.team007.appalanche.view.experimentActivity.QuestionFragment.questionList;
+import static com.team007.appalanche.view.experimentActivity.TrialsFragment.trialListController;
 
-public class ExperimentActivity extends AppCompatActivity implements AskQuestionFragment.OnFragmentInteractionListener, AddBinomialTrialFragment.OnFragmentInteractionListener {
+public class ExperimentActivity extends AppCompatActivity implements AskQuestionFragment.OnFragmentInteractionListener, AddBinomialTrialFragment.OnFragmentInteractionListener, AddCountTrialFragment.OnFragmentInteractionListener {
     Experiment experiment;
 
     @Override
@@ -103,8 +107,6 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         //questionAdapter.notifyDataSetChanged();
     }
 
-    public void addTrial(BinomialTrial trial) {
-    }
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
@@ -135,5 +137,15 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
             Toast.makeText(getApplicationContext(), "Oops, you didn't scan anything",
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void addTrial(BinomialTrial trial) {
+        trialListController.addTrialToDb(trial);
+    }
+
+    @Override
+    public void addTrial(CountBasedTrial trial) {
+        trialListController.addTrialToDb(trial);
     }
 }

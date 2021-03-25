@@ -133,7 +133,7 @@ public class QuestionFragment extends Fragment {
                 intent.putExtra("Experiment", experiment);
                 intent.putExtra("Question", questionToReply);
                 intent.putExtra("Replying User", currentUser);
-                getActivity().startActivity(intent);
+                startActivity(intent);
             }
         });
 

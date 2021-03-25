@@ -2,11 +2,13 @@ package com.team007.appalanche.experiment;
 
 import com.team007.appalanche.scannableCode.MeasurementScannableCode;
 
+import java.io.Serializable;
+
 /**
  * This class that extends Experiment handles the creation of measurement-based trials.
  */
 
-public class MeasurementExperiment extends Experiment implements ExperimentInterface {
+public class MeasurementExperiment extends Experiment implements ExperimentInterface, Serializable {
     /**
      * Constructor function for measurement experiment class
      * @param description

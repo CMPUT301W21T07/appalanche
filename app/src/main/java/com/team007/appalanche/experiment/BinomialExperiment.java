@@ -2,11 +2,13 @@ package com.team007.appalanche.experiment;
 
 import com.team007.appalanche.scannableCode.BinomialScannableCode;
 
+import java.io.Serializable;
+
 /**
  * This class that extends Experiment handles the creation of binomial trials.
  */
 
-public class BinomialExperiment extends Experiment implements ExperimentInterface {
+public class BinomialExperiment extends Experiment implements ExperimentInterface, Serializable {
     //public String trialType;
 
     /**

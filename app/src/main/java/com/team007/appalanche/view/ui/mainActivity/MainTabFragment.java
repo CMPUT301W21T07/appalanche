@@ -28,6 +28,7 @@ import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.R;
 import com.team007.appalanche.controller.ExperimentController;
 import com.team007.appalanche.custom.CustomList;
+import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.AddExperimentFragment;
 import com.team007.appalanche.view.experimentActivity.ExperimentActivity;
@@ -87,7 +88,10 @@ public class MainTabFragment extends Fragment {
                     Boolean expOpen =  doc.getBoolean("expOpen");
                     Long minNumTrials      = (Long)    doc.getData().get("minNumTrials");
                     String expOwnerID = (String) doc.getData().get("expOwnerID");
-                    currentUser.addOwnedExperiment(new Experiment(description, "AB", trialType, 5,true, expOpen, expOwnerID ));
+                    ArrayList<Trial> trialList = (ArrayList<Trial>) doc.getData().get("trialList");
+                    Experiment newExp = new Experiment(description, "AB", trialType, minNumTrials.intValue(),true, expOpen, expOwnerID );
+                    //newExp.setTrials(trialList);
+                    currentUser.addOwnedExperiment(newExp);
 
                 }
                 expAdapter.notifyDataSetChanged();
