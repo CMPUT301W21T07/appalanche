@@ -90,4 +90,6 @@ public class User implements Serializable {
     public void addOwnedExperiment(Experiment experiment) {
         ownedExperiments.add(experiment);
     }
+    public void addSubscribedExperiment(Experiment experiment) {subscribedExperiments.add(experiment);}
+
 }

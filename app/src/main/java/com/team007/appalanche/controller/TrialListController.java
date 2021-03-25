@@ -46,4 +46,12 @@ public class TrialListController {
                 .document()
                 .set(data);
     }
+
+//    public void ignoreTrial(Trial trialBeingIgnored) {
+//        db = FirebaseFirestore.getInstance();
+//        final CollectionReference collectionReference = db.collection("Experiments/" + experiment.getDescription()+"/Trials");
+//        collectionReference
+//                .document()
+//                .set(data);
+//    }
 }
