@@ -47,9 +47,12 @@ public class ExperimentController {
 
     public void addExperiment(Experiment experiment) {
         db = FirebaseFirestore.getInstance();
+
         //final CollectionReference ownedCol = db.collection("Users/"+currentUser.getId()+"/OwnedExperiments");
-        final CollectionReference ownedCol = db.collection("Experiments");
-        currentUser.addOwnedExperiment(experiment);
+        //CollectionReference collection = db.collection("Experiments");
+//        if (index == 2)
+        CollectionReference collection = db.collection("Experiments");
+        //currentUser.addOwnedExperiment(experiment);
         // We use a HashMap to store a key-value pair in firestore.
         HashMap<String, Object> data = new HashMap<>();
         data.put("trialType", experiment.getTrialType());
@@ -61,7 +64,7 @@ public class ExperimentController {
         experiment.addTrial(new CountBasedTrial(new User(), new Date(), 5));
         data.put("trialList", experiment.getTrials());
 
-        ownedCol
+        collection
                 .document(experiment.getDescription())
                 .set(data);
 
@@ -83,4 +86,28 @@ public class ExperimentController {
 //        collectionReference.add(data1);
 
     }
-}
+    public void addSubExperiment(Experiment experiment) {
+        db = FirebaseFirestore.getInstance();
+
+        //final CollectionReference ownedCol = db.collection("Users/"+currentUser.getId()+"/OwnedExperiments");
+        //CollectionReference collection = db.collection("Experiments");
+//        if (index == 2)
+        CollectionReference collection = db.collection("Subscribed");
+        //currentUser.addOwnedExperiment(experiment);
+        // We use a HashMap to store a key-value pair in firestore.
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("trialType", experiment.getTrialType());
+        data.put("expOwnerID", experiment.getExperimentOwnerID());
+        data.put("expOpen", experiment.getStatus());
+        data.put("minNumTrials", experiment.getMinNumTrials());
+        data.put("region", experiment.getRegion());
+        data.put("locationRequired", experiment.getLocationRequired());
+        experiment.addTrial(new CountBasedTrial(new User(), new Date(), 5));
+        data.put("trialList", experiment.getTrials());
+
+        collection
+                .document(experiment.getDescription())
+                .set(data);
+    }
+
+    }

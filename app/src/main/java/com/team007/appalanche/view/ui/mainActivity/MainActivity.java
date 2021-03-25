@@ -1,9 +1,6 @@
 package com.team007.appalanche.view.ui.mainActivity;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,7 +14,6 @@ import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -35,7 +31,6 @@ import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.team007.appalanche.controller.ExperimentController;
 import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.R;
 import com.team007.appalanche.trial.Trial;
@@ -46,7 +41,9 @@ import com.team007.appalanche.view.AddExperimentFragment;
 import com.team007.appalanche.view.Capture;
 import com.team007.appalanche.view.experimentActivity.ExperimentActivity;
 
-import static com.team007.appalanche.view.ui.mainActivity.MainTabFragment.experimentController;
+import java.util.HashMap;
+
+import static com.team007.appalanche.view.ui.mainActivity.SubscribedFragment.experimentController;
 
 public class MainActivity extends AppCompatActivity  implements AddExperimentFragment.OnFragmentInteractionListener{
     FirebaseFirestore db;
@@ -75,7 +72,6 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
 
         db = FirebaseFirestore.getInstance();
         DocumentReference docRef;
-
         if (userKey == null) {
 
             // if we don't have a stored user, then create a user account in firebase and set the
@@ -89,8 +85,11 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
             Profile profile = new Profile();
             currentUser = new User(userKey, profile);
 
-            // Store that user object in firebase
-            docRef.set(currentUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+            // Store that user object in firebase\//
+            // docRef.set(currentUser)
+            HashMap<String, Object> data = new HashMap<>();
+            data.put("test", currentUser);
+            docRef.set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Log.d(TAG, "DocumentSnapshot successfully written!");
@@ -104,22 +103,36 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
 
             // Store the userKey in shared preferences
             SharedPreferences.Editor editor = sharedPref.edit();
-
             editor.putString("com.team007.Appalanche.user_key", userKey);
             editor.apply();
             Toast.makeText(MainActivity.this, "hello", Toast.LENGTH_LONG).show();
         } else {
             docRef = db.collection("Users").document(userKey);
-
+            HashMap<String, Object> data = new HashMap<>();
+            data.put("test", "123");
+            docRef.set(data);
             docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     currentUser = documentSnapshot.toObject(User.class);
                 }
             });
-            Toast.makeText(MainActivity.this, "hello", Toast.LENGTH_LONG).show();
+            //Toast.makeText(MainActivity.this, "hello", Toast.LENGTH_LONG).show();
 
         }
+
+//                final User[] us = new User[1];
+//        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//            @Override
+//            public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                us[0] = documentSnapshot.toObject(User.class);
+//                Experiment newExp = new Experiment("How many jelly beans can I fit in my mouth?",
+//                        "Alberta", "NonNegTrial",2, false, true, us[0].getId());
+////                Toast.makeText(MainActivity.this, us[0].getId(), Toast.LENGTH_LONG).show();
+//                us[0].addOwnedExperiment(newExp);
+//                docRef.set(us[0]);
+//            }
+//        });
 
         // Add floating action button click listeners
         FloatingActionButton addExperimentButton = findViewById(R.id.addExperimentButton);
@@ -297,4 +310,5 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
     public void addExperiment(Experiment newExp) {
         experimentController.addExperiment(newExp);
     }
+    //public void subscribedExp
 }
