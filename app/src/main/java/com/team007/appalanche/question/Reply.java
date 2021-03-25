@@ -33,4 +33,8 @@ public class Reply implements Serializable {
     public String getReplyText() {
         return replyText;
     }
+
+    public User getUserReplied() {
+        return userReplied;
+    }
 }

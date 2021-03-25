@@ -1,97 +1,80 @@
 package com.team007.appalanche.controller;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import android.util.Log;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.user.User;
-import com.team007.appalanche.user.UserDocument;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
-/**
- * This view model maps the type of experiment to display (owned or subscribed) based on the index
- * - 0 maps to owned experiments
- * - 1 maps to subscribed experiments
- */
+import static android.content.ContentValues.TAG;
 
-@SuppressWarnings("UnusedAssignment")
-public class ExperimentController extends ViewModel {
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+public class ExperimentController {
+    User currentUser;
+    FirebaseFirestore db;
     private MutableLiveData<Integer> experimentType = new MutableLiveData<>();
-    private ArrayList<Experiment> ownedExperiments = new ArrayList<Experiment>();
-    private ArrayList<Experiment> subscribedExperiments = new ArrayList<Experiment>();
-    private String currentUserKey;
+    public ExperimentController(User currentUser) {
+        this.currentUser = currentUser;
+    };
 
     public void setExperimentType(int index) {
         experimentType.setValue(index);
     }
 
-    public ArrayList<Experiment> getExperiments () {
-        if (experimentType.getValue() == 0) {
-            return ownedExperiments;
-        } else {
-            return subscribedExperiments;
-        }
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
     }
 
-    public void loadExperiments() {
-        // do firebase stuff by loading in the owned and subscribed experiments
-        DocumentReference userDoc = db.collection("Users").document(currentUserKey);
-        final User[] currentUser = new User[1];
-
-//        userDoc.addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-//                // clear the old list
-//                ownedExperiments.clear();
-//                subscribedExperiments.clear();
-//                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-//                    Log.d(TAG, String.valueOf(doc.getData().get("user_posted_question")));
-//                    ownedExperiments =  (ArrayList<Experiment>) userDoc.get("ownedExperiments");
-//                    subscribedExperiments = (ArrayList<Experiment>) userDoc.get("subsribedExperiments");
-//
-//                    questionList.addQuestion(new Question(question, new User(user, null), new Date()));
-//                }
-//            }});
-        userDoc.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    ownedExperiments = document.toObject(UserDocument.class).users;
-                    //subscribedExperiments = document.toObject(UserDocument.class).users;
-                }
-            }
-        });
-
-
-        userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                currentUser[0] = documentSnapshot.toObject(User.class);
-//                //ADDED THIS
-//                currentUser[0].setID(currentUserKey);
-
-            }
-        });
-
-        if (currentUser[0] != null) {
-            ownedExperiments = (ArrayList<Experiment>) currentUser[0].getOwnedExperiments();
-            subscribedExperiments = (ArrayList<Experiment>) currentUser[0].getSubscribedExperiments();
-        }
-
-    }
-    public void setCurrentUser(String userKey) {
-        this.currentUserKey = userKey;
+    public User getCurrentUser() {
+        return currentUser;
     }
 
     public void addExperiment(Experiment experiment) {
-        DocumentReference newExperiment = db.collection("Experiments").document();
-        newExperiment.set(experiment);
+        db = FirebaseFirestore.getInstance();
+        //final CollectionReference ownedCol = db.collection("Users/"+currentUser.getId()+"/OwnedExperiments");
+        final CollectionReference ownedCol = db.collection("Experiments");
+        currentUser.addOwnedExperiment(experiment);
+        // We use a HashMap to store a key-value pair in firestore.
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("trialType", experiment.getTrialType());
+        data.put("expOwnerID", experiment.getExperimentOwnerID());
+        data.put("expOpen",experiment.getStatus());
+        data.put("minNumTrials", experiment.getMinNumTrials());
+        data.put("region",experiment.getRegion());
+        data.put("locationRequired",experiment.getLocationRequired());
+
+        ownedCol
+                .document(experiment.getDescription())
+                .set(data);
+
+//        //SET UP THE COLLECTION FOR QUESTIONS BEFOREHAND
+//        final CollectionReference collectionReference = db.collection("Experiments/" + experiment.getDescription()+"/Questions");
+//        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    if(task.getResult().size() == 0) {
+//                        HashMap<String, Object> data1 = new HashMap<>();
+//                        collectionReference.add(data1);
+//
+//                    }
+//                }
+//            }
+//        });
+//        HashMap<String, Object> data1 = new HashMap<>();
+//        collectionReference.add(data1);
+
     }
 }

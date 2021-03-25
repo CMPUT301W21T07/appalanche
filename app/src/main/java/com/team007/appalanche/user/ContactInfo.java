@@ -1,4 +1,4 @@
-package com.team007.appalanche.User;
+package com.team007.appalanche.user;
 
 /**
  * This class represents a user's contact information, which is comprised

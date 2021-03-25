@@ -1,7 +1,5 @@
 package com.team007.appalanche.user;
 
-import com.team007.appalanche.User.ContactInfo;
-
 import java.io.Serializable;
 
 /**

@@ -2,6 +2,7 @@ package com.team007.appalanche.view;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -18,6 +19,7 @@ import android.widget.EditText;
 import com.team007.appalanche.experiment.CountBasedExperiment;
 import com.team007.appalanche.R;
 
+import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.user.Experimenter;
 import com.team007.appalanche.user.Profile;
 import com.team007.appalanche.user.User;
@@ -34,7 +36,7 @@ import java.util.Date;
 
 public class AddExperimentFragment extends DialogFragment {
 
-    private AskQuestionFragment.OnFragmentInteractionListener listener;
+    private OnFragmentInteractionListener listener;
 
     @NonNull
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -53,7 +55,8 @@ public class AddExperimentFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
-                        CountBasedExperiment newExperiment = new CountBasedExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, "123");
+                        Experiment newExperiment = new CountBasedExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, "123");
+                        listener.addExperiment(newExperiment);
                     }
                 })
 
@@ -66,5 +69,19 @@ public class AddExperimentFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_add_experiment, container, false);
+    }
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener){
+            listener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    public interface OnFragmentInteractionListener {
+        void addExperiment(Experiment newExp);
     }
 }
