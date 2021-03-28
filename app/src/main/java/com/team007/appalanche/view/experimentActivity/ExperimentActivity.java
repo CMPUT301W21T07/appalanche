@@ -1,6 +1,8 @@
 package com.team007.appalanche.view.experimentActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.team007.appalanche.controller.ExperimentController;
 import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.R;
 
@@ -22,6 +25,7 @@ import com.team007.appalanche.trial.BinomialTrial;
 import com.team007.appalanche.question.Question;
 import com.team007.appalanche.trial.CountBasedTrial;
 import com.team007.appalanche.trial.Trial;
+import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.AskQuestionFragment;
 import com.team007.appalanche.view.Capture;
 import com.team007.appalanche.view.QRCodeActivity;
@@ -32,6 +36,7 @@ import com.team007.appalanche.view.addTrialFragments.AddCountTrialFragment;
 import static com.team007.appalanche.view.experimentActivity.QuestionFragment.questionAdapter;
 import static com.team007.appalanche.view.experimentActivity.QuestionFragment.questionList;
 import static com.team007.appalanche.view.experimentActivity.TrialsFragment.trialListController;
+//import static com.team007.appalanche.view.ui.mainActivity.SubscribedFragment.experimentController;
 
 public class ExperimentActivity extends AppCompatActivity implements AskQuestionFragment.OnFragmentInteractionListener, AddBinomialTrialFragment.OnFragmentInteractionListener, AddCountTrialFragment.OnFragmentInteractionListener {
     Experiment experiment;
@@ -50,7 +55,7 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
 
         // Get the experiment that started the activity
         Intent intent = getIntent();
-        Experiment experiment = (Experiment) intent.getSerializableExtra("Experiment");
+        experiment = (Experiment) intent.getSerializableExtra("Experiment");
     }
 
     //When the 3-dot options menu is selected on an experiment page
@@ -75,6 +80,17 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
             case R.id.register_barcode:
                 scanCode();
                 return true;
+            case R.id.subscribe:
+                SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+                String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
+                User currentUser = new User(userKey);
+                ExperimentController experimentController = new ExperimentController(currentUser);
+                experimentController.addSubExperiment(experiment);
+                //TODO: Either remove the subscribe button or grey it out for that specific experiment, after the user subscribed to it
+            case R.id.close_button:
+                //TODO: implement
+            case R.id.end_button:
+                //TODO: implement
             default:
                 return false;
         }

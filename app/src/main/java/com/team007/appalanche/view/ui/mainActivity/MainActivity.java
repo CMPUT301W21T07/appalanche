@@ -293,7 +293,6 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
     private void openExperimentActivity(Experiment experiment) {
         Intent intent = new Intent(this, ExperimentActivity.class);
         intent.putExtra("Experiment", experiment);
-        startActivity(intent);
         startActivityForResult(intent,1);
     }
 

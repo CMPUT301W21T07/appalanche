@@ -165,7 +165,6 @@ public class SubscribedFragment extends Fragment {
     private void openExperimentActivity(Experiment experiment) {
         Intent intent = new Intent(getContext(), ExperimentActivity.class);
         intent.putExtra("Experiment", experiment);
-        startActivity(intent);
         startActivityForResult(intent,1);
     }
 
