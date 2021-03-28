@@ -41,7 +41,7 @@ public class QRCodeActivity extends AppCompatActivity {
     // refactor code once we worry about persistent data
     // figure out how to pass experiment information onto this activity
     BinomialExperiment binomialExp = new BinomialExperiment("Can I do a handstand?", "region",
-            "binomial", 5, false, true, null);
+            2, false, false, null);
     CountBasedExperiment countExp = new CountBasedExperiment("How many times have you cried " +
             "listening to driver's license?", "region", 2, false, true, null);
     MeasurementExperiment measurementExp = new MeasurementExperiment("How many litres of water " +
