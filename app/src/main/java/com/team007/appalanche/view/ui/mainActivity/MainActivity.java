@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
         } else {
             docRef = db.collection("Users").document(userKey);
             HashMap<String, Object> data = new HashMap<>();
-            data.put("test", "123");
+            data.put("test", "456");
             docRef.set(data);
             docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override

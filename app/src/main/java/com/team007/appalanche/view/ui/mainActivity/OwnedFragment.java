@@ -93,9 +93,9 @@ public class OwnedFragment extends Fragment {
                     String description = doc.getId();
                     String trialType = (String) doc.getData().get("trialType");
                     Boolean expOpen =  doc.getBoolean("expOpen");
+                    User user = (User) doc.getData().get("user");
                     //Long minNumTrials      = (Long)    doc.getData().get("minNumTrials");
                     String expOwnerID = (String) doc.getData().get("expOwnerID");
-
                     //Experiment newExp = new Experiment(description, "AB", trialType, minNumTrials.intValue(),true, expOpen, expOwnerID );
                     Experiment newExp = new Experiment(description, "AB", trialType, 4,true, expOpen, expOwnerID );
                     //newExp.setTrials(trialList);
