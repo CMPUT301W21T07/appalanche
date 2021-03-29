@@ -45,7 +45,7 @@ public class SubscribedFragment extends Fragment {
     public static ExperimentController experimentController;
     ListView expList;
     ArrayAdapter<Experiment> expAdapter;
-    ArrayList<Experiment> ExperimentDataList;
+    public ArrayList<Experiment> ExperimentDataList;
     FirebaseFirestore db;
     public int index;
 
