@@ -49,7 +49,7 @@ public class OverviewFragment extends Fragment {
         owner.setText("Owner: " + experiment.getExperimentOwnerID());
 
         TextView status = root.findViewById(R.id.status);
-        if (experiment.getStatus()) {
+        if (experiment.getOpen()) {
             status.setText("Status: Open");
         } else {
             status.setText("Status: Closed");

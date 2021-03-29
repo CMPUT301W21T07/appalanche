@@ -57,7 +57,7 @@ public class ExperimentController {
         HashMap<String, Object> data = new HashMap<>();
         data.put("trialType", experiment.getTrialType());
         data.put("expOwnerID", experiment.getExperimentOwnerID());
-        data.put("expOpen",experiment.getStatus());
+        data.put("expOpen",experiment.getOpen());
         data.put("minNumTrials", experiment.getMinNumTrials());
         data.put("region",experiment.getRegion());
         data.put("locationRequired",experiment.getLocationRequired());
@@ -98,7 +98,7 @@ public class ExperimentController {
         HashMap<String, Object> data = new HashMap<>();
         data.put("trialType", experiment.getTrialType());
         data.put("expOwnerID", experiment.getExperimentOwnerID());
-        data.put("expOpen", experiment.getStatus());
+        data.put("expOpen", experiment.getOpen());
         data.put("minNumTrials", experiment.getMinNumTrials());
         data.put("region", experiment.getRegion());
         data.put("locationRequired", experiment.getLocationRequired());

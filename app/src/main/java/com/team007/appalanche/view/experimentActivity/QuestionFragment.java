@@ -67,10 +67,13 @@ public class QuestionFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getActivity().getIntent();
+
         experiment = (Experiment) intent.getSerializableExtra("Experiment");
         questionList = new QuestionListController(experiment);
+
         // Access a Cloud Firestore instance from your Activity
         db = FirebaseFirestore.getInstance();
+
         // Get a top-level reference to the collection.
         final CollectionReference collectionReference = db.collection("Experiments/" + experiment.getDescription()+"/Questions");
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {

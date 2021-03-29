@@ -49,8 +49,9 @@ import java.util.Map;
 import static android.content.ContentValues.TAG;
 
 /**
- * A placeholder fragment containing a simple view.
+ * A fragment containing the view rendered for the trials experiment tab.
  */
+
 public class TrialsFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
@@ -79,13 +80,14 @@ public class TrialsFragment extends Fragment {
         trialListController = new TrialListController(experiment);
 
 
-        //set up firebase, realtime updates
+        // Set up firebase, realtime updates
         db = FirebaseFirestore.getInstance();
-        final CollectionReference ownedCol = db.collection("Experiments/"+experiment.getDescription()+"/Trials");
+        final CollectionReference ownedCol =
+                db.collection("Experiments/" + experiment.getDescription() + "/Trials");
         ownedCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                // clear the old list
+                // Clear the old list
                 trialListController.clearTrialList();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
                     Log.d(TAG, String.valueOf(doc.getData().get("description")));
@@ -96,9 +98,8 @@ public class TrialsFragment extends Fragment {
                 }
                 trialAdapter.notifyDataSetChanged();
             }});
-//
 
-//        //TEST
+        //TEST
         //trialListController.addTrialToDb( new CountBasedTrial(new User(), new Date(), 4));
     }
 
@@ -111,14 +112,20 @@ public class TrialsFragment extends Fragment {
         TextView description = root.findViewById(R.id.description);
         description.setText(experiment.getDescription());
 
-
         Button addTrialButton = root.findViewById(R.id.addTrialButton);
-        addTrialButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openAddTrialActivity();
-            }
-        });
+
+        if (experiment.getOpen()) {
+            // Adding an onClick listener if the current trial is still open
+            addTrialButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openAddTrialActivity();
+                }
+            });
+        } else {
+            // Removing the add trial button if the current trial is ended
+            addTrialButton.setVisibility(View.GONE);
+        }
 
         // SET UP TRIAL LISTVIEW
 //        trialDataList = new ArrayList<Trial>();
@@ -144,6 +151,11 @@ public class TrialsFragment extends Fragment {
     }
 
     public void openAddTrialActivity() {
+        if (!experiment.getOpen()) {
+            // Throw an exception if we're trying to add a trial to an ended experiment
+            throw new RuntimeException("Cannot add a new trial as the experiment is ended");
+        }
+
         switch("count") {
             case "binomial":
                 new AddBinomialTrialFragment().show(getFragmentManager(), "Add_Trial");

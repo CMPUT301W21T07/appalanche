@@ -24,7 +24,6 @@ import com.team007.appalanche.R;
 import com.team007.appalanche.trial.BinomialTrial;
 import com.team007.appalanche.question.Question;
 import com.team007.appalanche.trial.CountBasedTrial;
-import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.AskQuestionFragment;
 import com.team007.appalanche.view.Capture;
@@ -32,14 +31,14 @@ import com.team007.appalanche.view.QRCodeActivity;
 import com.team007.appalanche.view.RegisterBarcodeActivity;
 import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddCountTrialFragment;
+import com.team007.appalanche.view.ui.mainActivity.MainActivity;
 
-import static com.team007.appalanche.view.experimentActivity.QuestionFragment.questionAdapter;
 import static com.team007.appalanche.view.experimentActivity.QuestionFragment.questionList;
 import static com.team007.appalanche.view.experimentActivity.TrialsFragment.trialListController;
-//import static com.team007.appalanche.view.ui.mainActivity.SubscribedFragment.experimentController;
 
 public class ExperimentActivity extends AppCompatActivity implements AskQuestionFragment.OnFragmentInteractionListener, AddBinomialTrialFragment.OnFragmentInteractionListener, AddCountTrialFragment.OnFragmentInteractionListener {
     Experiment experiment;
+    User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,30 +55,39 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         // Get the experiment that started the activity
         Intent intent = getIntent();
         experiment = (Experiment) intent.getSerializableExtra("Experiment");
+        currentUser = MainActivity.currentUser;
     }
 
-    //When the 3-dot options menu is selected on an experiment page
+    // Creating the 3-dot options menu on an experiment page
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.experiment_settings, menu);
+        if (experiment.getExperimentOwnerID() == currentUser.getId()) {
+            // If the current user is the owner, give them more options
+            getMenuInflater().inflate(R.menu.owner_experiment_settings, menu);
+        } else {
+            // Otherwise, give them the generic options
+            getMenuInflater().inflate(R.menu.general_experiment_settings, menu);
+        }
         return true;
     }
+
     // Direct user depending on which menu item they select
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemID = item.getItemId();
         String expType = null;
         switch (itemID) {
-            //selecting "Generate CR Code" menu item
+            // Selecting "Generate CR Code" menu item
             case R.id.generate_qr_code:
                 if (experiment != null) expType = experiment.getTrialType();
                 if (expType == null) expType = "binomial";
                 openQRCodeActivity(expType);
                 return true;
-            // selecting "Scan QR Code" menu item
+            // Selecting "Scan QR Code" menu item
             case R.id.register_barcode:
                 scanCode();
                 return true;
+            // Selecting "Subscribe" menu item
             case R.id.subscribe:
                 SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
                 String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
@@ -87,13 +95,31 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
                 ExperimentController experimentController = new ExperimentController(currentUser);
                 experimentController.addSubExperiment(experiment);
                 //TODO: Either remove the subscribe button or grey it out for that specific experiment, after the user subscribed to it
+            // Selecting "Close experiment" menu item
             case R.id.close_button:
                 //TODO: implement
+            // Selecting "End experiment" menu item
             case R.id.end_button:
-                //TODO: implement
+                endExperiment();
             default:
                 return false;
         }
+    }
+
+    /** This method sets the status of the current experiment to closed (ends the experiment)
+     */
+    private void endExperiment() {
+        if (experiment.getExperimentOwnerID() != currentUser.getId()) {
+            throw new RuntimeException("Current user not authorized to end the experiment");
+        }
+
+        // Change the status in the model
+        experiment.setOpen(false);
+
+        // TODO: Connect with firebase
+
+        // Notify the owner that the experiment was ended
+        Toast.makeText(this, "The experiment has been closed.", Toast.LENGTH_LONG).show();
     }
 
     /** This method starts the QR Code Fragment, passing the experiment type as a string
