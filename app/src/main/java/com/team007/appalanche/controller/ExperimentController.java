@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -108,6 +110,24 @@ public class ExperimentController {
         collection
                 .document(experiment.getDescription())
                 .set(data);
+    }
+
+    public void unpublishExperiment(Experiment experiment) {
+        db = FirebaseFirestore.getInstance();
+        db.collection("Subscribed").document(experiment.getDescription())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Experiment successfully unpublished");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error unpublishing experiment", e);
+                    }
+                });
     }
 
     }

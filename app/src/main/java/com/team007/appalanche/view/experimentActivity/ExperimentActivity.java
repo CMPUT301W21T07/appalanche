@@ -69,6 +69,10 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemID = item.getItemId();
         String expType = null;
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
+        User currentUser = new User(userKey);
+        ExperimentController experimentController = new ExperimentController(currentUser);
         switch (itemID) {
             //selecting "Generate CR Code" menu item
             case R.id.generate_qr_code:
@@ -81,14 +85,14 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
                 scanCode();
                 return true;
             case R.id.subscribe:
-                SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-                String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
-                User currentUser = new User(userKey);
-                ExperimentController experimentController = new ExperimentController(currentUser);
                 experimentController.addSubExperiment(experiment);
                 //TODO: Either remove the subscribe button or grey it out for that specific experiment, after the user subscribed to it
             case R.id.close_button:
                 //TODO: implement
+            case R.id.unpublish_button:
+                experimentController.unpublishExperiment(experiment);
+                //TODO: if the user isn't the owner of the experiment they're currently on, disable/remove the Unpublish button
+                return true;
             case R.id.end_button:
                 //TODO: implement
             default:
