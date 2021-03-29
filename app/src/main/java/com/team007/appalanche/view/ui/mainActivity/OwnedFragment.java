@@ -16,7 +16,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -24,13 +23,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.R;
 import com.team007.appalanche.controller.ExperimentController;
 import com.team007.appalanche.custom.CustomList;
-import com.team007.appalanche.trial.Trial;
+import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.user.User;
-import com.team007.appalanche.view.AddExperimentFragment;
 import com.team007.appalanche.view.experimentActivity.ExperimentActivity;
 
 import java.util.ArrayList;
@@ -40,7 +37,7 @@ import static android.content.ContentValues.TAG;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainTabFragment extends Fragment {
+public class OwnedFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -51,8 +48,8 @@ public class MainTabFragment extends Fragment {
     ArrayList<Experiment> ExperimentDataList;
     FirebaseFirestore db;
 
-    public static MainTabFragment newInstance(int index) {
-        MainTabFragment fragment = new MainTabFragment();
+    public static OwnedFragment newInstance(int index) {
+        OwnedFragment fragment = new OwnedFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_SECTION_NUMBER, index);
         fragment.setArguments(bundle);
@@ -62,20 +59,30 @@ public class MainTabFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int index = 1;
-        if (getArguments() != null) {
-            index = getArguments().getInt(ARG_SECTION_NUMBER);
-        }
 
+//        if (getArguments() != null) {
+////            Toast.makeText(getActivity(), "Oops, you didn't scan anything",
+////                    Toast.LENGTH_LONG).show();
+//            index = getArguments().getInt(ARG_SECTION_NUMBER);
+//        }
+//        else
+//            Toast.makeText(getActivity(), "Oops, you didn't scan anything",
+//                    Toast.LENGTH_LONG).show();
+
+
+        // index = 1;
+        // System.out.println(String.valueOf(index));
+        // INDEX 1: Owned, INDEX 2: subscribed
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        //String userKey = getResources().getString(R.string.saved_user_key);
         String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
         User currentUser = new User(userKey);
 
         db = FirebaseFirestore.getInstance();
         //final CollectionReference ownedCol = db.collection("Users/"+currentUser.getId()+"/OwnedExperiments");
-        final CollectionReference ownedCol = db.collection("Experiments");
-        ownedCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        final CollectionReference collection = db.collection("Experiments");
+
+
+        collection.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
 
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -86,13 +93,16 @@ public class MainTabFragment extends Fragment {
                     String description = doc.getId();
                     String trialType = (String) doc.getData().get("trialType");
                     Boolean expOpen =  doc.getBoolean("expOpen");
-                    Long minNumTrials      = (Long)    doc.getData().get("minNumTrials");
+                    //Long minNumTrials      = (Long)    doc.getData().get("minNumTrials");
                     String expOwnerID = (String) doc.getData().get("expOwnerID");
-                    ArrayList<Trial> trialList = (ArrayList<Trial>) doc.getData().get("trialList");
-                    Experiment newExp = new Experiment(description, "AB", trialType, minNumTrials.intValue(),true, expOpen, expOwnerID );
-                    //newExp.setTrials(trialList);
-                    currentUser.addOwnedExperiment(newExp);
 
+                    //Experiment newExp = new Experiment(description, "AB", trialType, minNumTrials.intValue(),true, expOpen, expOwnerID );
+                    Experiment newExp = new Experiment(description, "AB", trialType, 4,true, expOpen, expOwnerID );
+                    //newExp.setTrials(trialList);
+                    //if (index == 1)
+                        currentUser.addOwnedExperiment(newExp);
+//                    else if (index == 2)
+//                        currentUser.addSubscribedExperiment(newExp);
                 }
                 expAdapter.notifyDataSetChanged();
             }});
@@ -100,12 +110,14 @@ public class MainTabFragment extends Fragment {
 
         experimentController = new ExperimentController(currentUser);
         experimentController.setCurrentUser(currentUser);
-        experimentController.setExperimentType(index);
+        //experimentController.setExperimentType(index);
         //experimentController.loadExperiments();
 
         // TEST
-        experimentController.addExperiment(new Experiment("How many jelly mans can a jelly bean fit in its mouth", "Edmonton", "NonNegative", 4, false, true, "123"));
-
+        // experimentController.addExperiment(new Experiment("How many jelly mans can a jelly bean fit in its mouth", "Edmonton", "NonNegative", 4, false, true, "123"));
+        // experimentController.addExperiment(new Experiment(userKey, "Edmonton", "NonNegative", 4, false, true, "123"));
+        //experimentController.addExperiment(new Experiment("How many jelly mans can a jelly bean fit in its mouth", "Edmonton", "NonNegative", 4, false, true, "123"), index);
+        //experimentController.addExperiment(new Experiment(String.valueOf(index), "Edmonton", "NonNegative", 4, false, true, "123"), index);
 
     }
 
@@ -115,9 +127,15 @@ public class MainTabFragment extends Fragment {
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.mainpage_tab_fragment, container, false);
 
+        Toast.makeText(getActivity(), "Oops, you didn't scan anything",
+                Toast.LENGTH_LONG).show();
         // Obtain the IDs
         expList = root.findViewById(R.id.expList);
-        ExperimentDataList = experimentController.getCurrentUser().getOwnedExperiments();
+//        if ( index == 1 )
+            ExperimentDataList = experimentController.getCurrentUser().getOwnedExperiments();
+//        else if (index == 2)
+//            ExperimentDataList = experimentController.getCurrentUser().getSubscribedExperiments();
+
         // Set up the adapter for Experiment List View
         expAdapter = new CustomList(this.getActivity(), ExperimentDataList);
         expList.setAdapter(expAdapter);
@@ -141,7 +159,6 @@ public class MainTabFragment extends Fragment {
     private void openExperimentActivity(Experiment experiment) {
         Intent intent = new Intent(getContext(), ExperimentActivity.class);
         intent.putExtra("Experiment", experiment);
-        startActivity(intent);
         startActivityForResult(intent,1);
     }
 

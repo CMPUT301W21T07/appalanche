@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -129,6 +130,15 @@ public class TrialsFragment extends Fragment {
         trialAdapter = new TrialCustomList(this.getContext(), trialDataList);
         trialListView = root.findViewById(R.id.trialList);
         trialListView.setAdapter(trialAdapter);
+
+
+//        // IGNORE CERTAIN TRIAL
+//        trialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//            }
+//        });
 
         return root;
     }

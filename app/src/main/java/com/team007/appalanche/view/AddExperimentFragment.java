@@ -14,12 +14,17 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.team007.appalanche.experiment.BinomialExperiment;
 import com.team007.appalanche.experiment.CountBasedExperiment;
 import com.team007.appalanche.R;
 
 import com.team007.appalanche.experiment.Experiment;
+import com.team007.appalanche.experiment.MeasurementExperiment;
+import com.team007.appalanche.experiment.NonNegativeCountExperiment;
 import com.team007.appalanche.user.Experimenter;
 import com.team007.appalanche.user.Profile;
 import com.team007.appalanche.user.User;
@@ -37,16 +42,42 @@ import java.util.Date;
 public class AddExperimentFragment extends DialogFragment {
 
     private OnFragmentInteractionListener listener;
-
+    private int k;
     @NonNull
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_add_experiment,null);
-
-
         EditText experimentDescription = view.findViewById(R.id.textView2);
         EditText experimentregion = view.findViewById(R.id.textView3);
         EditText numberoftrials = view.findViewById(R.id.textView4);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final Button button = view.findViewById(R.id.button);
+        final Button button2 = view.findViewById(R.id.button2);
+        final Button button3 = view.findViewById(R.id.button3);
+        final Button button4 = view.findViewById(R.id.button4);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                k= 1;
+            }
+        });
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                k=2;
+            }
+        });
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                k=3;
+            }
+        });
+        button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                k=4;
+            }
+        });
         return builder
                 .setView(view)
                 .setTitle("NEW EXPERIMENT")
@@ -55,8 +86,21 @@ public class AddExperimentFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
-                        Experiment newExperiment = new CountBasedExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, "123");
-                        listener.addExperiment(newExperiment);
+                        if(k==1){
+                            Experiment newExperiment = new CountBasedExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, "123");
+                            listener.addExperiment(newExperiment);
+                        }
+                        else if(k==2){
+                            Experiment newExperiment = new BinomialExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, "123");
+                            listener.addExperiment(newExperiment);
+                        } else if (k == 3) {
+                            Experiment newExperiment = new NonNegativeCountExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, "123");
+                            listener.addExperiment(newExperiment);
+                        }
+                        else if (k==4){
+                            Experiment newExperiment = new MeasurementExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, "123");
+                            listener.addExperiment(newExperiment);
+                        }
                     }
                 })
 

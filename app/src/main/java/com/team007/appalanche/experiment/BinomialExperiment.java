@@ -21,7 +21,6 @@ public class BinomialExperiment extends Experiment implements ExperimentInterfac
      */
     public BinomialExperiment(String description,
                               String region,
-                              String trialType,
                               Integer minNumTrials,
                               Boolean locationRequired,
                               Boolean status,
