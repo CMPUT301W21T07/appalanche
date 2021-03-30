@@ -1,6 +1,7 @@
 package com.team007.appalanche;
 
 import android.app.Activity;
+import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
@@ -44,10 +45,13 @@ public class SubscriptionUITest {
     public void mainTest(){
         String randomDesc = UUID.randomUUID().toString(); // https://stackoverflow.com/a/41762
         // Creating a mock experiment so that subscription can be tested
-        User autoGenUser = new User("123", null);
-        Experiment autoGenExp = new MeasurementExperiment(randomDesc, "Albania", 2, false, false, "123");
-        ExperimentController experimentController = new ExperimentController(autoGenUser);
-        experimentController.addExperiment(autoGenExp);
+        User autoGenUser = new User("@opulence63", null);
+        solo.clickOnView(solo.getView(R.id.addExperimentButton));
+        solo.enterText((EditText) solo.getView(R.id.textView2), randomDesc);
+        solo.enterText((EditText) solo.getView(R.id.textView3), "Albania");
+        solo.enterText((EditText) solo.getView(R.id.textView4), "2");
+        solo.clickOnButton("binomial");
+        solo.clickOnButton("Post");
 
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
 
