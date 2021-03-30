@@ -80,7 +80,6 @@ public class ExperimentController {
         final DocumentReference document = db.collection("Users/"+currentUser.getId()+"/OwnedExperiments").document(experiment.getDescription());
         document.set(data);
 
-
     }
     public void addSubExperiment(Experiment experiment) {
         db = FirebaseFirestore.getInstance();
