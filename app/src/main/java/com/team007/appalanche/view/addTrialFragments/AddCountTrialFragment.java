@@ -36,14 +36,13 @@ public class AddCountTrialFragment extends DialogFragment  {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
-                .setTitle("ADD TRIAL")
+                .setTitle("ADD COUNT TO TRIAL")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Post", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
                         CountBasedTrial newCountBasedTrial = new CountBasedTrial(new User(), new Date(), Integer.valueOf(result.getText().toString()));
-                        // newTrial.setOutcome(Boolean.valueOf(result.toString())); TODO: set trial result for trial object
                         listener.addTrial(newCountBasedTrial);
                     }
                 })

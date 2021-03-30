@@ -22,6 +22,11 @@ public class MeasurementTrial extends Trial implements Serializable {
         super(userAddedTrial, date);
     }
 
+    public MeasurementTrial(User userAddedTrial, Date date, double value) {
+        super(userAddedTrial, date);
+        this.value = value;
+    }
+
     /*getter ans setter for the class*/
     public void setValue(double value){
         this.value=value;
