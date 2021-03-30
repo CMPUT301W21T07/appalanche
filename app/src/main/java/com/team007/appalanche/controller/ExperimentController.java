@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -20,6 +21,7 @@ import com.team007.appalanche.trial.CountBasedTrial;
 import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -45,14 +47,21 @@ public class ExperimentController {
         return currentUser;
     }
 
+    public void clearOwnedList() {
+        currentUser.getOwnedExperiments().clear();
+    }
+    public void clearSubscribedList() {
+        currentUser.getSubscribedExperiments().clear();
+    }
+    public void addOwnExperiment(Experiment experiment) {currentUser.addOwnedExperiment(experiment);}
+    public void addSubscribedExperiment(Experiment experiment) {currentUser.addSubscribedExperiment(experiment);}
+
     public void addExperiment(Experiment experiment) {
         db = FirebaseFirestore.getInstance();
 
-        //final CollectionReference ownedCol = db.collection("Users/"+currentUser.getId()+"/OwnedExperiments");
-        //CollectionReference collection = db.collection("Experiments");
-//        if (index == 2)
+
         CollectionReference collection = db.collection("Experiments");
-        //currentUser.addOwnedExperiment(experiment);
+
         // We use a HashMap to store a key-value pair in firestore.
         HashMap<String, Object> data = new HashMap<>();
         data.put("trialType", experiment.getTrialType());
@@ -61,53 +70,23 @@ public class ExperimentController {
         data.put("minNumTrials", experiment.getMinNumTrials());
         data.put("region",experiment.getRegion());
         data.put("locationRequired",experiment.getLocationRequired());
-        experiment.addTrial(new CountBasedTrial(new User(), new Date(), 5));
-        data.put("trialList", experiment.getTrials());
 
+        // ADD EXPERIMENT TO THE PUBLIC COLLECTION "EXPERIMENTS"
         collection
                 .document(experiment.getDescription())
                 .set(data);
 
-//        //SET UP THE COLLECTION FOR QUESTIONS BEFOREHAND
-//        final CollectionReference collectionReference = db.collection("Experiments/" + experiment.getDescription()+"/Questions");
-//        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    if(task.getResult().size() == 0) {
-//                        HashMap<String, Object> data1 = new HashMap<>();
-//                        collectionReference.add(data1);
-//
-//                    }
-//                }
-//            }
-//        });
-//        HashMap<String, Object> data1 = new HashMap<>();
-//        collectionReference.add(data1);
+        // ADD EXPERIMENT TO OWNED LIST EXPERIMENT INSIDE USER BECAUSE WE WANT TO KEEP THE EXPERIMENT WHEN UNPUBLISH EXPERIMENT
+        final DocumentReference document = db.collection("Users/"+currentUser.getId()+"/OwnedExperiments").document(experiment.getDescription());
+        document.set(data);
 
     }
     public void addSubExperiment(Experiment experiment) {
         db = FirebaseFirestore.getInstance();
-
-        //final CollectionReference ownedCol = db.collection("Users/"+currentUser.getId()+"/OwnedExperiments");
-        //CollectionReference collection = db.collection("Experiments");
-//        if (index == 2)
-        CollectionReference collection = db.collection("Subscribed");
-        //currentUser.addOwnedExperiment(experiment);
-        // We use a HashMap to store a key-value pair in firestore.
+        // add a document key to subscribedExperiment collection
+        final DocumentReference document = db.collection("Users/"+currentUser.getId()+"/SubscribedExperiments").document(experiment.getDescription());
         HashMap<String, Object> data = new HashMap<>();
-        data.put("trialType", experiment.getTrialType());
-        data.put("expOwnerID", experiment.getExperimentOwnerID());
-        data.put("expOpen", experiment.getStatus());
-        data.put("minNumTrials", experiment.getMinNumTrials());
-        data.put("region", experiment.getRegion());
-        data.put("locationRequired", experiment.getLocationRequired());
-        experiment.addTrial(new CountBasedTrial(new User(), new Date(), 5));
-        data.put("trialList", experiment.getTrials());
-
-        collection
-                .document(experiment.getDescription())
-                .set(data);
+        document.set(data);
     }
 
-    }
+}
