@@ -40,7 +40,7 @@ public class CustomList extends ArrayAdapter<Experiment> {
         TextView description = view.findViewById(R.id.description);
 
         description.setText(exp.getDescription());
-
+        //description.setText(String.valueOf(experiments.size()));
         return view;
     }
 }

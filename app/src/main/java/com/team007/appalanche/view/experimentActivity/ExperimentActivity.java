@@ -40,6 +40,7 @@ import static com.team007.appalanche.view.experimentActivity.TrialsFragment.tria
 
 public class ExperimentActivity extends AppCompatActivity implements AskQuestionFragment.OnFragmentInteractionListener, AddBinomialTrialFragment.OnFragmentInteractionListener, AddCountTrialFragment.OnFragmentInteractionListener {
     Experiment experiment;
+    User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,7 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         // Get the experiment that started the activity
         Intent intent = getIntent();
         experiment = (Experiment) intent.getSerializableExtra("Experiment");
+        currentUser = (User) intent.getSerializableExtra("User");
     }
 
     //When the 3-dot options menu is selected on an experiment page
@@ -81,9 +83,9 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
                 scanCode();
                 return true;
             case R.id.subscribe:
-                SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-                String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
-                User currentUser = new User(userKey);
+//                SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+//                String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
+//                User currentUser = new User(userKey);
                 ExperimentController experimentController = new ExperimentController(currentUser);
                 experimentController.addSubExperiment(experiment);
                 //TODO: Either remove the subscribe button or grey it out for that specific experiment, after the user subscribed to it

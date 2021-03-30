@@ -82,13 +82,12 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
             userKey = docRef.getId();
 
             // Create a new instance of a user object
-            Profile profile = new Profile();
-            currentUser = new User(userKey, profile);
+            //Profile profile = new Profile();
+            currentUser = new User(userKey);
 
             // Store that user object in firebase\//
             // docRef.set(currentUser)
             HashMap<String, Object> data = new HashMap<>();
-            data.put("test", currentUser);
             docRef.set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
@@ -109,7 +108,6 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
         } else {
             docRef = db.collection("Users").document(userKey);
             HashMap<String, Object> data = new HashMap<>();
-            data.put("test", "123");
             docRef.set(data);
             docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
@@ -118,21 +116,7 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
                 }
             });
             //Toast.makeText(MainActivity.this, "hello", Toast.LENGTH_LONG).show();
-
         }
-
-//                final User[] us = new User[1];
-//        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//            @Override
-//            public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                us[0] = documentSnapshot.toObject(User.class);
-//                Experiment newExp = new Experiment("How many jelly beans can I fit in my mouth?",
-//                        "Alberta", "NonNegTrial",2, false, true, us[0].getId());
-////                Toast.makeText(MainActivity.this, us[0].getId(), Toast.LENGTH_LONG).show();
-//                us[0].addOwnedExperiment(newExp);
-//                docRef.set(us[0]);
-//            }
-//        });
 
         // Add floating action button click listeners
         FloatingActionButton addExperimentButton = findViewById(R.id.addExperimentButton);

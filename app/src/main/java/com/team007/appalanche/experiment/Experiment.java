@@ -148,7 +148,6 @@ public class Experiment implements Serializable {
     public ArrayList<Trial> getTrials() {
         return trials;
     }
-
     public void addTrial(Trial trial) {
         trials.add(trial);
     }
