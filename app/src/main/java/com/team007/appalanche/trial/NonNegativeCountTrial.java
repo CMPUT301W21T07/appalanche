@@ -22,6 +22,13 @@ public class  NonNegativeCountTrial extends Trial implements Serializable {
         super(userAddedTrial, date);
     }
 
+    public NonNegativeCountTrial(User userAddedTrial, Date date, Integer count) {
+        super(userAddedTrial, date);
+        if (count >= 0) {
+            this.count = count;
+        }
+    }
+
     /*This function returns the total number of count at the end*/
     public int getCount(){
         return this.count;

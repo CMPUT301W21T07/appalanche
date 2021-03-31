@@ -34,4 +34,8 @@ public class  CountBasedTrial extends com.team007.appalanche.trial.Trial impleme
     public int getCount(){
         return count;
     }
+
+    public int getValue() {
+        return count;
+    }
 }

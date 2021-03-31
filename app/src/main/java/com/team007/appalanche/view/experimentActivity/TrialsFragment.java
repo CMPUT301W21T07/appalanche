@@ -88,11 +88,18 @@ public class TrialsFragment extends Fragment {
                 // clear the old list
                 trialListController.clearTrialList();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
-                    Log.d(TAG, String.valueOf(doc.getData().get("description")));
-                    //ArrayList<Trial> trialList = (ArrayList<Trial>) doc.getData().get("trialList");
-                    Long count = (Long) doc.getData().get("count");
-                    trialListController.addTrial( new CountBasedTrial(new User(), new Date(), count.intValue()));
+                    if (experiment.getTrialType().equals("count")) {
+                        Log.d(TAG, String.valueOf(doc.getData().get("description")));
+                        //ArrayList<Trial> trialList = (ArrayList<Trial>) doc.getData().get("trialList");
+                        Long count = (Long) doc.getData().get("count");
+                        trialListController.addTrial( new CountBasedTrial(new User(), new Date(), count.intValue()));
+                    }
 
+                    if (experiment.getTrialType().equals("binomial")){
+                        Log.d(TAG, String.valueOf(doc.getData().get("description")));
+                        Long count = (Long) doc.getData().get("count");
+                        trialListController.addTrial(new BinomialTrial(new User(), new Date(), true));
+                    }
                 }
                 trialAdapter.notifyDataSetChanged();
             }});
@@ -144,7 +151,7 @@ public class TrialsFragment extends Fragment {
     }
 
     public void openAddTrialActivity() {
-        switch("count") {
+        switch(experiment.getTrialType()) {
             case "binomial":
                 new AddBinomialTrialFragment().show(getFragmentManager(), "Add_Trial");
                 break;
@@ -154,8 +161,9 @@ public class TrialsFragment extends Fragment {
             case "measurement":
                 new AddMeasurementTrialFragment().show(getFragmentManager(), "Add_trial");
                 break;
-            default:
+            case "nonNegativeCount":
                 new AddNonNegTrialFragment().show(getFragmentManager(), "Add_Trial");
+            default:
                 break;
         }
         // TODO: hook fragment result to update experiment and create trial

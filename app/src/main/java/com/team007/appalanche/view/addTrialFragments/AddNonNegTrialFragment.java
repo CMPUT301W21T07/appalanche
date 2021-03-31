@@ -18,6 +18,7 @@ import com.team007.appalanche.Location;
 import com.team007.appalanche.R;
 import com.team007.appalanche.trial.*;
 import com.team007.appalanche.user.Experimenter;
+import com.team007.appalanche.user.User;
 
 import java.util.Date;
 
@@ -41,7 +42,7 @@ public class AddNonNegTrialFragment extends DialogFragment  {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
-                        Trial newNonNegTrial = new NonNegativeCountTrial(new Experimenter("123", null), new Location(), new Date());
+                        NonNegativeCountTrial newNonNegTrial = new NonNegativeCountTrial(new User(), new Date(), Integer.valueOf(result.getText().toString()));
                         // newTrial.setOutcome(Boolean.valueOf(result.toString())); TODO: set trial result for trial object
                         listener.addTrial(newNonNegTrial);
                     }
@@ -51,7 +52,7 @@ public class AddNonNegTrialFragment extends DialogFragment  {
     }
 
     public interface OnFragmentInteractionListener {
-        void addTrial(Trial trial);
+        void addTrial(NonNegativeCountTrial trial);
     }
 
     @Override

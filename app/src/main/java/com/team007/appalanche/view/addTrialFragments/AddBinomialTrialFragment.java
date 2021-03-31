@@ -30,20 +30,17 @@ public class AddBinomialTrialFragment extends DialogFragment  {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.binomial_trial_fragment,null);
 
 
-        EditText result = view.findViewById(R.id.addBinomialResult);
+        // EditText result = view.findViewById(R.id.addBinomialResult);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
-                .setTitle("ADD TRIAL")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Post", new DialogInterface.OnClickListener() {
+                .setTitle("DO YOU WANT TO ADD A POSITIVE TRIAL?")
+                .setNegativeButton("NO", null)
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
-                        BinomialTrial newBinomialTrial =
-                                new BinomialTrial(new User("123", null), new Location(),
-                                        new Date());
-                        // newTrial.setOutcome(Boolean.valueOf(result.toString())); TODO: set trial result for trial object
+                        BinomialTrial newBinomialTrial = new BinomialTrial(new User(), new Date(), true);
                         listener.addTrial(newBinomialTrial);
                     }
                 })
