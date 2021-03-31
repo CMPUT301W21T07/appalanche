@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.app_bar_profile:
-                openProfileActivity();
+                openProfileActivity(currentUser);
                 break;
             case R.id.app_bar_search:
                 searchActivity();
@@ -280,8 +280,10 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
         startActivityForResult(intent,1);
     }
 
-    private void openProfileActivity() {
-        //TODO: Implement
+    private void openProfileActivity(User user) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra("Profile", user);
+        startActivityForResult(intent,1);
     }
 
     private void searchActivity() {
