@@ -101,6 +101,9 @@ public class AddExperimentFragment extends DialogFragment {
                             Experiment newExperiment = new MeasurementExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, "123");
                             listener.addExperiment(newExperiment);
                         }
+                        //Todo later(Theo can write this) : Once we have implemented searching for experiments, we should
+                        // automatically add owned experiments to the subscribed list;
+                        // listener.addSubExp(newExperiment);
                     }
                 })
 

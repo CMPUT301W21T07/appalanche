@@ -48,7 +48,7 @@ public class OwnedFragment extends Fragment {
 
 
     public static ExperimentController experimentController;
-    ListView expList;
+    public ListView expList;
     ArrayAdapter<Experiment> expAdapter;
     ArrayList<Experiment> ExperimentDataList;
     FirebaseFirestore db;
