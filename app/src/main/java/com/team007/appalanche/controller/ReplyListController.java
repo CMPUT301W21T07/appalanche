@@ -1,7 +1,9 @@
 package com.team007.appalanche.controller;
 
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.question.Question;
 import com.team007.appalanche.question.Reply;
 
@@ -29,16 +31,21 @@ public class ReplyListController {
         question.addReply(newReply);
     }
 
-    public void addReplyToDb(Reply newReply, CollectionReference collectionReference) {
+    public void addReplyToDb(Reply newReply, Experiment experiment) {
 
-        //collectionReference.add(newQuestion.getContent());
+        db = FirebaseFirestore.getInstance();
+        // Get a top-level reference to the collection.
+        final CollectionReference collectionReference = db.collection("Experiments/" + experiment.getDescription()+"/Questions/"+question.getContent()+"/Replies");
         // We use a HashMap to store a key-value pair in firestore.
         HashMap<String, String> data = new HashMap<>();
-        data.put("content", newReply.getReplyText());
-        //data.put("userPostedReply", newReply.getUserReplied().getId());
+        //data.put("content", newReply.getReplyText());
+        data.put("userPostedReply", newReply.getUserReplied().getId());
         collectionReference
                 .document(newReply.getReplyText())
                 .set(data);
 
+        // ADD TO OWNER COLLECTION
+        final DocumentReference document = db.collection("Users/"+ experiment.getExperimentOwnerID() +"/OwnedExperiments/"+ experiment.getDescription()+"/Questions/"+question.getContent()+"/Replies").document(newReply.getReplyText());
+        document.set(data);
     }
 }

@@ -58,22 +58,9 @@ public class QuestionListController {
                 .document(newQuestion.getContent())
                 .set(data);
 
-//        // SET UP COLLECTION FOR REPLIES BEFOREHAND
-//        final CollectionReference collectionReference1 = db.collection("Experiments/" + experiment.getDescription()+"/Questions/"+newQuestion.getContent()+"/Replies");
-//        collectionReference1.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    if(task.getResult().size() == 0) {
-//                        HashMap<String, Object> data1 = new HashMap<>();
-//                        collectionReference1.add(data1);
-//
-//                    }
-//                }
-//
-//            }
-//        });
-//        HashMap<String, Object> data1 = new HashMap<>();
-//        collectionReference1.add(data1);
+        // ADD TO OWNER
+        final DocumentReference document = db.collection("Users/"+ experiment.getExperimentOwnerID() +"/OwnedExperiments/"+ experiment.getDescription()+"/Questions/").document(newQuestion.getContent());
+        document.set(data);
+
     }
 }

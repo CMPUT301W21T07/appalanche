@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 
 import com.team007.appalanche.R;
 import com.team007.appalanche.experiment.Experiment;
+import com.team007.appalanche.user.User;
+import com.team007.appalanche.view.profile.ProfileActivity;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -48,6 +50,9 @@ public class OverviewFragment extends Fragment {
         TextView owner = root.findViewById(R.id.owner);
         owner.setText("Owner: " + experiment.getExperimentOwnerID());
 
+        // If user click on owner ID, go to the owner profile page
+        viewAProfile(owner);
+
         TextView status = root.findViewById(R.id.status);
         if (experiment.getStatus()) {
             status.setText("Status: Open");
@@ -65,5 +70,18 @@ public class OverviewFragment extends Fragment {
         minTrialNum.setText("Minimum number of trials: " + experiment.getMinNumTrials().toString());
 
         return root;
+    }
+
+    public void viewAProfile(TextView owner) {
+        owner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                String string = owner.getText().toString();
+                String userID = (String) string.subSequence(7, string.length());
+                intent.putExtra("Profile", new User(userID));
+                startActivityForResult(intent,1);
+            }
+        });
     }
 }
