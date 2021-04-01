@@ -32,6 +32,7 @@ import com.team007.appalanche.custom.QuestionCustomList;
 import com.team007.appalanche.question.Question;
 import com.team007.appalanche.view.AskQuestionFragment;
 import com.team007.appalanche.view.ReplyActivity;
+import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
 import com.team007.appalanche.view.ui.mainActivity.MainActivity;
 
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class QuestionFragment extends Fragment {
     public static ArrayAdapter<Question> questionAdapter;
     public static ListView questionListView;
     private Experiment experiment;
+    private User user;
 
     public static QuestionFragment newInstance(int index) {
         QuestionFragment fragment = new QuestionFragment();
@@ -68,6 +70,8 @@ public class QuestionFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Intent intent = getActivity().getIntent();
         experiment = (Experiment) intent.getSerializableExtra("Experiment");
+        user = (User) intent.getSerializableExtra("User");
+
         questionList = new QuestionListController(experiment);
         // Access a Cloud Firestore instance from your Activity
         db = FirebaseFirestore.getInstance();
@@ -116,12 +120,10 @@ public class QuestionFragment extends Fragment {
         askQuestionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AskQuestionFragment().show(getFragmentManager(),
+                new AskQuestionFragment().newInstance(user).show(getFragmentManager(),
                         "Ask_Question");
             }
         });
-
-        User currentUser = MainActivity.currentUser;
 
         // Reply to a question
         questionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -132,7 +134,7 @@ public class QuestionFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), ReplyActivity.class);
                 intent.putExtra("Experiment", experiment);
                 intent.putExtra("Question", questionToReply);
-                intent.putExtra("Replying User", currentUser);
+                intent.putExtra("Replying User", user);
                 startActivity(intent);
             }
         });

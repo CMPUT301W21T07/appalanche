@@ -42,7 +42,8 @@ public class AddCountTrialFragment extends DialogFragment  {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
-                        CountBasedTrial newCountBasedTrial = new CountBasedTrial(new User(), new Date(), Integer.valueOf(result.getText().toString()));
+                        User user = (User) getArguments().getSerializable("user");
+                        CountBasedTrial newCountBasedTrial = new CountBasedTrial(user, new Date(), Integer.valueOf(result.getText().toString()));
                         listener.addTrial(newCountBasedTrial);
                     }
                 })
@@ -63,5 +64,12 @@ public class AddCountTrialFragment extends DialogFragment  {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+    }
+    public static AddCountTrialFragment newInstance(User user) {
+        Bundle args = new Bundle();
+        args.putSerializable("user", user);
+        AddCountTrialFragment fragment = new AddCountTrialFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 }

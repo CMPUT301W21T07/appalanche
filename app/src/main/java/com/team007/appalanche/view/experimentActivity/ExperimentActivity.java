@@ -50,8 +50,8 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         AddNonNegTrialFragment.OnFragmentInteractionListener
 {
 
-    Experiment experiment;
-    User currentUser;
+    private Experiment experiment;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

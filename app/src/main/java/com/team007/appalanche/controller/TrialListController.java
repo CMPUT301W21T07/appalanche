@@ -45,9 +45,14 @@ public class TrialListController {
         // We use a HashMap to store a key-value pair in firestore.
         HashMap<String, Object> data = new HashMap<>();
         data.put("count", ((CountBasedTrial) newTrial).getCount());
+        data.put("userAddedTrial", newTrial.getUserAddedTrial());
         collectionReference
                 .document()
                 .set(data);
+
+        // ADD TO OWNER
+        final DocumentReference document = db.collection("Users/"+ experiment.getExperimentOwnerID() +"/OwnedExperiments/"+ experiment.getDescription()+"/Trials/").document();
+        document.set(data);
     }
 
     public void addBinomialTrialToDb(Trial newTrial) {
@@ -56,9 +61,13 @@ public class TrialListController {
         final CollectionReference collectionReference = db.collection("Experiments/" + experiment.getDescription() + "/Trials");
         HashMap<String, Object> data = new HashMap<>();
         data.put("binomial", ((BinomialTrial) newTrial).getOutcome());
+        data.put("userAddedTrial", newTrial.getUserAddedTrial());
         collectionReference
                 .document()
                 .set(data);
+        //ADD TO OWNER LIST
+        final DocumentReference document = db.collection("Users/"+ experiment.getExperimentOwnerID() +"/OwnedExperiments/"+ experiment.getDescription()+"/Trials/").document();
+        document.set(data);
     }
 
     public void addMeasurementTrialToDb(Trial newTrial) {
@@ -67,9 +76,13 @@ public class TrialListController {
         final CollectionReference collectionReference = db.collection("Experiments/" + experiment.getDescription() + "/Trials");
         HashMap<String, Object> data = new HashMap<>();
         data.put("measurement", ((MeasurementTrial) newTrial).getValue());
+        data.put("userAddedTrial", newTrial.getUserAddedTrial());
         collectionReference
                 .document()
                 .set(data);
+        //ADD TO OWNER LIST
+        final DocumentReference document = db.collection("Users/"+ experiment.getExperimentOwnerID() +"/OwnedExperiments/"+ experiment.getDescription()+"/Trials/").document();
+        document.set(data);
     }
 
     public void addNonNegTrialToDb(Trial newTrial) {
@@ -78,9 +91,13 @@ public class TrialListController {
         final CollectionReference collectionReference = db.collection("Experiments/" + experiment.getDescription() + "/Trials");
         HashMap<String, Object> data = new HashMap<>();
         data.put("nonNegativeCount", ((NonNegativeCountTrial) newTrial).getCount());
+        data.put("userAddedTrial", newTrial.getUserAddedTrial());
         collectionReference
                 .document()
                 .set(data);
+        //ADD TO OWNER LIST
+        final DocumentReference document = db.collection("Users/"+ experiment.getExperimentOwnerID() +"/OwnedExperiments/"+ experiment.getDescription()+"/Trials/").document();
+        document.set(data);
     }
 
 //    public void ignoreTrial(Trial trialBeingIgnored) {

@@ -91,8 +91,7 @@ public class ReplyActivity extends AppCompatActivity {
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
                     Log.d(TAG, String.valueOf(doc.getData().get("user_posted_question")));
                     String content = doc.getId();
-                    String user = (String) doc.getData().get("user_posted_question");
-
+                    String user = (String) doc.getData().get("userPostedReply");
                     replyListController.addReply(new Reply(content, new User(user, null), new Date()));}
                 replyAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.
             }
@@ -100,10 +99,9 @@ public class ReplyActivity extends AppCompatActivity {
 
 
         //TEST
+        //replyListController.addReplyToDb(new Reply("it is a very enjoyable way to carry out experiment", new User("12345",null),new Date()), experiment);
 
-        replyListController.addReplyToDb(new Reply("it is a very enjoyable way to carry out experiment", new User("12345",null),new Date()), collectionReference);
         ///////////////////////REPLY LIST BUILDING////////////////////////////////////
-        replyListController = new ReplyListController(question);
         replyAdapter = new ReplyCustomList(this, replyListController.getQuestion().getReplies());
         replyListView = findViewById(R.id.reply_list);
         replyListView.setAdapter(replyAdapter);
@@ -126,7 +124,7 @@ public class ReplyActivity extends AppCompatActivity {
                     String replyString = replyMessage.getText().toString();
                     Reply newReply = new Reply(replyString, replyingUser, new Date());
                     replyMessage.getText().clear();
-                    replyListController.addReplyToDb(newReply, collectionReference);
+                    replyListController.addReplyToDb(newReply, experiment);
                     replyAdapter.notifyDataSetChanged();
                 }
                 //end of if statement

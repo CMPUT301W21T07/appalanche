@@ -42,7 +42,8 @@ public class AddNonNegTrialFragment extends DialogFragment  {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
-                        NonNegativeCountTrial newNonNegTrial = new NonNegativeCountTrial(new User(), new Date(), Integer.valueOf(result.getText().toString()));
+                        User user = (User) getArguments().getSerializable("user");
+                        NonNegativeCountTrial newNonNegTrial = new NonNegativeCountTrial(user, new Date(), Integer.valueOf(result.getText().toString()));
                         // newTrial.setOutcome(Boolean.valueOf(result.toString())); TODO: set trial result for trial object
                         listener.addTrial(newNonNegTrial);
                     }
@@ -64,5 +65,12 @@ public class AddNonNegTrialFragment extends DialogFragment  {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+    }
+    public static AddNonNegTrialFragment newInstance(User user) {
+        Bundle args = new Bundle();
+        args.putSerializable("user", user);
+        AddNonNegTrialFragment fragment = new AddNonNegTrialFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 }

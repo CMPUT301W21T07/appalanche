@@ -70,6 +70,46 @@ public class OwnedFragment extends Fragment {
         User currentUser = new User(userKey);
 
         experimentController = new ExperimentController(currentUser);
+        setUpFirebase(currentUser);
+
+    }
+
+    @Override
+    public View onCreateView(
+            @NonNull LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.mainpage_tab_fragment, container, false);
+        // Obtain the IDs
+        expList = root.findViewById(R.id.expList);
+        ExperimentDataList = experimentController.getCurrentUser().getOwnedExperiments();
+        // Set up the adapter for Experiment List View
+        expAdapter = new CustomList(this.getActivity(), ExperimentDataList);
+        expList.setAdapter(expAdapter);
+
+        // Open the experiment
+        expList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Experiment experiment = ExperimentDataList.get(position);
+                openExperimentActivity(experiment);
+            }
+        });
+
+        return root;
+    }
+
+    /**
+     * This opens the experiment activity.
+     * @param experiment This is the experiment activity to open.
+     */
+    private void openExperimentActivity(Experiment experiment) {
+        Intent intent = new Intent(getContext(), ExperimentActivity.class);
+        intent.putExtra("Experiment", experiment);
+        intent.putExtra("User", experimentController.getCurrentUser());
+        startActivityForResult(intent,1);
+    }
+
+    public void setUpFirebase(User currentUser) {
         db = FirebaseFirestore.getInstance();
         //SET UP REAL TIME CHANGES FOR UI, ANYTHING IS CHANGED IN THIS COLLECTION PATH, UI ALSO CHANGES
         final CollectionReference collection = db.collection("Users/"+ currentUser.getId()+"/OwnedExperiments");
@@ -103,45 +143,5 @@ public class OwnedFragment extends Fragment {
         // experimentController.addExperiment(new Experiment("How many jelly mans can a jelly bean fit in its mouth", "Edmonton", "NonNegative", 4, false, true, "123"), index);
         // experimentController.addExperiment(new Experiment(String.valueOf(index), "Edmonton", "NonNegative", 4, false, true, "123"), index);
         //experimentController.addExperiment(new Experiment("5", "Edmonton", "NonNegative", 4, false, true, "123"));
-
     }
-
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.mainpage_tab_fragment, container, false);
-
-        Toast.makeText(getActivity(), "Oops, you didn't scan anything",
-                Toast.LENGTH_LONG).show();
-        // Obtain the IDs
-        expList = root.findViewById(R.id.expList);
-        ExperimentDataList = experimentController.getCurrentUser().getOwnedExperiments();
-        // Set up the adapter for Experiment List View
-        expAdapter = new CustomList(this.getActivity(), ExperimentDataList);
-        expList.setAdapter(expAdapter);
-
-        // Open the experiment
-        expList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Experiment experiment = ExperimentDataList.get(position);
-                openExperimentActivity(experiment);
-            }
-        });
-
-        return root;
-    }
-
-    /**
-     * This opens the experiment activity.
-     * @param experiment This is the experiment activity to open.
-     */
-    private void openExperimentActivity(Experiment experiment) {
-        Intent intent = new Intent(getContext(), ExperimentActivity.class);
-        intent.putExtra("Experiment", experiment);
-        intent.putExtra("User", experimentController.getCurrentUser());
-        startActivityForResult(intent,1);
-    }
-
 }

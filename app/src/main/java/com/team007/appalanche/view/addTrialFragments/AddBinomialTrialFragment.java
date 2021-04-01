@@ -17,6 +17,7 @@ import com.team007.appalanche.Location;
 import com.team007.appalanche.R;
 import com.team007.appalanche.trial.BinomialTrial;
 import com.team007.appalanche.user.User;
+import com.team007.appalanche.view.AddExperimentFragment;
 
 import java.util.Date;
 
@@ -40,7 +41,8 @@ public class AddBinomialTrialFragment extends DialogFragment  {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
-                        BinomialTrial newBinomialTrial = new BinomialTrial(new User(), new Date(), true);
+                        User user = (User) getArguments().getSerializable("user");
+                        BinomialTrial newBinomialTrial = new BinomialTrial(user, new Date(), true);
                         listener.addTrial(newBinomialTrial);
                     }
                 })
@@ -61,5 +63,12 @@ public class AddBinomialTrialFragment extends DialogFragment  {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+    }
+    public static AddBinomialTrialFragment newInstance(User user) {
+        Bundle args = new Bundle();
+        args.putSerializable("user", user);
+        AddBinomialTrialFragment fragment = new AddBinomialTrialFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 }

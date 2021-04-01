@@ -79,7 +79,6 @@ public class ExperimentController {
         // ADD EXPERIMENT TO OWNED LIST EXPERIMENT INSIDE USER BECAUSE WE WANT TO KEEP THE EXPERIMENT WHEN UNPUBLISH EXPERIMENT
         final DocumentReference document = db.collection("Users/"+currentUser.getId()+"/OwnedExperiments").document(experiment.getDescription());
         document.set(data);
-
     }
     public void addSubExperiment(Experiment experiment) {
         db = FirebaseFirestore.getInstance();

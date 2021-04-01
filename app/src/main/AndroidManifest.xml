@@ -13,6 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Appalanche">
+        <activity android:name=".view.profile.ProfileActivity"
+            android:parentActivityName=".view.ui.mainActivity.MainActivity"></activity>
+        <activity
+            android:name=".view.profile.OwnerProfileActivity"
+            android:parentActivityName=".view.ui.mainActivity.MainActivity" />
         <activity
             android:name=".view.experimentActivity.ExperimentActivity"
             android:parentActivityName=".view.ui.mainActivity.MainActivity">
@@ -25,6 +30,7 @@
         <activity android:name=".view.ui.mainActivity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

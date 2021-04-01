@@ -36,7 +36,9 @@ public class QuestionCustomList extends ArrayAdapter<Question> {
         // Display Question List
         TextView questionContent = view.findViewById(R.id.questionContent);
         questionContent.setText(question.getContent());
-
+        // Display user posted question
+        TextView userPostedQues = view.findViewById(R.id.user_posted_question);
+        userPostedQues.setText(question.getUserPostedQuestion().getId());
         return view;
     }
 }

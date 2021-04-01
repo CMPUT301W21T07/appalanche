@@ -17,6 +17,8 @@ import androidx.fragment.app.DialogFragment;
 import com.team007.appalanche.R;
 import com.team007.appalanche.user.Experimenter;
 import com.team007.appalanche.question.Question;
+import com.team007.appalanche.user.User;
+import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
 
 import java.util.Date;
 
@@ -46,7 +48,8 @@ public class AskQuestionFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
-                        Question newQuestion = new Question(askQuestion.getText().toString(), new Experimenter("123", null), new Date());
+                        User user = (User) getArguments().getSerializable("user");
+                        Question newQuestion = new Question(askQuestion.getText().toString(), user, new Date());
                         listener.askQuestion(newQuestion);
                     }
                 })
@@ -67,4 +70,12 @@ public class AskQuestionFragment extends DialogFragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
+    public static AskQuestionFragment newInstance(User user) {
+        Bundle args = new Bundle();
+        args.putSerializable("user", user);
+        AskQuestionFragment fragment = new AskQuestionFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 }

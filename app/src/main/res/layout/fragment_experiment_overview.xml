@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="15dp"
             android:text="Owner: "
-            android:textColor="@color/black"
+            android:textColor="#00ffff"
             android:textSize="15dp" />
 
         <TextView

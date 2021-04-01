@@ -36,7 +36,9 @@ public class ReplyCustomList extends ArrayAdapter<Reply> {
         // Display Reply List
         TextView ReplyContent = view.findViewById(R.id.questionContent);
         ReplyContent.setText(reply.getReplyText());
-
+        // Display user ID
+        TextView userReplied = view.findViewById(R.id.user_posted_question);
+        userReplied.setText(reply.getUserReplied().getId());
         return view;
     }
 }

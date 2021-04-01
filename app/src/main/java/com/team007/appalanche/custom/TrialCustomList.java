@@ -16,6 +16,8 @@ import com.team007.appalanche.trial.MeasurementTrial;
 import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.trial.Trial;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class TrialCustomList extends ArrayAdapter<Trial> {
@@ -32,35 +34,36 @@ public class TrialCustomList extends ArrayAdapter<Trial> {
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.content_trial,parent,false);
         }
-
+        // GET IDS OF ALL TEXTVIEW
+        TextView trialCount = view.findViewById(R.id.trialCount);
+        TextView userAddedTrial = view.findViewById(R.id.userID);
         try {
             //FIX THIS
             CountBasedTrial trial = (CountBasedTrial) trials.get(position);
             // Display trial List
-            TextView trialCount = view.findViewById(R.id.trialCount);
             trialCount.setText(String.valueOf(trial.getCount()));
+            userAddedTrial.setText(trial.getUserAddedTrial().getId());
 
         } catch (Exception e0){
 
             try {
                 //FIX THIS
                 BinomialTrial trial = (BinomialTrial) trials.get(position);
-
                 // Display trial List
-                TextView trialCount = view.findViewById(R.id.trialCount);
                 trialCount.setText(String.valueOf(trial.getOutcome()));
+                userAddedTrial.setText(trial.getUserAddedTrial().getId());
             } catch (Exception e1) {
                 try {
                     MeasurementTrial trial = (MeasurementTrial) trials.get(position);
 
-                    TextView trialCount = view.findViewById(R.id.trialCount);
                     trialCount.setText(String.valueOf(trial.getValue()));
+                    userAddedTrial.setText(trial.getUserAddedTrial().getId());
                 } catch (Exception e2) {
                     try {
                         NonNegativeCountTrial trial = (NonNegativeCountTrial) trials.get(position);
 
-                        TextView trialCount = view.findViewById(R.id.trialCount);
                         trialCount.setText(String.valueOf(trial.getCount()));
+                        userAddedTrial.setText(trial.getUserAddedTrial().getId());
                     } catch (Exception e3) {
                         System.out.println("Something went wrong.");
                     }
@@ -70,4 +73,5 @@ public class TrialCustomList extends ArrayAdapter<Trial> {
 
         return view;
     }
+
 }
