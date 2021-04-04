@@ -33,10 +33,11 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        ExperimentDataList = new ArrayList<Experiment>();
         setUpFirebase();
 
         expList = findViewById(R.id.all_experiments);
-        ExperimentDataList = new ArrayList<Experiment>();
         expAdapter = new CustomList(this, ExperimentDataList);
         expList.setAdapter(expAdapter);
     }
@@ -59,6 +60,7 @@ public class SearchActivity extends AppCompatActivity {
                     String region = (String) doc.getData().get("region");
                     Boolean locationRequired =  doc.getBoolean("locationRequired");
                     Experiment newExp = new Experiment(description, region, trialType, minNumTrials.intValue(), locationRequired, expOpen, expOwnerID );
+                    ExperimentDataList.add(newExp);
                 }
                 expAdapter.notifyDataSetChanged();
             }
