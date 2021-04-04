@@ -32,14 +32,22 @@ public class CustomList extends ArrayAdapter<Experiment> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.content,parent,false);
+            view = LayoutInflater.from(context).inflate(R.layout.content_search_result,parent,false);
         }
         Experiment exp = experiments.get(position);
 
         // Date and Description display
-        TextView description = view.findViewById(R.id.description);
+        TextView description = view.findViewById(R.id.expDescSearchResult);
+        TextView userID = view.findViewById(R.id.userIDSearchResult);
+        TextView status = view.findViewById(R.id.statusSearchResult);
 
         description.setText(exp.getDescription());
+        userID.setText(exp.getExperimentOwnerID());
+        if (exp.getStatus()) {
+            status.setText("Open");
+        } else {
+            status.setText("Closed");
+        }
         //description.setText(String.valueOf(experiments.size()));
         return view;
     }
