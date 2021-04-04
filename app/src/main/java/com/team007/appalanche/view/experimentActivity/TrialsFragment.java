@@ -31,6 +31,8 @@ import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.question.Question;
 import com.team007.appalanche.trial.BinomialTrial;
 import com.team007.appalanche.trial.CountBasedTrial;
+import com.team007.appalanche.trial.MeasurementTrial;
+import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.ContactInfo;
 import com.team007.appalanche.user.Profile;
@@ -103,6 +105,18 @@ public class TrialsFragment extends Fragment {
                         Long count = (Long) doc.getData().get("count");
                         trialListController.addTrial(new BinomialTrial(user, new Date(), true));
                     }
+
+//                    if (experiment.getTrialType().equals("measurement")) {
+//                        Log.d(TAG, String.valueOf(doc.getData().get("description")));
+//                        Float count = (Long) doc.getData().get("count");
+//                        trialListController.addTrial(new MeasurementTrial(user, new Date(), count.floatValue()));
+//                    }
+//
+//                    if (experiment.getTrialType().equals("nonNegMeasurement")) {
+//                        Log.d(TAG, String.valueOf(doc.getData().get("description")));
+//                        Long count = (Long) doc.getData().get("count");
+//                        trialListController.addTrial(new NonNegativeCountTrial(user, new Date(), count.intValue()));
+//                    }
                 }
                 trialAdapter.notifyDataSetChanged();
             }});
