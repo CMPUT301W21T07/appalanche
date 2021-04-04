@@ -28,4 +28,12 @@ public class ContactInfo {
         this.phoneNumber = phoneNumber;
         this.githubLink = githubLink;
     }
+
+    public Integer getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getGithubLink() {
+        return githubLink;
+    }
 }
