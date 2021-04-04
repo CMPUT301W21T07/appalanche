@@ -1,5 +1,6 @@
 package com.team007.appalanche.view.ui.mainActivity;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +15,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuItemCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.DocumentReference;
@@ -39,6 +42,7 @@ import com.team007.appalanche.user.User;
 import com.team007.appalanche.scannableCode.ScannableCode;
 import com.team007.appalanche.view.AddExperimentFragment;
 import com.team007.appalanche.view.Capture;
+import com.team007.appalanche.view.SearchResultsActivity;
 import com.team007.appalanche.view.experimentActivity.ExperimentActivity;
 
 import java.util.HashMap;
@@ -135,6 +139,16 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
                 scanCode();
             }
         });
+
+        // placeholder until searching is put together
+        FloatingActionButton testSearchActivity = findViewById(R.id.testOpenSearch);
+        testSearchActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchActivity();
+            }
+        });
+
     }
 
 
