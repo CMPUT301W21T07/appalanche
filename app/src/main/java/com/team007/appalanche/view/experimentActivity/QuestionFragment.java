@@ -128,16 +128,40 @@ public class QuestionFragment extends Fragment {
         });
 
         // Reply to a question
+//        questionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Question questionToReply = questionDataList.get(position);
+//
+//                Intent intent = new Intent(getActivity(), ReplyActivity.class);
+//                intent.putExtra("Experiment", experiment);
+//                intent.putExtra("Question", questionToReply);
+//                intent.putExtra("Replying User", user);
+//                startActivity(intent);
+//            }
+//        });
+
         questionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Question questionToReply = questionDataList.get(position);
+                long viewId = view.getId();
+                if (viewId == R.id.seeReplies) {
+                    Question questionToReply = questionDataList.get(position);
+                    Intent intent = new Intent(getActivity(), ReplyActivity.class);
+                    intent.putExtra("Experiment", experiment);
+                    intent.putExtra("Question", questionToReply);
+                    intent.putExtra("Replying User", user);
+                    startActivity(intent);
+                }
+                else if (viewId == R.id.user_posted_question) {
+                    Question question = questionDataList.get(position);
+                    String userID = question.getUserPostedQuestion().getId();
+                    Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                    intent.putExtra("Profile", new User(userID));
+                    startActivityForResult(intent,1);
+                    // Again fix the back button
+                }
 
-                Intent intent = new Intent(getActivity(), ReplyActivity.class);
-                intent.putExtra("Experiment", experiment);
-                intent.putExtra("Question", questionToReply);
-                intent.putExtra("Replying User", user);
-                startActivity(intent);
             }
         });
 

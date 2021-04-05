@@ -114,18 +114,6 @@ public class TrialsFragment extends Fragment {
                         Long count = (Long) doc.getData().get("nonNegativeCount");
                         trialListController.addTrial(new NonNegativeCountTrial(user, new Date(), count.intValue()));
                     }
-
-//                    if (experiment.getTrialType().equals("measurement")) {
-//                        Log.d(TAG, String.valueOf(doc.getData().get("description")));
-//                        Float count = (Long) doc.getData().get("count");
-//                        trialListController.addTrial(new MeasurementTrial(user, new Date(), count.floatValue()));
-//                    }
-//
-//                    if (experiment.getTrialType().equals("nonNegMeasurement")) {
-//                        Log.d(TAG, String.valueOf(doc.getData().get("description")));
-//                        Long count = (Long) doc.getData().get("count");
-//                        trialListController.addTrial(new NonNegativeCountTrial(user, new Date(), count.intValue()));
-//                    }
                 }
                 trialAdapter.notifyDataSetChanged();
             }});
