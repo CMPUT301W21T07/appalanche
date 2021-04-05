@@ -158,7 +158,7 @@ public class QuestionFragment extends Fragment {
                     String userID = question.getUserPostedQuestion().getId();
                     Intent intent = new Intent(getActivity(), ProfileActivity.class);
                     intent.putExtra("Profile", new User(userID));
-                    startActivityForResult(intent,1);
+                    startActivity(intent);
                     // Again fix the back button
                 }
             }

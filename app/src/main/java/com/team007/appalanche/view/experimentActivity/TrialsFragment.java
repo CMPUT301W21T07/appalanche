@@ -189,7 +189,7 @@ public class TrialsFragment extends Fragment {
                 String userID = trial.getUserAddedTrial().getId();
                 Intent intent = new Intent(getActivity(), ProfileActivity.class);
                 intent.putExtra("Profile", new User(userID));
-                startActivityForResult(intent,1);
+                startActivity(intent);
                 // FIX BACK BUTTON
             }
         });

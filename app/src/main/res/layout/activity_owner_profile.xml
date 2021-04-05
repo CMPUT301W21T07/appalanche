@@ -47,8 +47,8 @@
             android:layout_height="wrap_content">
             <Button
                 android:id="@+id/editProfile"
-                android:layout_width="match_parent"
-                android:layout_height="75dp"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
                 android:layout_gravity="right"
                 android:text="Edit"
                 android:textSize="25dp"

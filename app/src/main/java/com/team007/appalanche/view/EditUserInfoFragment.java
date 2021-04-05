@@ -26,9 +26,15 @@ public class EditUserInfoFragment extends DialogFragment {
     @NonNull
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_edit_user_info, null);
+
+        User user = (User) getArguments().getSerializable("user");
         EditText userName = view.findViewById(R.id.editUserName);
+        userName.setText(user.getProfile().getUserName());
         EditText phoneNumber = view.findViewById(R.id.editPhoneNumber);
+        phoneNumber.setText(user.getProfile().getContactInfo().getPhoneNumber().toString());
         EditText githubLink = view.findViewById(R.id.editGithubLink);
+        githubLink.setText(user.getProfile().getContactInfo().getGithubLink());
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
