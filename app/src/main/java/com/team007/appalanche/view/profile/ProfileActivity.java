@@ -81,15 +81,29 @@ public class ProfileActivity extends AppCompatActivity {
                 String name = (String) snapshot.getData().get("Name");
                 Long phoneNumb  = (Long)  snapshot.getData().get("PhoneNumber");
                 String github = (String) snapshot.getData().get("Github");
-                ContactInfo contactInfo = new ContactInfo(phoneNumb.intValue(), github);
+                ContactInfo contactInfo;
+                if (phoneNumb != null)
+                    contactInfo = new ContactInfo(phoneNumb.intValue(), github);
+                else
+                    contactInfo = new  ContactInfo(github);
                 Profile profile = new Profile(name, contactInfo);
                 currentUser.setProfile(profile);
-                if (name != null )
+                if (name != null) {
                     userName.setText(currentUser.getProfile().getUserName());
+                    if (name.equals(""))
+                        userName.setHint("Name");}
+
+
                 if (phoneNumb != null)
                     phoneNumber.setText(String.valueOf(phoneNumb));
-                if (github != null)
+                else
+                    phoneNumber.setText("Phone Number");
+
+
+                if (github != null) {
                     gitHub.setText(github);
+                    if (github.equals(""))
+                        gitHub.setHint("Github Link");}
             }
         });
 

@@ -31,7 +31,8 @@ public class EditUserInfoFragment extends DialogFragment {
         EditText userName = view.findViewById(R.id.editUserName);
         userName.setText(user.getProfile().getUserName());
         EditText phoneNumber = view.findViewById(R.id.editPhoneNumber);
-        phoneNumber.setText(user.getProfile().getContactInfo().getPhoneNumber().toString());
+        if (user.getProfile().getContactInfo().getPhoneNumber() != null)
+            phoneNumber.setText(user.getProfile().getContactInfo().getPhoneNumber().toString());
         EditText githubLink = view.findViewById(R.id.editGithubLink);
         githubLink.setText(user.getProfile().getContactInfo().getGithubLink());
 
@@ -45,7 +46,14 @@ public class EditUserInfoFragment extends DialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
                         User user = (User) getArguments().getSerializable("user");
-                        ContactInfo contactInfo = new ContactInfo(Integer.valueOf(phoneNumber.getText().toString()), githubLink.getText().toString());
+                        ContactInfo contactInfo;
+                        if (!phoneNumber.getText().toString().equals("")) {
+                            contactInfo = new ContactInfo(Integer.valueOf(phoneNumber.getText().toString()), githubLink.getText().toString());
+                        }
+                        else {
+                            contactInfo = new ContactInfo( githubLink.getText().toString());
+                        }
+
                         Profile profile = new Profile(userName.getText().toString(), contactInfo);
                         user.setProfile(profile);
                         listener.updateUserInfo(user);

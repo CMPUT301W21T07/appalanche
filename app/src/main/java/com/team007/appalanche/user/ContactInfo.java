@@ -18,6 +18,14 @@ public class ContactInfo {
         this.phoneNumber = phoneNumber;
         this.githubLink = githubLink;
     }
+    public ContactInfo(Integer phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    public ContactInfo(String githubLink) {
+        this.githubLink = githubLink;
+    }
+    public ContactInfo() {
+    }
 
     /**
      * function to set contact info
