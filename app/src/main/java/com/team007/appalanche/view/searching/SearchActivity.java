@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -65,5 +68,39 @@ public class SearchActivity extends AppCompatActivity {
                 expAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // inflates search_bar.xml and display it in Appalanche
+        getMenuInflater().inflate(R.menu.search_bar,menu);
+
+        MenuItem menuItem = menu.findItem(R.id.search_item);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                ArrayList<Experiment> results = new ArrayList<>();
+
+                for(Experiment experiment: ExperimentDataList) {
+                    if(experiment.getDescription().contains(newText))
+                        results.add(experiment);
+                }
+
+                ((CustomList) expList.getAdapter()).update(results);
+
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
     }
 }
