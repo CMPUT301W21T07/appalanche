@@ -161,7 +161,6 @@ public class QuestionFragment extends Fragment {
                     startActivityForResult(intent,1);
                     // Again fix the back button
                 }
-
             }
         });
 
