@@ -97,7 +97,7 @@ public class OwnerProfileActivity extends AppCompatActivity implements EditUserI
                 Profile profile = new Profile(name, contactInfo);
                 currentUser.setProfile(profile);
                 userName.setText(currentUser.getProfile().getUserName());
-                phoneNumber.setText(String.valueOf(phoneNumb.intValue()));
+                phoneNumber.setText(String.valueOf(phoneNumb));
                 gitHub.setText(github);
             }
         });
