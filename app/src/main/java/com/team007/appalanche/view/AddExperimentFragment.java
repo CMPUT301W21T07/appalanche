@@ -86,21 +86,25 @@ public class AddExperimentFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
+                        User user = (User) getArguments().getSerializable("user");
                         if(k==1){
-                            Experiment newExperiment = new CountBasedExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, "123");
+                            Experiment newExperiment = new CountBasedExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, user.getId());
                             listener.addExperiment(newExperiment);
                         }
                         else if(k==2){
-                            Experiment newExperiment = new BinomialExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, "123");
+                            Experiment newExperiment = new BinomialExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, user.getId());
                             listener.addExperiment(newExperiment);
                         } else if (k == 3) {
-                            Experiment newExperiment = new NonNegativeCountExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, "123");
+                            Experiment newExperiment = new NonNegativeCountExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, user.getId());
                             listener.addExperiment(newExperiment);
                         }
                         else if (k==4){
-                            Experiment newExperiment = new MeasurementExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, "123");
+                            Experiment newExperiment = new MeasurementExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, user.getId());
                             listener.addExperiment(newExperiment);
                         }
+                        //Todo later(Theo can write this) : Once we have implemented searching for experiments, we should
+                        // automatically add owned experiments to the subscribed list;
+                        // listener.addSubExp(newExperiment);
                     }
                 })
 
@@ -127,5 +131,12 @@ public class AddExperimentFragment extends DialogFragment {
 
     public interface OnFragmentInteractionListener {
         void addExperiment(Experiment newExp);
+    }
+    public static AddExperimentFragment newInstance(User user) {
+        Bundle args = new Bundle();
+        args.putSerializable("user", user);
+        AddExperimentFragment fragment = new AddExperimentFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 }

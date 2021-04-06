@@ -31,6 +31,8 @@ import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.question.Question;
 import com.team007.appalanche.trial.BinomialTrial;
 import com.team007.appalanche.trial.CountBasedTrial;
+import com.team007.appalanche.trial.MeasurementTrial;
+import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.ContactInfo;
 import com.team007.appalanche.user.Profile;
@@ -39,6 +41,7 @@ import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddCountTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddMeasurementTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddNonNegTrialFragment;
+import com.team007.appalanche.view.profile.ProfileActivity;
 import com.team007.appalanche.view.ui.mainActivity.MainActivity;
 
 import java.util.ArrayList;
@@ -59,6 +62,7 @@ public class TrialsFragment extends Fragment {
     private ArrayAdapter<Trial> trialAdapter;
     private ArrayList<Trial> trialDataList;
     private Experiment experiment;
+    private User user;
     public static TrialListController trialListController;
     FirebaseFirestore db;
 
@@ -75,6 +79,8 @@ public class TrialsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Intent intent = getActivity().getIntent();
         experiment = (Experiment) intent.getSerializableExtra("Experiment");
+        user = (User) intent.getSerializableExtra("User");
+
 
 //        CREATE trialController here
         trialListController = new TrialListController(experiment);
@@ -90,11 +96,26 @@ public class TrialsFragment extends Fragment {
                 // Clear the old list
                 trialListController.clearTrialList();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
-                    Log.d(TAG, String.valueOf(doc.getData().get("description")));
-                    //ArrayList<Trial> trialList = (ArrayList<Trial>) doc.getData().get("trialList");
-                    Long count = (Long) doc.getData().get("count");
-                    trialListController.addTrial( new CountBasedTrial(new User(), new Date(), count.intValue()));
-
+                    if (experiment.getTrialType().equals("count")) {
+                        Log.d(TAG, String.valueOf(doc.getData().get("description")));
+                        Long count = (Long) doc.getData().get("count");
+                        trialListController.addTrial( new CountBasedTrial(user, new Date(), count.intValue()));
+                    }
+                    else if (experiment.getTrialType().equals("binomial")){
+                        Log.d(TAG, String.valueOf(doc.getData().get("description")));
+                        Boolean success= (Boolean) doc.getData().get("binomial");
+                        trialListController.addTrial(new BinomialTrial(user, new Date(),success));
+                    }
+                    else if (experiment.getTrialType().equals("measurement")){
+                        Log.d(TAG, String.valueOf(doc.getData().get("measurement")));
+                        Double result = (Double) doc.getData().get("measurement");
+                        trialListController.addTrial(new MeasurementTrial(user, new Date(), result));
+                    }
+                    else if (experiment.getTrialType().equals("nonNegativeCount")) {
+                        Log.d(TAG, String.valueOf(doc.getData().get("nonNegativeCount")));
+                        Long count = (Long) doc.getData().get("nonNegativeCount");
+                        trialListController.addTrial(new NonNegativeCountTrial(user, new Date(), count.intValue()));
+                    }
                 }
                 trialAdapter.notifyDataSetChanged();
             }});
@@ -128,16 +149,14 @@ public class TrialsFragment extends Fragment {
         }
 
         // SET UP TRIAL LISTVIEW
-//        trialDataList = new ArrayList<Trial>();
-//        CountBasedTrial trial = new CountBasedTrial(new User(), new Date(), 0);
-//        trial.IncrementCount();
-//        trialDataList.add(trial);
 
         trialDataList = trialListController.getExperiment().getTrials();
         trialAdapter = new TrialCustomList(this.getContext(), trialDataList);
         trialListView = root.findViewById(R.id.trialList);
         trialListView.setAdapter(trialAdapter);
 
+        // ON CLICK USER'S ID
+        viewAProfile();
 
 //        // IGNORE CERTAIN TRIAL
 //        trialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -156,21 +175,37 @@ public class TrialsFragment extends Fragment {
             throw new RuntimeException("Cannot add a new trial as the experiment is ended");
         }
 
-        switch("count") {
+        switch(experiment.getTrialType()) {
+
             case "binomial":
-                new AddBinomialTrialFragment().show(getFragmentManager(), "Add_Trial");
+                new AddBinomialTrialFragment().newInstance(user).show(getFragmentManager(), "Add_Trial");
                 break;
             case "count":
-                new AddCountTrialFragment().show(getFragmentManager(), "Add_Trial");
+                new AddCountTrialFragment().newInstance(user).show(getFragmentManager(), "Add_Trial");
                 break;
             case "measurement":
-                new AddMeasurementTrialFragment().show(getFragmentManager(), "Add_trial");
+                new AddMeasurementTrialFragment().newInstance(user).show(getFragmentManager(), "Add_trial");
                 break;
+            case "nonNegativeCount":
+                new AddNonNegTrialFragment().newInstance(user).show(getFragmentManager(), "Add_Trial");
             default:
-                new AddNonNegTrialFragment().show(getFragmentManager(), "Add_Trial");
                 break;
         }
         // TODO: hook fragment result to update experiment and create trial
+    }
+
+    public void viewAProfile() {
+        trialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Trial trial = trialDataList.get(position);
+                String userID = trial.getUserAddedTrial().getId();
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                intent.putExtra("Profile", new User(userID));
+                startActivity(intent);
+                // FIX BACK BUTTON
+            }
+        });
     }
 
 }

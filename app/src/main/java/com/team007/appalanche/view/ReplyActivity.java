@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -28,6 +29,7 @@ import com.team007.appalanche.controller.ReplyListController;
 import com.team007.appalanche.custom.ReplyCustomList;
 import com.team007.appalanche.question.Question;
 import com.team007.appalanche.question.Reply;
+import com.team007.appalanche.view.profile.ProfileActivity;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -78,6 +80,8 @@ public class ReplyActivity extends AppCompatActivity {
 
         replyListController = new ReplyListController(question);
 
+        replyDataList = replyListController.getQuestion().getReplies();
+
         ///////FIRESTORE////////
         // Access a Cloud Firestore instance from your Activity
         db = FirebaseFirestore.getInstance();
@@ -91,8 +95,7 @@ public class ReplyActivity extends AppCompatActivity {
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
                     Log.d(TAG, String.valueOf(doc.getData().get("user_posted_question")));
                     String content = doc.getId();
-                    String user = (String) doc.getData().get("user_posted_question");
-
+                    String user = (String) doc.getData().get("userPostedReply");
                     replyListController.addReply(new Reply(content, new User(user, null), new Date()));}
                 replyAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.
             }
@@ -100,10 +103,9 @@ public class ReplyActivity extends AppCompatActivity {
 
 
         //TEST
+        //replyListController.addReplyToDb(new Reply("it is a very enjoyable way to carry out experiment", new User("12345",null),new Date()), experiment);
 
-        replyListController.addReplyToDb(new Reply("it is a very enjoyable way to carry out experiment", new User("12345",null),new Date()), collectionReference);
         ///////////////////////REPLY LIST BUILDING////////////////////////////////////
-        replyListController = new ReplyListController(question);
         replyAdapter = new ReplyCustomList(this, replyListController.getQuestion().getReplies());
         replyListView = findViewById(R.id.reply_list);
         replyListView.setAdapter(replyAdapter);
@@ -126,7 +128,7 @@ public class ReplyActivity extends AppCompatActivity {
                     String replyString = replyMessage.getText().toString();
                     Reply newReply = new Reply(replyString, replyingUser, new Date());
                     replyMessage.getText().clear();
-                    replyListController.addReplyToDb(newReply, collectionReference);
+                    replyListController.addReplyToDb(newReply, experiment);
                     replyAdapter.notifyDataSetChanged();
                 }
                 //end of if statement
@@ -135,6 +137,17 @@ public class ReplyActivity extends AppCompatActivity {
         });
         //end of listener
         //////////////////////////////////////////////////////////////////////////////
+
+        replyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Reply reply = replyDataList.get(position);
+                String userID = reply.getUserReplied().getId();
+                Intent intent = new Intent(ReplyActivity.this, ProfileActivity.class);
+                intent.putExtra("Profile", new User(userID));
+                startActivity(intent);
+            }
+        });
 
 
     }

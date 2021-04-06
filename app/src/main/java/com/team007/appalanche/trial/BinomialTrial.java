@@ -22,6 +22,11 @@ public class BinomialTrial extends com.team007.appalanche.trial.Trial implements
         super(userAddedTrial, date);
     }
 
+    public BinomialTrial(User userAddedTrial, Date date, boolean outcome) {
+        super(userAddedTrial, date);
+        this.outcome = outcome;
+    }
+
     /*GETTER AND SETTER FOR THE CLASS THAT GIVES US THE BOOLEAN OUTCOME OF THE TRIAL*/
     public void setOutcome(boolean outcome){
         this.outcome= outcome;
@@ -30,4 +35,6 @@ public class BinomialTrial extends com.team007.appalanche.trial.Trial implements
     public boolean getOutcome(){
         return  outcome;
     }
+
+    public boolean getValue() { return outcome; }
 }

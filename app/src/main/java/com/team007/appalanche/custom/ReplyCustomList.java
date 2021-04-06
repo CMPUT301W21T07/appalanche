@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.team007.appalanche.R;
@@ -36,7 +37,15 @@ public class ReplyCustomList extends ArrayAdapter<Reply> {
         // Display Reply List
         TextView ReplyContent = view.findViewById(R.id.questionContent);
         ReplyContent.setText(reply.getReplyText());
-
+        // Display user ID
+        TextView userReplied = view.findViewById(R.id.user_posted_question);
+        userReplied.setText(reply.getUserReplied().getId());
+        userReplied.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ListView) parent).performItemClick(v, position, 0); // Let the event be handled in onItemClick()
+            }
+        });
         return view;
     }
 }

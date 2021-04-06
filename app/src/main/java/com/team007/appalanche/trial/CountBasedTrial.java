@@ -26,15 +26,16 @@ public class  CountBasedTrial extends com.team007.appalanche.trial.Trial impleme
     public CountBasedTrial(User userAddedTrial, Date date) {
         super(userAddedTrial, date);
     }
-
     /*This function increments the count by 1 whenever called*/
     public void IncrementCount(){
         this.count= this.count+1;
     }
-
     /*This function returns the total number of count at the end*/
     public int getCount(){
         return count;
     }
 
+    public int getValue() {
+        return count;
+    }
 }

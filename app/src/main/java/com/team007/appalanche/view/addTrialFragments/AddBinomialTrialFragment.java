@@ -17,6 +17,7 @@ import com.team007.appalanche.Location;
 import com.team007.appalanche.R;
 import com.team007.appalanche.trial.BinomialTrial;
 import com.team007.appalanche.user.User;
+import com.team007.appalanche.view.AddExperimentFragment;
 
 import java.util.Date;
 
@@ -30,20 +31,26 @@ public class AddBinomialTrialFragment extends DialogFragment  {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.binomial_trial_fragment,null);
 
 
-        EditText result = view.findViewById(R.id.addBinomialResult);
+        // EditText result = view.findViewById(R.id.addBinomialResult);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
-                .setTitle("ADD TRIAL")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Post", new DialogInterface.OnClickListener() {
+                .setTitle("DO YOU WANT TO ADD A POSITIVE TRIAL?")
+                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
-                        BinomialTrial newBinomialTrial =
-                                new BinomialTrial(new User("123", null), new Location(),
-                                        new Date());
-                        // newTrial.setOutcome(Boolean.valueOf(result.toString())); TODO: set trial result for trial object
+                        User user = (User) getArguments().getSerializable("user");
+                        BinomialTrial newBinomialTrial = new BinomialTrial(user, new Date(), false);
+                        listener.addTrial(newBinomialTrial);
+                    }
+                })
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
+                        User user = (User) getArguments().getSerializable("user");
+                        BinomialTrial newBinomialTrial = new BinomialTrial(user, new Date(), true);
                         listener.addTrial(newBinomialTrial);
                     }
                 })
@@ -64,5 +71,12 @@ public class AddBinomialTrialFragment extends DialogFragment  {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+    }
+    public static AddBinomialTrialFragment newInstance(User user) {
+        Bundle args = new Bundle();
+        args.putSerializable("user", user);
+        AddBinomialTrialFragment fragment = new AddBinomialTrialFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 }

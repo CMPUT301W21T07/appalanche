@@ -24,6 +24,10 @@ import com.team007.appalanche.R;
 import com.team007.appalanche.trial.BinomialTrial;
 import com.team007.appalanche.question.Question;
 import com.team007.appalanche.trial.CountBasedTrial;
+
+import com.team007.appalanche.trial.MeasurementTrial;
+import com.team007.appalanche.trial.NonNegativeCountTrial;
+import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.AskQuestionFragment;
 import com.team007.appalanche.view.Capture;
@@ -31,14 +35,25 @@ import com.team007.appalanche.view.QRCodeActivity;
 import com.team007.appalanche.view.RegisterBarcodeActivity;
 import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddCountTrialFragment;
-import com.team007.appalanche.view.ui.mainActivity.MainActivity;
+
+import com.team007.appalanche.view.addTrialFragments.AddMeasurementTrialFragment;
+import com.team007.appalanche.view.addTrialFragments.AddNonNegTrialFragment;
+
+
 
 import static com.team007.appalanche.view.experimentActivity.QuestionFragment.questionList;
 import static com.team007.appalanche.view.experimentActivity.TrialsFragment.trialListController;
 
-public class ExperimentActivity extends AppCompatActivity implements AskQuestionFragment.OnFragmentInteractionListener, AddBinomialTrialFragment.OnFragmentInteractionListener, AddCountTrialFragment.OnFragmentInteractionListener {
-    Experiment experiment;
-    User currentUser;
+
+public class ExperimentActivity extends AppCompatActivity implements AskQuestionFragment.OnFragmentInteractionListener,
+        AddBinomialTrialFragment.OnFragmentInteractionListener,
+        AddCountTrialFragment.OnFragmentInteractionListener,
+        AddMeasurementTrialFragment.OnFragmentInteractionListener,
+        AddNonNegTrialFragment.OnFragmentInteractionListener
+{
+
+    private Experiment experiment;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +70,8 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         // Get the experiment that started the activity
         Intent intent = getIntent();
         experiment = (Experiment) intent.getSerializableExtra("Experiment");
-        currentUser = MainActivity.currentUser;
+
+        currentUser = (User) intent.getSerializableExtra("User");
     }
 
     // Creating the 3-dot options menu on an experiment page
@@ -89,9 +105,9 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
                 return true;
             // Selecting "Subscribe" menu item
             case R.id.subscribe:
-                SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-                String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
-                User currentUser = new User(userKey);
+//                SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+//                String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
+//                User currentUser = new User(userKey);
                 ExperimentController experimentController = new ExperimentController(currentUser);
                 experimentController.addSubExperiment(experiment);
                 //TODO: Either remove the subscribe button or grey it out for that specific experiment, after the user subscribed to it
@@ -183,11 +199,17 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
 
     @Override
     public void addTrial(BinomialTrial trial) {
-        trialListController.addTrialToDb(trial);
+        trialListController.addBinomialTrialToDb(trial);
     }
 
     @Override
     public void addTrial(CountBasedTrial trial) {
-        trialListController.addTrialToDb(trial);
+        trialListController.addCountTrialToDb(trial);
     }
+
+    @Override
+    public void addTrial(MeasurementTrial trial) { trialListController.addMeasurementTrialToDb(trial); }
+
+    @Override
+    public void addTrial(NonNegativeCountTrial trial) { trialListController.addNonNegTrialToDb(trial); }
 }

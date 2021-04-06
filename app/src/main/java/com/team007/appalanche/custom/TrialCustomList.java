@@ -10,8 +10,13 @@ import android.widget.TextView;
 
 import com.team007.appalanche.R;
 import com.team007.appalanche.question.Question;
+import com.team007.appalanche.trial.BinomialTrial;
 import com.team007.appalanche.trial.CountBasedTrial;
+import com.team007.appalanche.trial.MeasurementTrial;
+import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.trial.Trial;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -29,14 +34,44 @@ public class TrialCustomList extends ArrayAdapter<Trial> {
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.content_trial,parent,false);
         }
-        //FIX THIS
-        CountBasedTrial trial = (CountBasedTrial) trials.get(position);
-
-        // Display trial List
+        // GET IDS OF ALL TEXTVIEW
         TextView trialCount = view.findViewById(R.id.trialCount);
-        trialCount.setText(String.valueOf(trial.getCount()));
-        //trialCount.setText("1");
+        TextView userAddedTrial = view.findViewById(R.id.userID);
+        try {
+            //FIX THIS
+            CountBasedTrial trial = (CountBasedTrial) trials.get(position);
+            // Display trial List
+            trialCount.setText(String.valueOf(trial.getCount()));
+            userAddedTrial.setText(trial.getUserAddedTrial().getId());
+
+        } catch (Exception e0){
+
+            try {
+                //FIX THIS
+                BinomialTrial trial = (BinomialTrial) trials.get(position);
+                // Display trial List
+                trialCount.setText(String.valueOf(trial.getOutcome()));
+                userAddedTrial.setText(trial.getUserAddedTrial().getId());
+            } catch (Exception e1) {
+                try {
+                    MeasurementTrial trial = (MeasurementTrial) trials.get(position);
+
+                    trialCount.setText(String.valueOf(trial.getValue()));
+                    userAddedTrial.setText(trial.getUserAddedTrial().getId());
+                } catch (Exception e2) {
+                    try {
+                        NonNegativeCountTrial trial = (NonNegativeCountTrial) trials.get(position);
+
+                        trialCount.setText(String.valueOf(trial.getCount()));
+                        userAddedTrial.setText(trial.getUserAddedTrial().getId());
+                    } catch (Exception e3) {
+                        System.out.println("Something went wrong.");
+                    }
+                }
+            }
+        }
 
         return view;
     }
+
 }

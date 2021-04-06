@@ -14,6 +14,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -34,20 +35,22 @@ import com.google.zxing.integration.android.IntentResult;
 import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.R;
 import com.team007.appalanche.trial.Trial;
-import com.team007.appalanche.user.Profile;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.scannableCode.ScannableCode;
 import com.team007.appalanche.view.AddExperimentFragment;
+import com.team007.appalanche.view.AddUserIDFragment;
 import com.team007.appalanche.view.Capture;
 import com.team007.appalanche.view.experimentActivity.ExperimentActivity;
+import com.team007.appalanche.view.profile.OwnerProfileActivity;
 
 import java.util.HashMap;
 
 import static com.team007.appalanche.view.ui.mainActivity.SubscribedFragment.experimentController;
 
-public class MainActivity extends AppCompatActivity  implements AddExperimentFragment.OnFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity  implements AddExperimentFragment.OnFragmentInteractionListener, AddUserIDFragment.OnFragmentInteractionListener {
     FirebaseFirestore db;
     public static User currentUser;
+    String ID;
     private static final String TAG = "Fragment Activity";
 
 
@@ -67,72 +70,22 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
         /* Create the current user in the shared preferences, if the user does not already exist */
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
 
-        // Check if we have a use already logged in
+//        SharedPreferences.Editor editor1 = sharedPref.edit();
+//        editor1.putString("com.team007.Appalanche.user_key", null);
+//        editor1.apply();
+
+        // Check if we have a user already logged in
         String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
 
+
         db = FirebaseFirestore.getInstance();
-        DocumentReference docRef;
         if (userKey == null) {
-
-            // if we don't have a stored user, then create a user account in firebase and set the
-            // user key to the user document ID
-
-            // Create a new collection in firebase and store the generated id to userKey
-            docRef = db.collection("Users").document();
-            userKey = docRef.getId();
-
-            // Create a new instance of a user object
-            Profile profile = new Profile();
-            currentUser = new User(userKey, profile);
-
-            // Store that user object in firebase\//
-            // docRef.set(currentUser)
-            HashMap<String, Object> data = new HashMap<>();
-            data.put("test", currentUser);
-            docRef.set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Log.d(TAG, "DocumentSnapshot successfully written!");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.w(TAG, "Error writing document", e);
-                }
-            });
-
-            // Store the userKey in shared preferences
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString("com.team007.Appalanche.user_key", userKey);
-            editor.apply();
-            Toast.makeText(MainActivity.this, "hello", Toast.LENGTH_LONG).show();
+            // GET THE TEXT FROM THE FRAGMENT AND CREATE A NEW USER ID
+            DialogFragment dialog = new AddUserIDFragment();
+            dialog.show(getSupportFragmentManager(), "New UserID Fragment");
         } else {
-            docRef = db.collection("Users").document(userKey);
-            HashMap<String, Object> data = new HashMap<>();
-            data.put("test", "123");
-            docRef.set(data);
-            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    currentUser = documentSnapshot.toObject(User.class);
-                }
-            });
-            //Toast.makeText(MainActivity.this, "hello", Toast.LENGTH_LONG).show();
-
+            getExistedUser(userKey);
         }
-
-//                final User[] us = new User[1];
-//        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//            @Override
-//            public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                us[0] = documentSnapshot.toObject(User.class);
-//                Experiment newExp = new Experiment("How many jelly beans can I fit in my mouth?",
-//                        "Alberta", "NonNegTrial",2, false, true, us[0].getId());
-////                Toast.makeText(MainActivity.this, us[0].getId(), Toast.LENGTH_LONG).show();
-//                us[0].addOwnedExperiment(newExp);
-//                docRef.set(us[0]);
-//            }
-//        });
 
         // Add floating action button click listeners
         FloatingActionButton addExperimentButton = findViewById(R.id.addExperimentButton);
@@ -140,7 +93,7 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
         addExperimentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AddExperimentFragment().show(getSupportFragmentManager(), "New ");
+                new AddExperimentFragment().newInstance(currentUser).show(getSupportFragmentManager(), "New ");
             }
         });
 
@@ -185,7 +138,7 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.app_bar_profile:
-                openProfileActivity();
+                openProfileActivity(currentUser);
                 break;
             case R.id.app_bar_search:
                 searchActivity();
@@ -293,11 +246,14 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
     private void openExperimentActivity(Experiment experiment) {
         Intent intent = new Intent(this, ExperimentActivity.class);
         intent.putExtra("Experiment", experiment);
+        intent.putExtra("User", currentUser);
         startActivityForResult(intent,1);
     }
 
-    private void openProfileActivity() {
-        //TODO: Implement
+    private void openProfileActivity(User user) {
+        Intent intent = new Intent(this, OwnerProfileActivity.class);
+        intent.putExtra("Profile", user);
+        startActivityForResult(intent,1);
     }
 
     private void searchActivity() {
@@ -309,5 +265,50 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
     public void addExperiment(Experiment newExp) {
         experimentController.addExperiment(newExp);
     }
-    //public void subscribedExp
+
+    // OVERRIDE NEW USER ID HAS BEEN ENTERED
+    @Override
+    public void addUserID(User newUser) {
+        currentUser = newUser;
+        newUserSetup();
+    }
+
+    /* Set up new user on firebase and shared preference */
+    public void newUserSetup() {
+        // Set up firebase for new user
+        DocumentReference docRef = db.collection("Users").document(currentUser.getId());
+        HashMap<String, Object> data = new HashMap<>();
+        docRef.set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "DocumentSnapshot successfully written!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error writing document", e);
+            }
+        });
+
+        // add value into sharePreference file so that user will be recognized next time using the app
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        // with the same key, value next time will not be null anymore
+        editor.putString("com.team007.Appalanche.user_key", currentUser.getId());
+        editor.apply();
+    }
+
+    /* Get existed user info on firebase */
+    public void getExistedUser(String userKey) {
+        DocumentReference docRef;
+        docRef = db.collection("Users").document(userKey);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                currentUser = new User(documentSnapshot.getId());
+                // NEED TO SET UP PROFILE ON FIREBASE HERE
+                //currentUser.setProfile();
+            }
+        });
+    }
 }

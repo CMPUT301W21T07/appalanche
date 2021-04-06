@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.team007.appalanche.R;
@@ -36,6 +38,24 @@ public class QuestionCustomList extends ArrayAdapter<Question> {
         // Display Question List
         TextView questionContent = view.findViewById(R.id.questionContent);
         questionContent.setText(question.getContent());
+        // Display user posted question
+        TextView userPostedQues = view.findViewById(R.id.user_posted_question);
+        userPostedQues.setText(question.getUserPostedQuestion().getId());
+        userPostedQues.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ListView) parent).performItemClick(v, position, 0); // Let the event be handled in onItemClick()
+            }
+        });
+
+        // CLICK ON REPLY ICON
+        ImageView seeReplies = view.findViewById(R.id.seeReplies);
+        seeReplies.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ListView) parent).performItemClick(v, position, 1); // Let the event be handled in onItemClick()
+            }
+        });
 
         return view;
     }

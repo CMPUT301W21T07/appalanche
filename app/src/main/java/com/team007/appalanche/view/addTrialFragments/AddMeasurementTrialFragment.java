@@ -18,6 +18,7 @@ import com.team007.appalanche.Location;
 import com.team007.appalanche.R;
 import com.team007.appalanche.trial.*;
 import com.team007.appalanche.user.Experimenter;
+import com.team007.appalanche.user.User;
 
 import java.util.Date;
 
@@ -41,8 +42,10 @@ public class AddMeasurementTrialFragment extends DialogFragment  {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
-                        Trial newMeasurementTrial = new MeasurementTrial(new Experimenter("123", null), new Location(), new Date());
-                        // newTrial.setOutcome(Boolean.valueOf(result.toString())); TODO: set trial result for trial object
+                        User user = (User) getArguments().getSerializable("user");
+                        MeasurementTrial newMeasurementTrial = new MeasurementTrial(user, new Date(), Double.valueOf(result.getText().toString()));
+                        // newMeasurementTrial.setValue(Boolean.valueOf(result.toString()));
+                        // CountBasedTrial newCountBasedTrial = new CountBasedTrial(new User(), new Date(), Integer.valueOf(result.getText().toString()));
                         listener.addTrial(newMeasurementTrial);
                     }
                 })
@@ -51,7 +54,7 @@ public class AddMeasurementTrialFragment extends DialogFragment  {
     }
 
     public interface OnFragmentInteractionListener {
-        void addTrial(Trial trial);
+        void addTrial(MeasurementTrial trial);
     }
 
     @Override
@@ -63,5 +66,12 @@ public class AddMeasurementTrialFragment extends DialogFragment  {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+    }
+    public static AddMeasurementTrialFragment newInstance(User user) {
+        Bundle args = new Bundle();
+        args.putSerializable("user", user);
+        AddMeasurementTrialFragment fragment = new AddMeasurementTrialFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 }
