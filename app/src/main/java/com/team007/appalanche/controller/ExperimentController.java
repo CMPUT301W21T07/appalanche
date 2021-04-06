@@ -58,8 +58,6 @@ public class ExperimentController {
 
     public void addExperiment(Experiment experiment) {
         db = FirebaseFirestore.getInstance();
-
-
         CollectionReference collection = db.collection("Experiments");
 
         // We use a HashMap to store a key-value pair in firestore.
@@ -77,8 +75,10 @@ public class ExperimentController {
                 .set(data);
 
         // ADD EXPERIMENT TO OWNED LIST EXPERIMENT INSIDE USER BECAUSE WE WANT TO KEEP THE EXPERIMENT WHEN UNPUBLISH EXPERIMENT
-        final DocumentReference document = db.collection("Users/"+currentUser.getId()+"/OwnedExperiments").document(experiment.getDescription());
-        document.set(data);
+        final CollectionReference ownerCol = db.collection("Users/"+currentUser.getId()+"/OwnedExperiments");
+        ownerCol
+                .document(experiment.getDescription())
+                .set(data);
     }
     public void addSubExperiment(Experiment experiment) {
         db = FirebaseFirestore.getInstance();

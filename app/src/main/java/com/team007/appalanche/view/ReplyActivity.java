@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -28,6 +29,7 @@ import com.team007.appalanche.controller.ReplyListController;
 import com.team007.appalanche.custom.ReplyCustomList;
 import com.team007.appalanche.question.Question;
 import com.team007.appalanche.question.Reply;
+import com.team007.appalanche.view.profile.ProfileActivity;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -77,6 +79,8 @@ public class ReplyActivity extends AppCompatActivity {
         //////////////////////////////////////////////////////////////////////////////
 
         replyListController = new ReplyListController(question);
+
+        replyDataList = replyListController.getQuestion().getReplies();
 
         ///////FIRESTORE////////
         // Access a Cloud Firestore instance from your Activity
@@ -133,6 +137,17 @@ public class ReplyActivity extends AppCompatActivity {
         });
         //end of listener
         //////////////////////////////////////////////////////////////////////////////
+
+        replyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Reply reply = replyDataList.get(position);
+                String userID = reply.getUserReplied().getId();
+                Intent intent = new Intent(ReplyActivity.this, ProfileActivity.class);
+                intent.putExtra("Profile", new User(userID));
+                startActivity(intent);
+            }
+        });
 
 
     }

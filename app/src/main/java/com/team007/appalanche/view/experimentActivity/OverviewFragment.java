@@ -80,7 +80,7 @@ public class OverviewFragment extends Fragment {
                 String string = owner.getText().toString();
                 String userID = (String) string.subSequence(7, string.length());
                 intent.putExtra("Profile", new User(userID));
-                startActivityForResult(intent,1);
+                startActivity(intent);
             }
         });
     }

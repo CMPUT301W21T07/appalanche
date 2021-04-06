@@ -31,6 +31,8 @@ import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.question.Question;
 import com.team007.appalanche.trial.BinomialTrial;
 import com.team007.appalanche.trial.CountBasedTrial;
+import com.team007.appalanche.trial.MeasurementTrial;
+import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.ContactInfo;
 import com.team007.appalanche.user.Profile;
@@ -97,11 +99,20 @@ public class TrialsFragment extends Fragment {
                         Long count = (Long) doc.getData().get("count");
                         trialListController.addTrial( new CountBasedTrial(user, new Date(), count.intValue()));
                     }
-
-                    if (experiment.getTrialType().equals("binomial")){
+                    else if (experiment.getTrialType().equals("binomial")){
                         Log.d(TAG, String.valueOf(doc.getData().get("description")));
-                        Long count = (Long) doc.getData().get("count");
-                        trialListController.addTrial(new BinomialTrial(user, new Date(), true));
+                        Boolean success= (Boolean) doc.getData().get("binomial");
+                        trialListController.addTrial(new BinomialTrial(user, new Date(),success));
+                    }
+                    else if (experiment.getTrialType().equals("measurement")){
+                        Log.d(TAG, String.valueOf(doc.getData().get("measurement")));
+                        Double result = (Double) doc.getData().get("measurement");
+                        trialListController.addTrial(new MeasurementTrial(user, new Date(), result));
+                    }
+                    else if (experiment.getTrialType().equals("nonNegativeCount")) {
+                        Log.d(TAG, String.valueOf(doc.getData().get("nonNegativeCount")));
+                        Long count = (Long) doc.getData().get("nonNegativeCount");
+                        trialListController.addTrial(new NonNegativeCountTrial(user, new Date(), count.intValue()));
                     }
                 }
                 trialAdapter.notifyDataSetChanged();
@@ -178,7 +189,7 @@ public class TrialsFragment extends Fragment {
                 String userID = trial.getUserAddedTrial().getId();
                 Intent intent = new Intent(getActivity(), ProfileActivity.class);
                 intent.putExtra("Profile", new User(userID));
-                startActivityForResult(intent,1);
+                startActivity(intent);
                 // FIX BACK BUTTON
             }
         });

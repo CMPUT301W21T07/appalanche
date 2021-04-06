@@ -26,6 +26,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.team007.appalanche.R;
 import com.team007.appalanche.experiment.Experiment;
+import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.controller.QuestionListController;
 import com.team007.appalanche.custom.QuestionCustomList;
@@ -33,6 +34,7 @@ import com.team007.appalanche.question.Question;
 import com.team007.appalanche.view.AskQuestionFragment;
 import com.team007.appalanche.view.ReplyActivity;
 import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
+import com.team007.appalanche.view.profile.ProfileActivity;
 import com.team007.appalanche.view.ui.mainActivity.MainActivity;
 
 import java.util.ArrayList;
@@ -126,20 +128,42 @@ public class QuestionFragment extends Fragment {
         });
 
         // Reply to a question
+//        questionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Question questionToReply = questionDataList.get(position);
+//
+//                Intent intent = new Intent(getActivity(), ReplyActivity.class);
+//                intent.putExtra("Experiment", experiment);
+//                intent.putExtra("Question", questionToReply);
+//                intent.putExtra("Replying User", user);
+//                startActivity(intent);
+//            }
+//        });
+
         questionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Question questionToReply = questionDataList.get(position);
-
-                Intent intent = new Intent(getActivity(), ReplyActivity.class);
-                intent.putExtra("Experiment", experiment);
-                intent.putExtra("Question", questionToReply);
-                intent.putExtra("Replying User", user);
-                startActivity(intent);
+                long viewId = view.getId();
+                if (viewId == R.id.seeReplies) {
+                    Question questionToReply = questionDataList.get(position);
+                    Intent intent = new Intent(getActivity(), ReplyActivity.class);
+                    intent.putExtra("Experiment", experiment);
+                    intent.putExtra("Question", questionToReply);
+                    intent.putExtra("Replying User", user);
+                    startActivity(intent);
+                }
+                else if (viewId == R.id.user_posted_question) {
+                    Question question = questionDataList.get(position);
+                    String userID = question.getUserPostedQuestion().getId();
+                    Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                    intent.putExtra("Profile", new User(userID));
+                    startActivity(intent);
+                    // Again fix the back button
+                }
             }
         });
 
         return root;
     }
-
 }
