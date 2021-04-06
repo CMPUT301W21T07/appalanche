@@ -9,19 +9,36 @@ import java.io.Serializable;
  */
 
 public class Location implements Serializable {
-    private String latitude;
-    private String longitude;
+
     private String locationString;
+    private double latitude;
+    private double longitude;
+    public double getLat() {
+        return latitude;
+    }
+
+    public double getLon() {
+        return longitude;
+    }
+
+
 
 
     /* constructor for class location*/
-    public void setLocation(String latitude, String longitude, String locationstring) {
+    public void setLat(double latitude) {
         this.latitude = latitude;
+
+    }
+
+    public void setLon(double longitude){
         this.longitude = longitude;
+    }
+
+    public void setLocation(String locationstring){
         this.locationString = locationstring;
     }
     /*This function returns the location of the experiment*/
     public String getLocation(){
-    return locationString;
+        return locationString;
     }
 }
