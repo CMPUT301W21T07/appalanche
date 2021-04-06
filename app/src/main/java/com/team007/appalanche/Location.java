@@ -13,6 +13,7 @@ public class Location implements Serializable {
     private String locationString;
     private double latitude;
     private double longitude;
+
     public double getLat() {
         return latitude;
     }
@@ -21,13 +22,8 @@ public class Location implements Serializable {
         return longitude;
     }
 
-
-
-
-    /* constructor for class location*/
     public void setLat(double latitude) {
         this.latitude = latitude;
-
     }
 
     public void setLon(double longitude){
@@ -37,7 +33,7 @@ public class Location implements Serializable {
     public void setLocation(String locationstring){
         this.locationString = locationstring;
     }
-    /*This function returns the location of the experiment*/
+
     public String getLocation(){
         return locationString;
     }

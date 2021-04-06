@@ -81,10 +81,8 @@ public class TrialsFragment extends Fragment {
         experiment = (Experiment) intent.getSerializableExtra("Experiment");
         user = (User) intent.getSerializableExtra("User");
 
-
-//        CREATE trialController here
+        // Create trialController here
         trialListController = new TrialListController(experiment);
-
 
         // Set up firebase, realtime updates
         db = FirebaseFirestore.getInstance();
@@ -119,9 +117,6 @@ public class TrialsFragment extends Fragment {
                 }
                 trialAdapter.notifyDataSetChanged();
             }});
-
-        //TEST
-        //trialListController.addTrialToDb( new CountBasedTrial(new User(), new Date(), 4));
     }
 
     @Override
@@ -148,8 +143,7 @@ public class TrialsFragment extends Fragment {
             addTrialButton.setVisibility(View.GONE);
         }
 
-        // SET UP TRIAL LISTVIEW
-
+        // Set up Trial ListView
         trialDataList = trialListController.getExperiment().getTrials();
         trialAdapter = new TrialCustomList(this.getContext(), trialDataList);
         trialListView = root.findViewById(R.id.trialList);
@@ -158,7 +152,7 @@ public class TrialsFragment extends Fragment {
         // ON CLICK USER'S ID
         viewAProfile();
 
-//        // IGNORE CERTAIN TRIAL
+        // IGNORE CERTAIN TRIAL
 //        trialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -176,7 +170,6 @@ public class TrialsFragment extends Fragment {
         }
 
         switch(experiment.getTrialType()) {
-
             case "binomial":
                 new AddBinomialTrialFragment().newInstance(user).show(getFragmentManager(), "Add_Trial");
                 break;
@@ -207,5 +200,4 @@ public class TrialsFragment extends Fragment {
             }
         });
     }
-
 }
