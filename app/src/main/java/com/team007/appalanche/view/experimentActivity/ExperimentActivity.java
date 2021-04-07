@@ -41,6 +41,7 @@ import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddCountTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddMeasurementTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddNonNegTrialFragment;
+import com.team007.appalanche.view.ui.mainActivity.MainActivity;
 
 
 import java.util.HashMap;
@@ -90,6 +91,7 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemID = item.getItemId();
         String expType = null;
+        ExperimentController experimentController = new ExperimentController(currentUser);
         switch (itemID) {
             //selecting "Generate CR Code" menu item
             case R.id.generate_qr_code:
@@ -102,14 +104,18 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
                 scanCode();
                 return true;
             case R.id.subscribe:
-//                SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-//                String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
-//                User currentUser = new User(userKey);
-                ExperimentController experimentController = new ExperimentController(currentUser);
                 experimentController.addSubExperiment(experiment);
+                return true;
                 //TODO: Either remove the subscribe button or grey it out for that specific experiment, after the user subscribed to it
             case R.id.close_button:
                 //TODO: implement
+            case R.id.unpublish_button:
+                // Check if current user is the owner -> if not the owner, can't unpublish
+                if(currentUser.getId().matches(experiment.getExperimentOwnerID()))
+                    experimentController.unpublishExp(experiment);
+                else
+                    Toast.makeText(ExperimentActivity.this, "Sorry, you're not the owner of this experiment, you can't unpublish this experiment", Toast.LENGTH_LONG).show();
+                return true;
             case R.id.end_button:
                 //TODO: implement
             default:
@@ -139,9 +145,7 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
 
     @Override
     public void askQuestion(Question question) {
-        //questionList.addQuestionToDb(question, db);
         questionList.addQuestionToDb(question);
-        //questionAdapter.notifyDataSetChanged();
     }
 
 
@@ -198,17 +202,14 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         experiment.addIgnoredUser(ignoredUser);
         addIgnoredUserToDB(ignoredUser);
         trialListController.deleteTrials(ignoredUser);
-
     }
 
     public void addIgnoredUserToDB(User ignoredUser) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = db.collection("Users/" + currentUser.getId() +"/OwnedExperiments/"+experiment.getDescription()+"/IgnoredExperimenters");
+        final CollectionReference collectionReference = db.collection("Users/" + currentUser.getId() +"/OwnedExperiments/"+ experiment.getDescription()+"/IgnoredExperimenters");
         HashMap<String, Object> data = new HashMap<>();
         collectionReference
                 .document(ignoredUser.getId())
                 .set(data);
     }
-
-
 }

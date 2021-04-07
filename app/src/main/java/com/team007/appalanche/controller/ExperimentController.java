@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -87,6 +89,27 @@ public class ExperimentController {
         final DocumentReference document = db.collection("Users/"+currentUser.getId()+"/SubscribedExperiments").document(experiment.getDescription());
         HashMap<String, Object> data = new HashMap<>();
         document.set(data);
+    }
+
+    public void unpublishExp(Experiment experiment) {
+        // still in the owner list but not in the public experiment list
+        db = FirebaseFirestore.getInstance();
+        final DocumentReference document = db.collection("Experiments").document(experiment.getDescription());
+        document
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Experiment successfully unpublished");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error unpublishing experiment", e);
+                    }
+                });
+
     }
 
 }
