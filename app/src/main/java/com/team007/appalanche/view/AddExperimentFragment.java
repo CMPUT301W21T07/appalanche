@@ -14,8 +14,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.team007.appalanche.experiment.BinomialExperiment;
@@ -45,39 +48,20 @@ public class AddExperimentFragment extends DialogFragment {
     private int k;
     @NonNull
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_add_experiment,null);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_add_experiment, null);
         EditText experimentDescription = view.findViewById(R.id.textView2);
         EditText experimentregion = view.findViewById(R.id.textView3);
         EditText numberoftrials = view.findViewById(R.id.textView4);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        final Button button = view.findViewById(R.id.button);
-        final Button button2 = view.findViewById(R.id.button2);
-        final Button button3 = view.findViewById(R.id.button3);
-        final Button button4 = view.findViewById(R.id.button4);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                k= 1;
-            }
-        });
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                k=2;
-            }
-        });
-        button3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                k=3;
-            }
-        });
-        button4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                k=4;
-            }
-        });
+        String[] users = {"COUNT", "BINOMIAL", "NON NEGATIVE COUNT", "MEASUREMENT"};
+        Spinner spin = (Spinner) view.findViewById(R.id.spinner1);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, users);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin.setAdapter(adapter);
+        spin.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
+        String typee= spin.getSelectedItem().toString();
+
+
         return builder
                 .setView(view)
                 .setTitle("NEW EXPERIMENT")

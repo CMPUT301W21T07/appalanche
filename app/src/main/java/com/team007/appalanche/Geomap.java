@@ -92,7 +92,7 @@ public class GeoMap implements OnMapReadyCallback {
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
                 }
 
-                displayCircle(center, geoLocation.getRadius());
+               
 
                 float zoomLevel = 13.0f;
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(center, zoomLevel));
@@ -107,7 +107,7 @@ public class GeoMap implements OnMapReadyCallback {
                 map.addMarker(new MarkerOptions()
                         .position(defaultCenter));
 
-                displayCircle(defaultCenter, radius);
+
 
                 float zoomLevel = 10.0f;
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultCenter, zoomLevel));
@@ -141,17 +141,3 @@ public class GeoMap implements OnMapReadyCallback {
      * @param radius
      *      This represents the radius of the circle in meters.
      */
-    public void displayCircle(LatLng center, double radius) {
-        // Set the attributes of the circle to be drawn on the map.
-        CircleOptions circleOptions = new CircleOptions();
-        circleOptions.center(center);
-        circleOptions.radius(radius);
-        circleOptions.strokeWidth(5);
-        circleOptions.strokeColor(Color.BLUE);
-        circleOptions.fillColor(Color.argb(50, 0, 0, 120));
-
-        // Add a circle to the map with the attributes set above.
-        map.addCircle(circleOptions);
-    }
-
-}
