@@ -47,12 +47,11 @@ import java.util.HashMap;
 
 import static com.team007.appalanche.view.ui.mainActivity.SubscribedFragment.experimentController;
 
-public class MainActivity extends AppCompatActivity  implements AddExperimentFragment.OnFragmentInteractionListener, AddUserIDFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements AddExperimentFragment.OnFragmentInteractionListener, AddUserIDFragment.OnFragmentInteractionListener {
     FirebaseFirestore db;
     public static User currentUser;
     String ID;
     private static final String TAG = "Fragment Activity";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +92,7 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
         addExperimentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AddExperimentFragment().newInstance(currentUser).show(getSupportFragmentManager(), "New ");
+                new AddExperimentFragment().newInstance(currentUser).show(getSupportFragmentManager(), "New");
             }
         });
 
@@ -157,16 +156,18 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode,
                 data);
-        if (scanResult.getContents() != null) {
-            if (scanResult.getFormatName() == BarcodeFormat.QR_CODE.toString()) {
-                // We have scanned a QR code
-                getScannedTrialQR(scanResult.getContents());
-            } else {
-                // We have scanned a barcode
-                getScannedTrialBarcode(scanResult.getContents());
-            }
-        } else {
-            Toast.makeText(getApplicationContext(), "Oops, you didn't scan anything",
+
+        // If the activity is a scan activity
+        if (scanResult != null) {
+            if (scanResult.getContents() != null) {
+                if (scanResult.getFormatName().equals(BarcodeFormat.QR_CODE.toString())) {
+                   // We have scanned a QR code
+                   getScannedTrialQR(scanResult.getContents());
+                } else {
+                   // We have scanned a barcode
+                   getScannedTrialBarcode(scanResult.getContents());
+                }
+            } else Toast.makeText(getApplicationContext(), "Oops, you didn't scan anything",
                     Toast.LENGTH_SHORT).show();
         }
     }
@@ -306,8 +307,6 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 currentUser = new User(documentSnapshot.getId());
-                // NEED TO SET UP PROFILE ON FIREBASE HERE
-                //currentUser.setProfile();
             }
         });
     }

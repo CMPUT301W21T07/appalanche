@@ -62,6 +62,8 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
 
     private Experiment experiment;
     private User currentUser;
+    private ExperimentController experimentController;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,12 +82,13 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         experiment = (Experiment) intent.getSerializableExtra("Experiment");
 
         currentUser = (User) intent.getSerializableExtra("User");
+        experimentController = new ExperimentController(currentUser);
     }
 
     // Creating the 3-dot options menu on an experiment page
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (experiment.getExperimentOwnerID() == currentUser.getId()) {
+        if (experiment.getExperimentOwnerID().equals(currentUser.getId())) {
             // If the current user is the owner, give them more options
             getMenuInflater().inflate(R.menu.owner_experiment_settings, menu);
         } else {
@@ -113,14 +116,10 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
                 return true;
             // Selecting "Subscribe" menu item
             case R.id.subscribe:
-//                SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-//                String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
-//                User currentUser = new User(userKey);
-                ExperimentController experimentController = new ExperimentController(currentUser);
                 experimentController.addSubExperiment(experiment);
                 //TODO: Either remove the subscribe button or grey it out for that specific experiment, after the user subscribed to it
-            // Selecting "Close experiment" menu item
-            case R.id.close_button:
+            // Selecting "Unpublish experiment" menu item
+            case R.id.unpublish_button:
                 //TODO: implement
             // Selecting "End experiment" menu item
             case R.id.end_button:
@@ -133,14 +132,8 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
     /** This method sets the status of the current experiment to closed (ends the experiment)
      */
     private void endExperiment() {
-        if (experiment.getExperimentOwnerID() != currentUser.getId()) {
-            throw new RuntimeException("Current user not authorized to end the experiment");
-        }
-
-        // Change the status in the model
-        experiment.setOpen(false);
-
-        // TODO: Connect with firebase
+        // End the experiment using the experiment controller
+        experimentController.endExperiment(experiment);
 
         // Notify the owner that the experiment was ended
         Toast.makeText(this, "The experiment has been closed.", Toast.LENGTH_LONG).show();

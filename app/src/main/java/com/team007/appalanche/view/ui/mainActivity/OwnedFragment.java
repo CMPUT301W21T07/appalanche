@@ -133,10 +133,11 @@ public class OwnedFragment extends Fragment {
                     String description = doc.getId();
                     String trialType = (String) doc.getData().get("trialType");
                     Boolean expOpen =  doc.getBoolean("expOpen");
-                    Long minNumTrials  = (Long)    doc.getData().get("minNumTrials");
+                    Long minNumTrials  = (Long) doc.getData().get("minNumTrials");
                     String expOwnerID = (String) doc.getData().get("expOwnerID");
                     String region = (String) doc.getData().get("region");
                     Boolean locationRequired =  doc.getBoolean("locationRequired");
+
                     Experiment newExp = new Experiment(description, region, trialType, minNumTrials.intValue(), locationRequired, expOpen, expOwnerID );
                     // add to owned experiment in the user owned list
                     //if (experimentController.getCurrentUser().getSubscribedExperiments().contains(newExp) == false )

@@ -96,9 +96,6 @@ public class QuestionFragment extends Fragment {
                 questionAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.
             }
         });
-
-        //TEST
-        //questionList.addQuestionToDb(new Question("what is the significance of using your own mouth?", new User("12345",null),new Date()));
     }
 
     @Override
