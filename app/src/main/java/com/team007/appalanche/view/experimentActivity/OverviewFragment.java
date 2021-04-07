@@ -54,7 +54,7 @@ public class OverviewFragment extends Fragment {
         viewAProfile(owner);
 
         TextView status = root.findViewById(R.id.status);
-        if (experiment.getStatus()) {
+        if (experiment.getOpen()) {
             status.setText("Status: Open");
         } else {
             status.setText("Status: Closed");

@@ -65,7 +65,7 @@ public class ExperimentController {
         HashMap<String, Object> data = new HashMap<>();
         data.put("trialType", experiment.getTrialType());
         data.put("expOwnerID", experiment.getExperimentOwnerID());
-        data.put("expOpen",experiment.getStatus());
+        data.put("expOpen",experiment.getOpen());
         data.put("minNumTrials", experiment.getMinNumTrials());
         data.put("region",experiment.getRegion());
         data.put("locationRequired",experiment.getLocationRequired());
@@ -86,6 +86,7 @@ public class ExperimentController {
         // add a document key to subscribedExperiment collection
         final DocumentReference document = db.collection("Users/"+currentUser.getId()+"/SubscribedExperiments").document(experiment.getDescription());
         HashMap<String, Object> data = new HashMap<>();
+
         document.set(data);
     }
 
