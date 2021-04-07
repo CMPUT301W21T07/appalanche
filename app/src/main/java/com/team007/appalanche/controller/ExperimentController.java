@@ -56,6 +56,7 @@ public class ExperimentController {
     public void addOwnExperiment(Experiment experiment) {currentUser.addOwnedExperiment(experiment);}
     public void addSubscribedExperiment(Experiment experiment) {currentUser.addSubscribedExperiment(experiment);}
 
+
     public void addExperiment(Experiment experiment) {
         db = FirebaseFirestore.getInstance();
         CollectionReference collection = db.collection("Experiments");

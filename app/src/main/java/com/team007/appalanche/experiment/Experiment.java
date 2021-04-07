@@ -2,6 +2,7 @@ package com.team007.appalanche.experiment;
 
 import com.team007.appalanche.question.Question;
 import com.team007.appalanche.trial.Trial;
+import com.team007.appalanche.user.User;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class Experiment implements Serializable {
     public ArrayList<Question> getQuestions() {
         return questions;
     }
+
+    public ArrayList<User> ignoredUsers = new ArrayList<User>();
 
     public void addQuestion( Question question) {
         questions.add(question);
@@ -163,5 +166,16 @@ public class Experiment implements Serializable {
         } else {
             throw new RuntimeException("You cannot add a trial to this experiment as it is ended");
         }
+    }
+
+    /**
+     * To add an ignored user to the list of a specific experiment
+     */
+    public void addIgnoredUser(User user) {
+        ignoredUsers.add(user);
+    }
+
+    public ArrayList<User> getIgnoredUsers() {
+        return ignoredUsers;
     }
 }
