@@ -73,9 +73,8 @@ public class QuestionFragment extends Fragment {
         user = (User) intent.getSerializableExtra("User");
 
         questionList = new QuestionListController(experiment);
-        // Access a Cloud Firestore instance from your Activity
+
         db = FirebaseFirestore.getInstance();
-        // Get a top-level reference to the collection.
         final CollectionReference collectionReference = db.collection("Experiments/" + experiment.getDescription()+"/Questions");
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -91,9 +90,6 @@ public class QuestionFragment extends Fragment {
                 questionAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.
             }
         });
-
-        //TEST
-        questionList.addQuestionToDb(new Question("what is the significance of using your own mouth?", new User("12345",null),new Date()));
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * This class represents a GoogleMaps API and is responsible for displaying any Google Maps screem
  * in the application.
  */
-public class GeoMap implements OnMapReadyCallback {
+public class Geomap implements OnMapReadyCallback {
 
     private GoogleMap map;
 
@@ -30,19 +30,17 @@ public class GeoMap implements OnMapReadyCallback {
     private boolean hasLocationSet;
 
 
-
-
     /**
      * Constructor of GeoMap that is called when the Map tab of ExperimentActivity is clicked on.
-     * @param isEditable
-     *      This indicates whether the map is "editable", i.e, you can change the location of the
-     *      marker.
+     *
+     * @param isEditable This indicates whether the map is "editable", i.e, you can change the location of the
+     *                   marker.
      */
-    public GeoMap(Experiment experiment, boolean isEditable) {
+    public Geomap(Experiment experiment, boolean isEditable) {
         this.isEditable = isEditable;
         this.geoLocation.setLocation(experiment.getRegion());
         markerSet = true;
-        if (experiment.getLocationRequired() ==  false) {
+        if (experiment.getLocationRequired() == false) {
             hasLocationSet = false;
         } else {
             hasLocationSet = true;
@@ -82,7 +80,7 @@ public class GeoMap implements OnMapReadyCallback {
                         .position(center));
 
                 // Add an orange marker for every trial
-                for (Trial trial: trials) {
+                for (Trial trial : trials) {
                     double trialLat = trial.getLocationList().getLat();
                     double trialLon = trial.getLocationList().getLon();
                     LatLng trialLocation = new LatLng(trialLat, trialLon);
@@ -92,7 +90,6 @@ public class GeoMap implements OnMapReadyCallback {
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
                 }
 
-               
 
                 float zoomLevel = 13.0f;
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(center, zoomLevel));
@@ -108,7 +105,6 @@ public class GeoMap implements OnMapReadyCallback {
                         .position(defaultCenter));
 
 
-
                 float zoomLevel = 10.0f;
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultCenter, zoomLevel));
             }
@@ -117,8 +113,8 @@ public class GeoMap implements OnMapReadyCallback {
 
     /**
      * Gets the geolocation that represents the region of the experiment.
-     * @return
-     *      Returns the geolocation of the experiment.
+     *
+     * @return Returns the geolocation of the experiment.
      */
     public Location getGeoLocation() {
         return geoLocation;
@@ -126,8 +122,8 @@ public class GeoMap implements OnMapReadyCallback {
 
     /**
      * Gets whether a marker is already set on the map or not.
-     * @return
-     *      Returns true if a marker is set on the map, false otherwise.
+     *
+     * @return Returns true if a marker is set on the map, false otherwise.
      */
     public boolean isMarkerSet() {
         return markerSet;
@@ -141,3 +137,4 @@ public class GeoMap implements OnMapReadyCallback {
      * @param radius
      *      This represents the radius of the circle in meters.
      */
+}

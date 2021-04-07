@@ -49,6 +49,7 @@ public class AskQuestionFragment extends DialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
                         User user = (User) getArguments().getSerializable("user");
+
                         Question newQuestion = new Question(askQuestion.getText().toString(), user, new Date());
                         listener.askQuestion(newQuestion);
                     }

@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.team007.appalanche.experiment.BinomialExperiment;
@@ -43,24 +44,36 @@ import java.util.Date;
 
 
 public class AddExperimentFragment extends DialogFragment {
-
     private OnFragmentInteractionListener listener;
-    private int k;
+
+    public static AddExperimentFragment newInstance(User user) {
+        Bundle args = new Bundle();
+        args.putSerializable("User", user);
+        AddExperimentFragment fragment = new AddExperimentFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @NonNull
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_add_experiment, null);
-        EditText experimentDescription = view.findViewById(R.id.textView2);
-        EditText experimentregion = view.findViewById(R.id.textView3);
-        EditText numberoftrials = view.findViewById(R.id.textView4);
+
+        // Get EditTexts
+        EditText experimentDescription = view.findViewById(R.id.expDescription);
+        EditText experimentRegion = view.findViewById(R.id.expRegion);
+        EditText minTrials = view.findViewById(R.id.expTrials);
+        Switch geoRequired = view.findViewById(R.id.geoRequired);
+
+        // Initialize Dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        String[] users = {"COUNT", "BINOMIAL", "NON NEGATIVE COUNT", "MEASUREMENT"};
-        Spinner spin = (Spinner) view.findViewById(R.id.spinner1);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, users);
+
+        // Initialize Spinner
+        String[] types = {"COUNT", "BINOMIAL", "NON NEGATIVE COUNT", "MEASUREMENT"};
+        Spinner spin = (Spinner) view.findViewById(R.id.expType);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_spinner_item, types);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin.setAdapter(adapter);
-        spin.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
-        String typee= spin.getSelectedItem().toString();
-
 
         return builder
                 .setView(view)
@@ -69,23 +82,45 @@ public class AddExperimentFragment extends DialogFragment {
                 .setPositiveButton("Post", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
-                        User user = (User) getArguments().getSerializable("user");
-                        if(k==1){
-                            Experiment newExperiment = new CountBasedExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, user.getId());
-                            listener.addExperiment(newExperiment);
+                        User user = (User) getArguments().getSerializable("User");
+
+                        // Get the experiment details
+                        String description = experimentDescription.getText().toString();
+                        String region = experimentRegion.getText().toString();
+                        int numTrials = Integer.valueOf(minTrials.getText().toString());
+
+                        // Get the type of the experiment
+                        String type = spin.getSelectedItem().toString();
+
+                        // Get whether geolocation is required
+
+                        switch(type) {
+                            case "COUNT":
+                                Experiment countExp =
+                                        new CountBasedExperiment(description, region,
+                                                numTrials, Boolean.FALSE, Boolean.FALSE, user.getId());
+                                listener.addExperiment(countExp);
+                                break;
+                            case "BINOMIAL":
+                                Experiment binomialExp =
+                                        new BinomialExperiment(description, region,
+                                                numTrials, Boolean.FALSE, Boolean.FALSE, user.getId());
+                                listener.addExperiment(binomialExp);
+                                break;
+                            case "NON NEGATIVE COUNT":
+                                Experiment nonNegExp =
+                                        new NonNegativeCountExperiment(description, region,
+                                                numTrials, Boolean.FALSE, Boolean.FALSE, user.getId());
+                                listener.addExperiment(nonNegExp);
+                                break;
+                            case "MEASUREMENT":
+                                Experiment measurementExp =
+                                        new MeasurementExperiment(description, region,
+                                                numTrials, Boolean.FALSE, Boolean.FALSE, user.getId());
+                                listener.addExperiment(measurementExp);
+                                break;
                         }
-                        else if(k==2){
-                            Experiment newExperiment = new BinomialExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, user.getId());
-                            listener.addExperiment(newExperiment);
-                        } else if (k == 3) {
-                            Experiment newExperiment = new NonNegativeCountExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, user.getId());
-                            listener.addExperiment(newExperiment);
-                        }
-                        else if (k==4){
-                            Experiment newExperiment = new MeasurementExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, user.getId());
-                            listener.addExperiment(newExperiment);
-                        }
+
                         //Todo later(Theo can write this) : Once we have implemented searching for experiments, we should
                         // automatically add owned experiments to the subscribed list;
                         // listener.addSubExp(newExperiment);
@@ -102,6 +137,7 @@ public class AddExperimentFragment extends DialogFragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_add_experiment, container, false);
     }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -116,11 +152,6 @@ public class AddExperimentFragment extends DialogFragment {
     public interface OnFragmentInteractionListener {
         void addExperiment(Experiment newExp);
     }
-    public static AddExperimentFragment newInstance(User user) {
-        Bundle args = new Bundle();
-        args.putSerializable("user", user);
-        AddExperimentFragment fragment = new AddExperimentFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
+
+
 }

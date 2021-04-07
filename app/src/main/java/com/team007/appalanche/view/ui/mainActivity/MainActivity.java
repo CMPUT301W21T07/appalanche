@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
     String ID;
     private static final String TAG = "Fragment Activity";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +92,7 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
         addExperimentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AddExperimentFragment().newInstance(currentUser).show(getSupportFragmentManager(), "New ");
+                new AddExperimentFragment().newInstance(currentUser).show(getSupportFragmentManager(), "New");
             }
         });
 
