@@ -95,7 +95,7 @@ public class QuestionFragment extends Fragment {
         });
 
         //TEST
-        questionList.addQuestionToDb(new Question("what is the significance of using your own mouth?", new User("12345",null),new Date()));
+        //questionList.addQuestionToDb(new Question("what is the significance of using your own mouth?", new User("12345",null),new Date()));
     }
 
     @Override

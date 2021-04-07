@@ -59,7 +59,6 @@ public class EditUserInfoFragment extends DialogFragment {
                         listener.updateUserInfo(user);
                     }
                 })
-
                 .create();
     }
 

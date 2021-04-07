@@ -88,18 +88,18 @@ public class AddExperimentFragment extends DialogFragment {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
                         User user = (User) getArguments().getSerializable("user");
                         if(k==1){
-                            Experiment newExperiment = new CountBasedExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, user.getId());
+                            Experiment newExperiment = new CountBasedExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.TRUE, user.getId());
                             listener.addExperiment(newExperiment);
                         }
                         else if(k==2){
-                            Experiment newExperiment = new BinomialExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, user.getId());
+                            Experiment newExperiment = new BinomialExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.TRUE, user.getId());
                             listener.addExperiment(newExperiment);
                         } else if (k == 3) {
-                            Experiment newExperiment = new NonNegativeCountExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, user.getId());
+                            Experiment newExperiment = new NonNegativeCountExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.TRUE, user.getId());
                             listener.addExperiment(newExperiment);
                         }
                         else if (k==4){
-                            Experiment newExperiment = new MeasurementExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.FALSE, user.getId());
+                            Experiment newExperiment = new MeasurementExperiment(experimentDescription.getText().toString(), experimentregion.getText().toString(), Integer.valueOf(numberoftrials.getText().toString()), Boolean.FALSE, Boolean.TRUE, user.getId());
                             listener.addExperiment(newExperiment);
                         }
                         //Todo later(Theo can write this) : Once we have implemented searching for experiments, we should

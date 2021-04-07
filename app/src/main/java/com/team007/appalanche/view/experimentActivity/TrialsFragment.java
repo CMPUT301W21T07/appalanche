@@ -97,22 +97,30 @@ public class TrialsFragment extends Fragment {
                     if (experiment.getTrialType().equals("count")) {
                         Log.d(TAG, String.valueOf(doc.getData().get("description")));
                         Long count = (Long) doc.getData().get("count");
-                        trialListController.addTrial( new CountBasedTrial(user, new Date(), count.intValue()));
+                        String id = (String) doc.getData().get("userAddedTrial");
+                        User addedUser = new User(id);
+                        trialListController.addTrial( new CountBasedTrial(addedUser, new Date(), count.intValue()));
                     }
                     else if (experiment.getTrialType().equals("binomial")){
                         Log.d(TAG, String.valueOf(doc.getData().get("description")));
                         Boolean success= (Boolean) doc.getData().get("binomial");
-                        trialListController.addTrial(new BinomialTrial(user, new Date(),success));
+                        String id = (String) doc.getData().get("userAddedTrial");
+                        User addedUser = new User(id);
+                        trialListController.addTrial(new BinomialTrial(addedUser, new Date(),success));
                     }
                     else if (experiment.getTrialType().equals("measurement")){
                         Log.d(TAG, String.valueOf(doc.getData().get("measurement")));
                         Double result = (Double) doc.getData().get("measurement");
-                        trialListController.addTrial(new MeasurementTrial(user, new Date(), result));
+                        String id = (String) doc.getData().get("userAddedTrial");
+                        User addedUser = new User(id);
+                        trialListController.addTrial(new MeasurementTrial(addedUser, new Date(), result));
                     }
                     else if (experiment.getTrialType().equals("nonNegativeCount")) {
                         Log.d(TAG, String.valueOf(doc.getData().get("nonNegativeCount")));
                         Long count = (Long) doc.getData().get("nonNegativeCount");
-                        trialListController.addTrial(new NonNegativeCountTrial(user, new Date(), count.intValue()));
+                        String id = (String) doc.getData().get("userAddedTrial");
+                        User addedUser = new User(id);
+                        trialListController.addTrial(new NonNegativeCountTrial(addedUser, new Date(), count.intValue()));
                     }
                 }
                 trialAdapter.notifyDataSetChanged();
@@ -120,7 +128,7 @@ public class TrialsFragment extends Fragment {
 //
 
 //        //TEST
-        //trialListController.addTrialToDb( new CountBasedTrial(new User(), new Date(), 4));
+        //trialListController.addCountTrialToDb( new CountBasedTrial(new User("@pm"), new Date(), 4));
     }
 
     @Override
@@ -133,31 +141,47 @@ public class TrialsFragment extends Fragment {
         description.setText(experiment.getDescription());
 
 
+        // TO DO: CHECK IF CURRENT USER IS IN THE LIST OF IGNORED EXPERIMENTERS
+
         Button addTrialButton = root.findViewById(R.id.addTrialButton);
+        boolean inIgnoredList = checkIgnoredExperimenters();
         addTrialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openAddTrialActivity();
+                // IF THE CURRENT USER IS IN THE IGNORED LIST OF CURRENT EXPERIMENT -> SHOW MESSAGE
+                if (inIgnoredList)
+                    Toast.makeText(getContext(), "You're not allowed to add trial to this experiment", Toast.LENGTH_SHORT).show();
+                else
+                    openAddTrialActivity();
             }
         });
 
         // SET UP TRIAL LISTVIEW
-
         trialDataList = trialListController.getExperiment().getTrials();
         trialAdapter = new TrialCustomList(this.getContext(), trialDataList);
         trialListView = root.findViewById(R.id.trialList);
         trialListView.setAdapter(trialAdapter);
 
-        // ON CLICK USER'S ID
-        viewAProfile();
 
-//        // IGNORE CERTAIN TRIAL
-//        trialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//            }
-//        });
+        trialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                long viewId = view.getId();
+                Trial trial = trialDataList.get(position);
+                // VIEW A USER PROFILE
+                if (viewId == R.id.userID) {
+                    viewAProfile(trial);
+                }
+                // IGNORE A CERTAIN EXPERIMENTER
+                // IF current User is the owner of the experiment
+                // CHECK THIS AFTER SEARCHING IS DONE
+                else if (viewId == R.id.ignoreUser && experiment.getExperimentOwnerID().matches(user.getId())) {
+                    User ignoredUser = trial.getUserAddedTrial();
+                    new IgnoreAUserFragment().newInstance(ignoredUser).show(getFragmentManager(), "Add_Ignored_User");
+                }
+
+            }
+        });
 
         return root;
     }
@@ -181,18 +205,24 @@ public class TrialsFragment extends Fragment {
         // TODO: hook fragment result to update experiment and create trial
     }
 
-    public void viewAProfile() {
-        trialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Trial trial = trialDataList.get(position);
-                String userID = trial.getUserAddedTrial().getId();
-                Intent intent = new Intent(getActivity(), ProfileActivity.class);
-                intent.putExtra("Profile", new User(userID));
-                startActivity(intent);
-                // FIX BACK BUTTON
+    public void viewAProfile(Trial trial) {
+
+        String userID = trial.getUserAddedTrial().getId();
+        Intent intent = new Intent(getActivity(), ProfileActivity.class);
+        intent.putExtra("Profile", new User(userID));
+        startActivity(intent);
+    }
+
+    public boolean checkIgnoredExperimenters() {
+        boolean inIgnoredList = false;
+        ArrayList<User> ignoredList = experiment.getIgnoredUsers();
+        for( int i =0; i< ignoredList.size(); i++) {
+            if(user.getId().equals(ignoredList.get(i).getId())) {
+                inIgnoredList = true;
+                break;
             }
-        });
+        }
+        return inIgnoredList;
     }
 
 }
