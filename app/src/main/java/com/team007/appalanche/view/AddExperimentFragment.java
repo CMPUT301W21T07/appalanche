@@ -9,19 +9,15 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.team007.appalanche.experiment.BinomialExperiment;
 import com.team007.appalanche.experiment.CountBasedExperiment;
 import com.team007.appalanche.R;
@@ -29,20 +25,13 @@ import com.team007.appalanche.R;
 import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.experiment.MeasurementExperiment;
 import com.team007.appalanche.experiment.NonNegativeCountExperiment;
-import com.team007.appalanche.user.Experimenter;
-import com.team007.appalanche.user.Profile;
 import com.team007.appalanche.user.User;
-import com.team007.appalanche.question.Question;
-
-import java.util.Date;
 
 /**
  * This Fragment is created when a user wants to create an experiment.
  * The user can select attributes such as the minimum number of trials,
  * the region of the experiment, and the experiment's description.
  */
-
-
 public class AddExperimentFragment extends DialogFragment {
     private OnFragmentInteractionListener listener;
 
@@ -82,48 +71,52 @@ public class AddExperimentFragment extends DialogFragment {
                 .setPositiveButton("Post", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
                         User user = (User) getArguments().getSerializable("User");
 
                         // Get the experiment details
                         String description = experimentDescription.getText().toString();
                         String region = experimentRegion.getText().toString();
-                        int numTrials = Integer.valueOf(minTrials.getText().toString());
+                        int numTrials;
+                        try {
+                            numTrials = Integer.valueOf(minTrials.getText().toString());
+                        } catch (NumberFormatException e) {
+                            numTrials = 0;
+                        }
 
                         // Get the type of the experiment
                         String type = spin.getSelectedItem().toString();
 
                         // Get whether geolocation is required
+                        boolean geolocation = geoRequired.isChecked();
 
                         switch(type) {
                             case "COUNT":
                                 Experiment countExp =
                                         new CountBasedExperiment(description, region,
-                                                numTrials, Boolean.FALSE, true, user.getId());
+                                                numTrials, geolocation, true, user.getId());
                                 listener.addExperiment(countExp);
                                 break;
                             case "BINOMIAL":
                                 Experiment binomialExp =
                                         new BinomialExperiment(description, region,
-                                                numTrials, Boolean.FALSE, true, user.getId());
+                                                numTrials, geolocation, true, user.getId());
                                 listener.addExperiment(binomialExp);
                                 break;
                             case "NON NEGATIVE COUNT":
                                 Experiment nonNegExp =
                                         new NonNegativeCountExperiment(description, region,
-                                                numTrials, Boolean.FALSE, true, user.getId());
+                                                numTrials, geolocation, true, user.getId());
                                 listener.addExperiment(nonNegExp);
                                 break;
                             case "MEASUREMENT":
                                 Experiment measurementExp =
                                         new MeasurementExperiment(description, region,
-                                                numTrials, Boolean.FALSE, true, user.getId());
+                                                numTrials, geolocation, true, user.getId());
                                 listener.addExperiment(measurementExp);
                                 break;
                         }
                     }
                 })
-
                 .create();
     }
 
@@ -149,6 +142,4 @@ public class AddExperimentFragment extends DialogFragment {
     public interface OnFragmentInteractionListener {
         void addExperiment(Experiment newExp);
     }
-
-
 }

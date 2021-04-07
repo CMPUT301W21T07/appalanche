@@ -23,6 +23,7 @@
     <EditText
         android:id="@+id/expTrials"
         android:layout_width="match_parent"
+        android:inputType="number"
         android:layout_height="50dp"
         android:hint="Minimum number of trials" />
 

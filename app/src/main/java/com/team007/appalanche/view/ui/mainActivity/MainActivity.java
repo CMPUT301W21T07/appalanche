@@ -109,8 +109,7 @@ public class MainActivity extends AppCompatActivity implements AddExperimentFrag
     private void scanCode() {
         // scan the code from the zxing library
         IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setPrompt("For flash, use volume up key");
-        integrator.setBeepEnabled(true);
+        integrator.setPrompt("Scan the barcode or QR code");
         integrator.setOrientationLocked(true);
         integrator.setCaptureActivity(Capture.class);
         integrator.initiateScan();
@@ -154,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements AddExperimentFrag
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode,
                 data);
 
@@ -178,17 +178,17 @@ public class MainActivity extends AppCompatActivity implements AddExperimentFrag
      * @param contents This is the serialized QR code class.
      */
     private void getScannedTrialQR(String contents) {
-        // deserialize
+        // Deserialize
         ScannableCode scannedCode = deserialize(contents);
 
-        // get the trial from the deserialization
+        // Get the trial from the deserialization
         Trial trial = scannedCode.scan(currentUser);
 
-        // add the trial to the appropriate experiment
+        // Add the trial to the appropriate experiment
         Experiment experiment = scannedCode.getExperiment();
         experiment.addTrial(trial);
 
-        // go to that experiment
+        // Go to that experiment
         openExperimentActivity(experiment);
     }
 
@@ -260,7 +260,6 @@ public class MainActivity extends AppCompatActivity implements AddExperimentFrag
     private void searchActivity() {
         //TODO: Implement
     }
-
 
     @Override
     public void addExperiment(Experiment newExp) {

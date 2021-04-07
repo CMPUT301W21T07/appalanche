@@ -74,13 +74,14 @@ public class ExperimentController {
         // ADD EXPERIMENT TO THE PUBLIC COLLECTION "EXPERIMENTS"
         collection
                 .document(experiment.getDescription())
-                .set(data);
+                .update(data);
 
-        // ADD EXPERIMENT TO OWNED LIST EXPERIMENT INSIDE USER BECAUSE WE WANT TO KEEP THE EXPERIMENT WHEN UNPUBLISH EXPERIMENT
-        final CollectionReference ownerCol = db.collection("Users/"+currentUser.getId()+"/OwnedExperiments");
+        // Update experiment in owned user's list
+        final CollectionReference ownerCol = db.collection("Users/" + currentUser.getId() +
+                "/OwnedExperiments");
         ownerCol
                 .document(experiment.getDescription())
-                .set(data);
+                .update(data);
     }
 
     public void addExperiment(Experiment experiment) {
@@ -101,8 +102,11 @@ public class ExperimentController {
                 .document(experiment.getDescription())
                 .set(data);
 
+        // Add experiment to onwer's owned list
+        // (
         // ADD EXPERIMENT TO OWNED LIST EXPERIMENT INSIDE USER BECAUSE WE WANT TO KEEP THE EXPERIMENT WHEN UNPUBLISH EXPERIMENT
-        final CollectionReference ownerCol = db.collection("Users/"+currentUser.getId()+"/OwnedExperiments");
+        final CollectionReference ownerCol = db.collection("Users/" + currentUser.getId() +
+                "/OwnedExperiments");
         ownerCol
                 .document(experiment.getDescription())
                 .set(data);
@@ -111,7 +115,8 @@ public class ExperimentController {
     public void addSubExperiment(Experiment experiment) {
         db = FirebaseFirestore.getInstance();
         // add a document key to subscribedExperiment collection
-        final DocumentReference document = db.collection("Users/"+currentUser.getId()+"/SubscribedExperiments").document(experiment.getDescription());
+        final DocumentReference document = db.collection("Users/" + currentUser.getId() +
+                "/SubscribedExperiments").document(experiment.getDescription());
         HashMap<String, Object> data = new HashMap<>();
 
         document.set(data);
