@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.team007.appalanche.R;
@@ -70,6 +72,24 @@ public class TrialCustomList extends ArrayAdapter<Trial> {
                 }
             }
         }
+
+        // CLICK ON USER ID -> SHOW PROFILE
+        userAddedTrial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ListView) parent).performItemClick(v, position, 0); // Let the event be handled in onItemClick()
+            }
+        });
+
+        // CLICK ON WARNING IMAGE VIEW
+        ImageView ignore =  view.findViewById(R.id.ignoreUser);
+        ignore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ListView) parent).performItemClick(v, position, 1); // Let the event be handled in onItemClick()
+            }
+        });
+
 
         return view;
     }

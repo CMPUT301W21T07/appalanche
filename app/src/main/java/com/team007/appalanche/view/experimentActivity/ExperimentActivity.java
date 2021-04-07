@@ -15,6 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.team007.appalanche.controller.ExperimentController;
@@ -38,6 +43,8 @@ import com.team007.appalanche.view.addTrialFragments.AddMeasurementTrialFragment
 import com.team007.appalanche.view.addTrialFragments.AddNonNegTrialFragment;
 
 
+import java.util.HashMap;
+
 import static com.team007.appalanche.view.experimentActivity.QuestionFragment.questionAdapter;
 import static com.team007.appalanche.view.experimentActivity.QuestionFragment.questionList;
 import static com.team007.appalanche.view.experimentActivity.TrialsFragment.trialListController;
@@ -47,7 +54,8 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         AddBinomialTrialFragment.OnFragmentInteractionListener,
         AddCountTrialFragment.OnFragmentInteractionListener,
         AddMeasurementTrialFragment.OnFragmentInteractionListener,
-        AddNonNegTrialFragment.OnFragmentInteractionListener
+        AddNonNegTrialFragment.OnFragmentInteractionListener,
+        IgnoreAUserFragment.OnFragmentInteractionListener
 {
 
     private Experiment experiment;
@@ -183,4 +191,24 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
 
     @Override
     public void addTrial(NonNegativeCountTrial trial) { trialListController.addNonNegTrialToDb(trial); }
+
+    // IGNORE A USER HERE
+    @Override
+    public void addIgnoredUser(User ignoredUser) {
+        experiment.addIgnoredUser(ignoredUser);
+        addIgnoredUserToDB(ignoredUser);
+        trialListController.deleteTrials(ignoredUser);
+
+    }
+
+    public void addIgnoredUserToDB(User ignoredUser) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = db.collection("Users/" + currentUser.getId() +"/OwnedExperiments/"+experiment.getDescription()+"/IgnoredExperimenters");
+        HashMap<String, Object> data = new HashMap<>();
+        collectionReference
+                .document(ignoredUser.getId())
+                .set(data);
+    }
+
+
 }
