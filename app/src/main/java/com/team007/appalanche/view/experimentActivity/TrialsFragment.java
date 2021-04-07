@@ -52,8 +52,9 @@ import java.util.Map;
 import static android.content.ContentValues.TAG;
 
 /**
- * A placeholder fragment containing a simple view.
+ * A fragment containing the view rendered for the trials experiment tab.
  */
+
 public class TrialsFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
@@ -80,10 +81,10 @@ public class TrialsFragment extends Fragment {
         experiment = (Experiment) intent.getSerializableExtra("Experiment");
         user = (User) intent.getSerializableExtra("User");
 
-
-//        CREATE trialController here
+        // Create trialController here
         trialListController = new TrialListController(experiment);
         setUpFirebase();
+
     }
 
     @Override
@@ -95,12 +96,12 @@ public class TrialsFragment extends Fragment {
         TextView description = root.findViewById(R.id.description);
         description.setText(experiment.getDescription());
 
-
-        // TO DO: CHECK IF CURRENT USER IS IN THE LIST OF IGNORED EXPERIMENTERS
-
         Button addTrialButton = root.findViewById(R.id.addTrialButton);
         boolean inIgnoredList = checkIgnoredExperimenters();
-        addTrialButton.setOnClickListener(new View.OnClickListener() {
+
+        if (experiment.getOpen()) {
+            // Adding an onClick listener if the current trial is still open
+            addTrialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // IF THE CURRENT USER IS IN THE IGNORED LIST OF CURRENT EXPERIMENT -> SHOW MESSAGE
@@ -110,13 +111,16 @@ public class TrialsFragment extends Fragment {
                     openAddTrialActivity();
             }
         });
+        } else {
+            // Removing the add trial button if the current trial is ended
+            addTrialButton.setVisibility(View.GONE);
+        }
 
-        // SET UP TRIAL LISTVIEW
+        // Set up Trial ListView
         trialDataList = trialListController.getExperiment().getTrials();
         trialAdapter = new TrialCustomList(this.getContext(), trialDataList);
         trialListView = root.findViewById(R.id.trialList);
         trialListView.setAdapter(trialAdapter);
-
 
         trialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -142,6 +146,11 @@ public class TrialsFragment extends Fragment {
     }
 
     public void openAddTrialActivity() {
+        if (!experiment.getOpen()) {
+            // Throw an exception if we're trying to add a trial to an ended experiment
+            throw new RuntimeException("Cannot add a new trial as the experiment is ended");
+        }
+
         switch(experiment.getTrialType()) {
             case "binomial":
                 new AddBinomialTrialFragment().newInstance(user).show(getFragmentManager(), "Add_Trial");
@@ -179,6 +188,7 @@ public class TrialsFragment extends Fragment {
         }
         return inIgnoredList;
     }
+
 
     public void setUpFirebase() {
         //set up firebase, realtime updates
@@ -225,4 +235,5 @@ public class TrialsFragment extends Fragment {
 //        //TEST
         //trialListController.addCountTrialToDb( new CountBasedTrial(new User("@pm"), new Date(), 4));
     }
+
 }
