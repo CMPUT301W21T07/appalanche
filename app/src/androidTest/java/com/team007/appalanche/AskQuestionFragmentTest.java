@@ -18,14 +18,14 @@ import static org.junit.Assert.assertTrue;
 
 
 public class AskQuestionFragmentTest {
-    private Solo ask;
+    private Solo solo;
     @Rule
     public ActivityTestRule<MainActivity> rule =
             new ActivityTestRule<>(MainActivity.class, true, true);
 
     @Before
     public void Setup(){
-        ask = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
+        solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
     }
 
     @Test
@@ -34,12 +34,12 @@ public class AskQuestionFragmentTest {
     }
     @Test
     public void TestAskQuestion(){
-        ask.assertCurrentActivity("Wrong Activity",MainActivity.class);
-        ask.clickOnText("aaaa");
-        ask.clickOnText("Questions");
-        ask.clickOnButton("ASK NEW QUESTION");
-        ask.enterText((EditText) ask.getView(R.id.askQuestion),"Question");
-        ask.clickOnButton("Post");
-        assertTrue(ask.searchText("Question"));
+        solo.assertCurrentActivity("Wrong Activity",MainActivity.class);
+        solo.clickOnText("aaaa");
+        solo.clickOnText("Questions");
+        solo.clickOnButton("ASK NEW QUESTION");
+        solo.enterText((EditText) solo.getView(R.id.askQuestion),"Question");
+        solo.clickOnButton("Post");
+        assertTrue(solo.searchText("Question"));
     }
 }
