@@ -1,23 +1,16 @@
-package com.team007.appalanche.view.profile;
+package com.team007.appalanche.view.Profile;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -32,16 +25,12 @@ import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.user.ContactInfo;
 import com.team007.appalanche.user.Profile;
 import com.team007.appalanche.user.User;
-import com.team007.appalanche.view.AddExperimentFragment;
-import com.team007.appalanche.view.EditUserInfoFragment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.PrimitiveIterator;
 
 import static android.content.ContentValues.TAG;
 
-public class OwnerProfileActivity extends AppCompatActivity implements EditUserInfoFragment.OnFragmentInteractionListener {
+public class ProfileActivity extends AppCompatActivity {
     private User currentUser;
     FirebaseFirestore db;
     TextView userName;
@@ -53,36 +42,24 @@ public class OwnerProfileActivity extends AppCompatActivity implements EditUserI
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_owner_profile);
-
+        setContentView(R.layout.activity_profile);
         Intent intent = getIntent();
         currentUser = (User) intent.getSerializableExtra("Profile");
+
         // SET TEXT USER NAME
         userName = findViewById(R.id.userName);
+        // SET TEXT USER NAME
         phoneNumber = findViewById(R.id.phoneNumber);
         gitHub = findViewById(R.id.githubLink);
 
 //        // Fetch user info from firebase into currentUser using the given ID
         loadUserInfo();
-//
-//        else
-//            userName.setText("not entered");
-//
+
         // SET TEXT USER ID
         TextView userID = findViewById(R.id.userID);
         userID.setText(currentUser.getId());
 
-        // Add edit user button listeners
-        Button editUserButton = findViewById(R.id.editProfile);
-        // String finalUserKey = userKey;
-        editUserButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new EditUserInfoFragment().newInstance(currentUser).show(getSupportFragmentManager(), "New");
-            }
-        });
-
-
+        // set up list view
         expList = findViewById(R.id.ownedExpList);
         ExperimentDataList = new ArrayList<Experiment>();
         // Set up the adapter for Experiment List View
@@ -91,15 +68,6 @@ public class OwnerProfileActivity extends AppCompatActivity implements EditUserI
         setUpFirebase(currentUser);
 
     }
-
-
-    @Override
-    public void updateUserInfo(User user) {
-        //TODO: figure out what to do with this function
-        updateUserInfoToDB(user);
-
-    }
-
     /*Fetch user info from firebase  */
     public void loadUserInfo() {
         db = FirebaseFirestore.getInstance();
@@ -134,20 +102,19 @@ public class OwnerProfileActivity extends AppCompatActivity implements EditUserI
                     gitHub.setText(github);
                     if (github.equals(""))
                         gitHub.setHint("Github Link");}
-
             }
         });
 
     }
 
-    public void updateUserInfoToDB(User user) {
-        db = FirebaseFirestore.getInstance();
-        final DocumentReference userDoc = db.collection("Users").document(user.getId());
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("Name", user.getProfile().getUserName());
-        data.put("PhoneNumber", user.getProfile().getContactInfo().getPhoneNumber());
-        data.put("Github", user.getProfile().getContactInfo().getGithubLink());
-        userDoc.set(data);
+    /*Set up the back button */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id==android.R.id.home) {
+            finish();
+        }
+        return true;
     }
 
     public void setUpFirebase(User currentUser) {

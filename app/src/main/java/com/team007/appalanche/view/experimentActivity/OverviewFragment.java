@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.team007.appalanche.R;
 import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.user.User;
-import com.team007.appalanche.view.profile.ProfileActivity;
+import com.team007.appalanche.view.Profile.ProfileActivity;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -76,7 +76,8 @@ public class OverviewFragment extends Fragment {
         owner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                Intent intent = new Intent(getActivity(),
+                        ProfileActivity.class);
                 String string = owner.getText().toString();
                 String userID = (String) string.subSequence(7, string.length());
                 intent.putExtra("Profile", new User(userID));
