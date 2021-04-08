@@ -5,6 +5,10 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <permission
+        android:name="com.example.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature"/>
+    <uses-permission android:name="com.example.permission.MAPS_RECEIVE"/>
 
     <application
         android:allowBackup="true"
@@ -13,9 +17,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Appalanche">
-        <activity android:name=".view.profile.ProfileActivity"
-            android:parentActivityName=".view.ui.mainActivity.MainActivity"
-            ></activity>
+
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDY2RsPsmo0AbN4Iz58zNZOpPp3au7Tf40"/>
+
+        <activity
+            android:name=".view.profile.ProfileActivity"
+            android:parentActivityName=".view.ui.mainActivity.MainActivity" />
         <activity
             android:name=".view.profile.OwnerProfileActivity"
             android:parentActivityName=".view.ui.mainActivity.MainActivity"

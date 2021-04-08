@@ -17,6 +17,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -54,9 +61,7 @@ import static android.content.ContentValues.TAG;
 /**
  * A fragment containing the view rendered for the trials experiment tab.
  */
-
-public class TrialsFragment extends Fragment {
-
+public class TrialsFragment extends Fragment implements OnMapReadyCallback {
     private static final String ARG_SECTION_NUMBER = "section_number";
     private ListView trialListView;
     private ArrayAdapter<Trial> trialAdapter;
@@ -65,6 +70,8 @@ public class TrialsFragment extends Fragment {
     private User user;
     public static TrialListController trialListController;
     FirebaseFirestore db;
+    private GoogleMap map;
+    private MapView mapView;
 
     public static TrialsFragment newInstance(int index) {
         TrialsFragment fragment = new TrialsFragment();
@@ -131,11 +138,27 @@ public class TrialsFragment extends Fragment {
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+
+//        container.removeAllViews();
+
         View root = inflater.inflate(R.layout.fragment_experiment_trials, container, false);
 
+        // Set description text
         TextView description = root.findViewById(R.id.description);
         description.setText(experiment.getDescription());
 
+        // Map logic
+        mapView = (MapView) root.findViewById(R.id.map);
+        if (experiment.getLocationRequired()) {
+            // Create the google map
+            mapView.onCreate(savedInstanceState);
+            mapView.getMapAsync(this);
+        } else {
+            // Removing the map if geolocation is not required
+            mapView.setVisibility(View.GONE);
+        }
+
+        // Trial logic
         Button addTrialButton = root.findViewById(R.id.addTrialButton);
         boolean inIgnoredList = checkIgnoredExperimenters();
 
@@ -167,18 +190,18 @@ public class TrialsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 long viewId = view.getId();
                 Trial trial = trialDataList.get(position);
-                // VIEW A USER PROFILE
+                // View a user profile
                 if (viewId == R.id.userID) {
                     viewAProfile(trial);
                 }
-                // IGNORE A CERTAIN EXPERIMENTER
-                // IF current User is the owner of the experiment
+
+                // Ignore a certain experimenter
+                // If current User is the owner of the experiment
                 // CHECK THIS AFTER SEARCHING IS DONE
                 else if (viewId == R.id.ignoreUser && experiment.getExperimentOwnerID().matches(user.getId())) {
                     User ignoredUser = trial.getUserAddedTrial();
                     new IgnoreAUserFragment().newInstance(ignoredUser).show(getFragmentManager(), "Add_Ignored_User");
                 }
-
             }
         });
 
@@ -210,7 +233,6 @@ public class TrialsFragment extends Fragment {
     }
 
     public void viewAProfile(Trial trial) {
-
         String userID = trial.getUserAddedTrial().getId();
         Intent intent = new Intent(getActivity(), ProfileActivity.class);
         intent.putExtra("Profile", new User(userID));
@@ -228,4 +250,17 @@ public class TrialsFragment extends Fragment {
         }
         return inIgnoredList;
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(-34, 151);
+        map.addMarker(new MarkerOptions()
+                .position(sydney)
+                .title("Marker in Sydney"));
+        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
 }

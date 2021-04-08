@@ -1,12 +1,9 @@
 package com.team007.appalanche;
 
-import android.graphics.Color;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.team007.appalanche.experiment.Experiment;
@@ -29,7 +26,6 @@ public class Geomap implements OnMapReadyCallback {
     private boolean markerSet;
     private boolean hasLocationSet;
 
-
     /**
      * Constructor of GeoMap that is called when the Map tab of ExperimentActivity is clicked on.
      *
@@ -40,11 +36,10 @@ public class Geomap implements OnMapReadyCallback {
         this.isEditable = isEditable;
         this.geoLocation.setLocation(experiment.getRegion());
         markerSet = true;
-        if (experiment.getLocationRequired() == false) {
+        if (!experiment.getLocationRequired()) {
             hasLocationSet = false;
         } else {
             hasLocationSet = true;
-
         }
     }
 
@@ -103,7 +98,6 @@ public class Geomap implements OnMapReadyCallback {
 
                 map.addMarker(new MarkerOptions()
                         .position(defaultCenter));
-
 
                 float zoomLevel = 10.0f;
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultCenter, zoomLevel));

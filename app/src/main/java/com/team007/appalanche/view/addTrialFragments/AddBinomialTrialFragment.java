@@ -30,7 +30,6 @@ public class AddBinomialTrialFragment extends DialogFragment  {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.binomial_trial_fragment,null);
 
-
         // EditText result = view.findViewById(R.id.addBinomialResult);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
@@ -54,7 +53,6 @@ public class AddBinomialTrialFragment extends DialogFragment  {
                         listener.addTrial(newBinomialTrial);
                     }
                 })
-
                 .create();
     }
 

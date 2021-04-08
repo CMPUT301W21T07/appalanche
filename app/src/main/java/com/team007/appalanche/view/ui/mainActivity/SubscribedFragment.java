@@ -43,9 +43,7 @@ import static android.content.ContentValues.TAG;
  * A placeholder fragment containing a simple view.
  */
 public class SubscribedFragment extends Fragment {
-
     private static final String ARG_SECTION_NUMBER = "section_number";
-
 
     public static ExperimentController experimentController;
     ListView expList;
@@ -117,19 +115,6 @@ public class SubscribedFragment extends Fragment {
                 }
                 expAdapter.notifyDataSetChanged();
             }});
-
-
-        //experimentController = new ExperimentController(currentUser);
-//        experimentController.setCurrentUser(currentUser);
-//        experimentController.setExperimentType(index);
-        //experimentController.loadExperiments();
-
-        // TEST
-        // experimentController.addExperiment(new Experiment("How many jelly mans can a jelly bean fit in its mouth", "Edmonton", "NonNegative", 4, false, true, "123"));
-        // experimentController.addExperiment(new Experiment(userKey, "Edmonton", "NonNegative", 4, false, true, "123"));
-        //experimentController.addExperiment(new Experiment("How many jelly mans can a jelly bean fit in its mouth", "Edmonton", "NonNegative", 4, false, true, "123"), index);
-        //experimentController.addSubExperiment(new Experiment("1234", "Edmonton", "NonNegative", 4, false, true, "123"));
-
     }
 
     @Override
@@ -138,8 +123,6 @@ public class SubscribedFragment extends Fragment {
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.mainpage_tab_fragment, container, false);
 
-        Toast.makeText(getActivity(), "Oops, you didn't scan anything",
-                Toast.LENGTH_LONG).show();
         // Obtain the IDs
         expList = root.findViewById(R.id.expList);
         ExperimentDataList = experimentController.getCurrentUser().getSubscribedExperiments();
@@ -176,7 +159,6 @@ public class SubscribedFragment extends Fragment {
         intent.putExtra("User", experimentController.getCurrentUser());
         startActivityForResult(intent,1);
     }
-
 
     interface SetIgnoredList {
         void setIgnore(Experiment experiment);
