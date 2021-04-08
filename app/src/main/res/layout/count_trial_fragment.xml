@@ -6,11 +6,12 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/addCountResult"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter the count number" />
+        android:gravity="center"
+        android:text="+1"
+        android:textSize="30sp" />
 
     <LinearLayout
         android:id="@+id/geolocation"

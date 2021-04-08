@@ -45,7 +45,7 @@ public class AddCountTrialFragment extends DialogFragment  {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
-                .setTitle("ADD COUNT RESULT")
+                .setTitle("INCREMENT COUNT")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Post", new DialogInterface.OnClickListener() {
                     @Override
