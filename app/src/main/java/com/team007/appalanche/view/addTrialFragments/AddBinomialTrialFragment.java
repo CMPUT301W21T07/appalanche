@@ -36,7 +36,15 @@ public class AddBinomialTrialFragment extends DialogFragment  {
         return builder
                 .setView(view)
                 .setTitle("DO YOU WANT TO ADD A POSITIVE TRIAL?")
-                .setNegativeButton("NO", null)
+                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
+                        User user = (User) getArguments().getSerializable("user");
+                        BinomialTrial newBinomialTrial = new BinomialTrial(user, new Date(), false);
+                        listener.addTrial(newBinomialTrial);
+                    }
+                })
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

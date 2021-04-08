@@ -26,9 +26,16 @@ public class EditUserInfoFragment extends DialogFragment {
     @NonNull
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_edit_user_info, null);
+
+        User user = (User) getArguments().getSerializable("user");
         EditText userName = view.findViewById(R.id.editUserName);
+        userName.setText(user.getProfile().getUserName());
         EditText phoneNumber = view.findViewById(R.id.editPhoneNumber);
+        if (user.getProfile().getContactInfo().getPhoneNumber() != null)
+            phoneNumber.setText(user.getProfile().getContactInfo().getPhoneNumber().toString());
         EditText githubLink = view.findViewById(R.id.editGithubLink);
+        githubLink.setText(user.getProfile().getContactInfo().getGithubLink());
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
@@ -39,13 +46,19 @@ public class EditUserInfoFragment extends DialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
                         User user = (User) getArguments().getSerializable("user");
-                        ContactInfo contactInfo = new ContactInfo(Integer.valueOf(phoneNumber.getText().toString()), githubLink.getText().toString());
+                        ContactInfo contactInfo;
+                        if (!phoneNumber.getText().toString().equals("")) {
+                            contactInfo = new ContactInfo(Integer.valueOf(phoneNumber.getText().toString()), githubLink.getText().toString());
+                        }
+                        else {
+                            contactInfo = new ContactInfo( githubLink.getText().toString());
+                        }
+
                         Profile profile = new Profile(userName.getText().toString(), contactInfo);
                         user.setProfile(profile);
                         listener.updateUserInfo(user);
                     }
                 })
-
                 .create();
     }
 

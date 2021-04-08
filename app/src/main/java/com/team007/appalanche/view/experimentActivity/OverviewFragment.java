@@ -54,7 +54,7 @@ public class OverviewFragment extends Fragment {
         viewAProfile(owner);
 
         TextView status = root.findViewById(R.id.status);
-        if (experiment.getStatus()) {
+        if (experiment.getOpen()) {
             status.setText("Status: Open");
         } else {
             status.setText("Status: Closed");
@@ -80,7 +80,7 @@ public class OverviewFragment extends Fragment {
                 String string = owner.getText().toString();
                 String userID = (String) string.subSequence(7, string.length());
                 intent.putExtra("Profile", new User(userID));
-                startActivityForResult(intent,1);
+                startActivity(intent);
             }
         });
     }

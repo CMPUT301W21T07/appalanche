@@ -2,6 +2,7 @@ package com.team007.appalanche.experiment;
 
 import com.team007.appalanche.question.Question;
 import com.team007.appalanche.trial.Trial;
+import com.team007.appalanche.user.User;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class Experiment implements Serializable {
     private String trialType;
     private Integer minNumTrials;
     private Boolean locationRequired;
-    private Boolean status;
+    private Boolean open;
     private String experimentOwnerID;
     private ArrayList<Trial> trials = new ArrayList<Trial>();
     private ArrayList<Question> questions = new ArrayList<Question>();
@@ -23,6 +24,8 @@ public class Experiment implements Serializable {
     public ArrayList<Question> getQuestions() {
         return questions;
     }
+
+    public ArrayList<User> ignoredUsers = new ArrayList<User>();
 
     public void addQuestion( Question question) {
         questions.add(question);
@@ -33,21 +36,21 @@ public class Experiment implements Serializable {
      * @param region
      * @param minNumTrials
      * @param locationRequired
-     * @param status
+     * @param open
      */
     public Experiment(String description,
                       String region,
                       String trialType,
                       Integer minNumTrials,
                       Boolean locationRequired,
-                      Boolean status,
+                      Boolean open,
                       String experimentOwnerID) {
         this.description = description;
         this.region = region;
         this.trialType = trialType;
         this.minNumTrials = minNumTrials;
         this.locationRequired = locationRequired;
-        this.status = status;
+        this.open = open;
         this.experimentOwnerID = experimentOwnerID;
     }
 
@@ -113,7 +116,7 @@ public class Experiment implements Serializable {
     /**
      * get whether or not the exp trials need a location
      * @return
-     * boolean location is requied
+     * boolean location is required
      */
     public Boolean getLocationRequired() { return this.locationRequired; }
 
@@ -125,30 +128,54 @@ public class Experiment implements Serializable {
     public void setLocationRequired(Boolean locationRequired) { this.locationRequired = locationRequired; }
 
     /**
-     * function to get exp. status
+     * Function to get experiment status.
      * @return
-     * return true or false
+     * Returns true if the experiment is still open or false otherwise.
      */
-    public Boolean getStatus() { return this.status; }
+    public Boolean getOpen() { return open; }
 
     /**
-     * function to change exp. status
-     * @param status
-     *  boolean value for experiment status
+     * Function to change experiment status.
+     * @param open
+     *  True if the experiment is still open, false otherwise.
      */
-    public void setStatus(Boolean status) { this.status = status; }
+    public void setOpen(Boolean open) { this.open = open; }
 
     /**
      * function to get experiment owner
      * @return
      *  return profile object of the individual who created the experiment
      */
-    public String getExperimentOwnerID(){ return this.experimentOwnerID; }
+    public String getExperimentOwnerID() {
+        return this.experimentOwnerID;
+    }
 
     public ArrayList<Trial> getTrials() {
         return trials;
     }
+
+
+    /**
+     * This method adds a trial to the experiment class (only if the experiment if open)
+     * @param trial The trial you would like to add to the experiment
+     */
     public void addTrial(Trial trial) {
-        trials.add(trial);
+        // You are only able to add a trial if the experiment is open
+        if (open) {
+            trials.add(trial);
+        } else {
+            throw new RuntimeException("You cannot add a trial to this experiment as it is ended");
+        }
+    }
+
+    /**
+     * To add an ignored user to the list of a specific experiment
+     */
+    public void addIgnoredUser(User user) {
+        ignoredUsers.add(user);
+    }
+
+    public ArrayList<User> getIgnoredUsers() {
+        return ignoredUsers;
     }
 }

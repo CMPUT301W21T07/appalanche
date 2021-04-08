@@ -71,15 +71,15 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
         /* Create the current user in the shared preferences, if the user does not already exist */
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
 
-        // Check if we have a use already logged in
-        String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
-
 //        SharedPreferences.Editor editor1 = sharedPref.edit();
 //        editor1.putString("com.team007.Appalanche.user_key", null);
 //        editor1.apply();
 
+        // Check if we have a user already logged in
+        String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
+
+
         db = FirebaseFirestore.getInstance();
-        DocumentReference docRef;
         if (userKey == null) {
             // GET THE TEXT FROM THE FRAGMENT AND CREATE A NEW USER ID
             DialogFragment dialog = new AddUserIDFragment();

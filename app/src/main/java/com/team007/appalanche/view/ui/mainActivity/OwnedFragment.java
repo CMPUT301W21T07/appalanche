@@ -52,6 +52,7 @@ public class OwnedFragment extends Fragment {
     ArrayAdapter<Experiment> expAdapter;
     ArrayList<Experiment> ExperimentDataList;
     FirebaseFirestore db;
+    private User currentUser;
 
     public static OwnedFragment newInstance(int index) {
         OwnedFragment fragment = new OwnedFragment();
@@ -67,10 +68,11 @@ public class OwnedFragment extends Fragment {
 
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
-        User currentUser = new User(userKey);
+        currentUser = new User(userKey);
 
         experimentController = new ExperimentController(currentUser);
         setUpFirebase(currentUser);
+
 
     }
 
@@ -91,7 +93,13 @@ public class OwnedFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Experiment experiment = ExperimentDataList.get(position);
-                openExperimentActivity(experiment);
+                getIgnoredList(experiment, new SetIgnoredList() {
+                    @Override
+                    public void setIgnore(Experiment experiment) {
+                        //Toast.makeText(getContext(), String.valueOf(experiment.getIgnoredUsers().size()), Toast.LENGTH_SHORT).show();
+                        openExperimentActivity(experiment);
+                    }
+                });
             }
         });
 
@@ -133,6 +141,7 @@ public class OwnedFragment extends Fragment {
                     // add to owned experiment in the user owned list
                     //if (experimentController.getCurrentUser().getSubscribedExperiments().contains(newExp) == false )
                     experimentController.addOwnExperiment(newExp);
+
                 }
                 expAdapter.notifyDataSetChanged();
             }});
@@ -142,6 +151,29 @@ public class OwnedFragment extends Fragment {
         // experimentController.addExperiment(new Experiment(userKey, "Edmonton", "NonNegative", 4, false, true, "123"));
         // experimentController.addExperiment(new Experiment("How many jelly mans can a jelly bean fit in its mouth", "Edmonton", "NonNegative", 4, false, true, "123"), index);
         // experimentController.addExperiment(new Experiment(String.valueOf(index), "Edmonton", "NonNegative", 4, false, true, "123"), index);
-        //experimentController.addExperiment(new Experiment("5", "Edmonton", "NonNegative", 4, false, true, "123"));
+        //experimentController.addExperiment(new Experiment(currentUser.getId(), "Edmonton", "NonNegative", 4, false, true, "123"));
     }
+    interface SetIgnoredList {
+        void setIgnore(Experiment experiment);
+    }
+
+    public void getIgnoredList(Experiment experiment, SetIgnoredList ignoredList) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final CollectionReference collection = db.collection("Users/" + experiment.getExperimentOwnerID() +"/OwnedExperiments/"+ experiment.getDescription()+"/IgnoredExperimenters");
+        collection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                experiment.getIgnoredUsers().clear();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                    Log.d(TAG, String.valueOf(doc.getData().get("add ignored experimenters")));
+                    String ignoredUser = doc.getId();
+                    experiment.addIgnoredUser(new User(ignoredUser));
+                }
+
+                ignoredList.setIgnore(experiment);
+            }
+        });
+    }
+
+
 }
