@@ -29,7 +29,7 @@ import com.team007.appalanche.controller.ReplyListController;
 import com.team007.appalanche.custom.ReplyCustomList;
 import com.team007.appalanche.question.Question;
 import com.team007.appalanche.question.Reply;
-import com.team007.appalanche.view.Profile.ProfileActivity;
+import com.team007.appalanche.view.profile.ProfileActivity;
 
 import java.util.ArrayList;
 import java.util.Date;

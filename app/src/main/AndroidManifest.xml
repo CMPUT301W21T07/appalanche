@@ -24,12 +24,12 @@
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDY2RsPsmo0AbN4Iz58zNZOpPp3au7Tf40"/>
 
         <activity
-            android:name=".view.Profile.ProfileActivity"
+            android:name=".view.profile.ProfileActivity"
             android:parentActivityName=".view.ui.mainActivity.MainActivity" />
         <activity android:name=".view.searching.SearchActivity"></activity>
        
         <activity
-            android:name=".view.Profile.OwnerProfileActivity"
+            android:name=".view.profile.OwnerProfileActivity"
             android:parentActivityName=".view.ui.mainActivity.MainActivity"
              />
         <activity

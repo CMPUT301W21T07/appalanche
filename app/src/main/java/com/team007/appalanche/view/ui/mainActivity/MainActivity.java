@@ -38,7 +38,7 @@ import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.AddExperimentFragment;
 import com.team007.appalanche.view.AddUserIDFragment;
 import com.team007.appalanche.view.Capture;
-import com.team007.appalanche.view.Profile.OwnerProfileActivity;
+import com.team007.appalanche.view.profile.OwnerProfileActivity;
 import com.team007.appalanche.view.experimentActivity.ExperimentActivity;
 import com.team007.appalanche.view.searching.SearchActivity;
 

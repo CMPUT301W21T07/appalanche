@@ -3,6 +3,7 @@ package com.team007.appalanche.experiment;
 import com.team007.appalanche.scannableCode.BinomialScannableCode;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * This class that extends Experiment handles the creation of binomial trials.
@@ -38,10 +39,12 @@ public class BinomialExperiment extends Experiment implements ExperimentInterfac
 
     /**
      * function to obtain experiment histogram
+     * @return
      */
     @Override
-    public void obtainHistogram() {
+    public ArrayList<Integer> obtainHistogram() {
         // TODO: implement
+        return null;
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.team007.appalanche.view.Profile;
+package com.team007.appalanche.view.profile;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;

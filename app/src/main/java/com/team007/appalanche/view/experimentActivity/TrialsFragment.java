@@ -33,7 +33,7 @@ import com.team007.appalanche.trial.MeasurementTrial;
 import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
-import com.team007.appalanche.view.Profile.ProfileActivity;
+import com.team007.appalanche.view.profile.ProfileActivity;
 import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddCountTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddMeasurementTrialFragment;
@@ -74,50 +74,8 @@ public class TrialsFragment extends Fragment  {
 
         // Create trialController here
         trialListController = new TrialListController(experiment);
+        setUpFirebase();
 
-        // Set up firebase, realtime updates
-        db = FirebaseFirestore.getInstance();
-        final CollectionReference ownedCol =
-                db.collection("Experiments/" + experiment.getDescription() + "/Trials");
-
-        ownedCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                // Clear the old list
-                trialListController.clearTrialList();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
-                    if (experiment.getTrialType().equals("count")) {
-                        Log.d(TAG, String.valueOf(doc.getData().get("description")));
-                        Long count = (Long) doc.getData().get("count");
-                        String id = (String) doc.getData().get("userAddedTrial");
-                        User addedUser = new User(id);
-                        trialListController.addTrial( new CountBasedTrial(addedUser, new Date()));
-                    }
-                    else if (experiment.getTrialType().equals("binomial")){
-                        Log.d(TAG, String.valueOf(doc.getData().get("description")));
-                        Boolean success= (Boolean) doc.getData().get("binomial");
-                        String id = (String) doc.getData().get("userAddedTrial");
-                        User addedUser = new User(id);
-                        trialListController.addTrial(new BinomialTrial(addedUser, new Date(),
-                                success));
-                    }
-                    else if (experiment.getTrialType().equals("measurement")){
-                        Log.d(TAG, String.valueOf(doc.getData().get("measurement")));
-                        Double result = (Double) doc.getData().get("measurement");
-                        String id = (String) doc.getData().get("userAddedTrial");
-                        User addedUser = new User(id);
-                        trialListController.addTrial(new MeasurementTrial(addedUser, new Date(), result));
-                    }
-                    else if (experiment.getTrialType().equals("nonNegativeCount")) {
-                        Log.d(TAG, String.valueOf(doc.getData().get("nonNegativeCount")));
-                        Long count = (Long) doc.getData().get("nonNegativeCount");
-                        String id = (String) doc.getData().get("userAddedTrial");
-                        User addedUser = new User(id);
-                        trialListController.addTrial(new NonNegativeCountTrial(addedUser, new Date(), count.intValue()));
-                    }
-                }
-                trialAdapter.notifyDataSetChanged();
-            }});
     }
 
     @Override
@@ -153,7 +111,6 @@ public class TrialsFragment extends Fragment  {
         // Trial logic
         Button addTrialButton = root.findViewById(R.id.addTrialButton);
         boolean inIgnoredList = checkIgnoredExperimenters();
-
         if (experiment.getOpen()) {
             // Adding an onClick listener if the current trial is still open
             addTrialButton.setOnClickListener(new View.OnClickListener() {
@@ -250,4 +207,51 @@ public class TrialsFragment extends Fragment  {
         return inIgnoredList;
     }
 
+
+    public void setUpFirebase() {
+        //set up firebase, realtime updates
+        db = FirebaseFirestore.getInstance();
+        final CollectionReference ownedCol = db.collection("Experiments/"+experiment.getDescription()+"/Trials");
+        //final CollectionReference ownedCol = db.collection("Users/"+user.getId()+"/OwnedExperiments/"+experiment.getDescription()+"/Trials");
+        ownedCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                // clear the old list
+                trialListController.clearTrialList();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+
+                    if (experiment.getTrialType().equals("count")) {
+                        Log.d(TAG, String.valueOf(doc.getData().get("description")));
+//                        Long count = (Long) doc.getData().get("count");
+                        String id = (String) doc.getData().get("userAddedTrial");
+                        User addedUser = new User(id);
+                        trialListController.addTrial( new CountBasedTrial(addedUser, new Date()));
+                    }
+                    else if (experiment.getTrialType().equals("binomial")){
+                        Log.d(TAG, String.valueOf(doc.getData().get("description")));
+                        Boolean success= (Boolean) doc.getData().get("binomial");
+                        String id = (String) doc.getData().get("userAddedTrial");
+                        User addedUser = new User(id);
+                        trialListController.addTrial(new BinomialTrial(addedUser, new Date(),success));
+                    }
+                    else if (experiment.getTrialType().equals("measurement")){
+                        Log.d(TAG, String.valueOf(doc.getData().get("measurement")));
+                        Double result = (Double) doc.getData().get("measurement");
+                        String id = (String) doc.getData().get("userAddedTrial");
+                        User addedUser = new User(id);
+                        trialListController.addTrial(new MeasurementTrial(addedUser, new Date(), result));
+                    }
+                    else if (experiment.getTrialType().equals("nonNegativeCount")) {
+                        Log.d(TAG, String.valueOf(doc.getData().get("nonNegativeCount")));
+                        Long count = (Long) doc.getData().get("nonNegativeCount");
+                        String id = (String) doc.getData().get("userAddedTrial");
+                        User addedUser = new User(id);
+                        trialListController.addTrial(new NonNegativeCountTrial(addedUser, new Date(), count.intValue()));
+                    }
+                }
+                trialAdapter.notifyDataSetChanged();
+            }});
+//        //TEST
+        //trialListController.addCountTrialToDb( new CountBasedTrial(new User("@pm"), new Date(), 4));
+    }
 }

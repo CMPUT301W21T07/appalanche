@@ -50,6 +50,7 @@ public class SubscribedFragment extends Fragment {
     ArrayAdapter<Experiment> expAdapter;
     public ArrayList<Experiment> ExperimentDataList;
     FirebaseFirestore db;
+    private User currentUser;
 
     public static SubscribedFragment newInstance(int index) {
         SubscribedFragment fragment = new SubscribedFragment();
@@ -65,12 +66,79 @@ public class SubscribedFragment extends Fragment {
 
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
-        User currentUser = new User(userKey);
+        currentUser = new User(userKey);
 
         db = FirebaseFirestore.getInstance();
 
         experimentController = new ExperimentController(currentUser);
+        setUpFirebase();
 
+    }
+
+    @Override
+    public View onCreateView(
+            @NonNull LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.mainpage_tab_fragment, container, false);
+
+        // Obtain the IDs
+        expList = root.findViewById(R.id.expList);
+        ExperimentDataList = experimentController.getCurrentUser().getSubscribedExperiments();
+
+        // Set up the adapter for Experiment List View
+        expAdapter = new CustomList(this.getActivity(), ExperimentDataList);
+        expList.setAdapter(expAdapter);
+
+        // Open the experiment
+        expList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Experiment experiment = ExperimentDataList.get(position);
+                getIgnoredList(experiment, new SetIgnoredList() {
+                    @Override
+                    public void setIgnore(Experiment experiment) {
+                        openExperimentActivity(experiment);
+                    }
+                });
+            }
+        });
+
+        return root;
+    }
+
+    /**
+     * This opens the experiment activity.
+     * @param experiment This is the experiment activity to open.
+     */
+    private void openExperimentActivity(Experiment experiment) {
+        Intent intent = new Intent(getContext(), ExperimentActivity.class);
+        intent.putExtra("Experiment", experiment);
+        intent.putExtra("User", experimentController.getCurrentUser());
+        startActivityForResult(intent,1);
+    }
+
+    interface SetIgnoredList {
+        void setIgnore(Experiment experiment);
+    }
+
+    public void getIgnoredList(Experiment experiment, SetIgnoredList ignoredList) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final CollectionReference collection = db.collection("Users/" + experiment.getExperimentOwnerID() +"/OwnedExperiments/"+ experiment.getDescription()+"/IgnoredExperimenters");
+        collection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                experiment.getIgnoredUsers().clear();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                    Log.d(TAG, String.valueOf(doc.getData().get("add ignored experimenters")));
+                    String ignoredUser = doc.getId();
+                    experiment.addIgnoredUser(new User(ignoredUser));
+                }
+                ignoredList.setIgnore(experiment);
+            }
+        });
+    }
+
+    public void setUpFirebase() {
         // SET UP REAL TIME DATABASE FOR SUBSCRIBED EXPERIMENT LIST
         final CollectionReference collection = db.collection("Users/"+currentUser.getId()+"/SubscribedExperiments");
         collection.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -115,69 +183,12 @@ public class SubscribedFragment extends Fragment {
                 }
                 expAdapter.notifyDataSetChanged();
             }});
-    }
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.mainpage_tab_fragment, container, false);
-
-        // Obtain the IDs
-        expList = root.findViewById(R.id.expList);
-        ExperimentDataList = experimentController.getCurrentUser().getSubscribedExperiments();
-
-        // Set up the adapter for Experiment List View
-        expAdapter = new CustomList(this.getActivity(), ExperimentDataList);
-        expList.setAdapter(expAdapter);
-
-        // Open the experiment
-        expList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Experiment experiment = ExperimentDataList.get(position);
-                getIgnoredList(experiment, new SetIgnoredList() {
-                    @Override
-                    public void setIgnore(Experiment experiment) {
-                        //Toast.makeText(getContext(), String.valueOf(experiment.getIgnoredUsers().size()), Toast.LENGTH_SHORT).show();
-                        openExperimentActivity(experiment);
-                    }
-                });
-            }
-        });
-
-        return root;
-    }
-
-    /**
-     * This opens the experiment activity.
-     * @param experiment This is the experiment activity to open.
-     */
-    private void openExperimentActivity(Experiment experiment) {
-        Intent intent = new Intent(getContext(), ExperimentActivity.class);
-        intent.putExtra("Experiment", experiment);
-        intent.putExtra("User", experimentController.getCurrentUser());
-        startActivityForResult(intent,1);
-    }
-
-    interface SetIgnoredList {
-        void setIgnore(Experiment experiment);
-    }
-
-    public void getIgnoredList(Experiment experiment, SetIgnoredList ignoredList) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final CollectionReference collection = db.collection("Users/" + experiment.getExperimentOwnerID() +"/OwnedExperiments/"+ experiment.getDescription()+"/IgnoredExperimenters");
-        collection.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                experiment.getIgnoredUsers().clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
-                    Log.d(TAG, String.valueOf(doc.getData().get("add ignored experimenters")));
-                    String ignoredUser = doc.getId();
-                    experiment.addIgnoredUser(new User(ignoredUser));
-                }
-                ignoredList.setIgnore(experiment);
-            }
-        });
+        // TEST
+        // experimentController.addExperiment(new Experiment("How many jelly mans can a jelly bean fit in its mouth", "Edmonton", "NonNegative", 4, false, true, "123"));
+        // experimentController.addExperiment(new Experiment(userKey, "Edmonton", "NonNegative", 4, false, true, "123"));
+        //experimentController.addExperiment(new Experiment("How many jelly mans can a jelly bean fit in its mouth", "Edmonton", "NonNegative", 4, false, true, "123"), index);
+        experimentController.addExperiment(new Experiment("1234", "Edmonton", "NonNegative", 4, false, true, "123"));
+        experimentController.addSubExperiment(new Experiment("1234", "Edmonton", "NonNegative", 4, false, true, "123"));
     }
 }
