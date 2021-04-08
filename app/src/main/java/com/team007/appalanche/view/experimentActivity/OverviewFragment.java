@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,13 +32,18 @@ import com.team007.appalanche.trial.BinomialTrial;
 import com.team007.appalanche.trial.CountBasedTrial;
 import com.team007.appalanche.trial.MeasurementTrial;
 import com.team007.appalanche.trial.NonNegativeCountTrial;
+import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.profile.ProfileActivity;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.content.ContentValues.TAG;
+import static com.team007.appalanche.view.experimentActivity.TrialsFragment.trialListController;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -60,8 +66,11 @@ public class OverviewFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Intent intent = getActivity().getIntent();
         experiment = (Experiment) intent.getSerializableExtra("Experiment");
+        //setUpFirebase();
+        Toast.makeText(getContext(), String.valueOf(experiment.getTrials().size()), Toast.LENGTH_SHORT).show();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
@@ -94,8 +103,11 @@ public class OverviewFragment extends Fragment {
         minTrialNum.setText("Minimum number of trials: " + experiment.getMinNumTrials().toString());
 
         // SET UP HISTOGRAM HERE
-        setUpFirebase();
+//        setUpFirebase();
         GraphView histogram = root.findViewById(R.id.histogram);
+        histogram.getGridLabelRenderer().setHorizontalAxisTitle("Trial Result");
+        histogram.getGridLabelRenderer().setVerticalAxisTitle("Number of Trials");
+
         BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(getDataPoint());
         histogram.addSeries(series);
 
@@ -117,66 +129,76 @@ public class OverviewFragment extends Fragment {
     }
 
 
-    public void histogram() {
-
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private DataPoint[] getDataPoint() {
-        CountBasedExperiment exp = (CountBasedExperiment) experiment;
-        ArrayList<Integer> countList = exp.obtainHistogram();
-        DataPoint[] series = new DataPoint[] {
-                new DataPoint(countList.get(0), 1),
-                new DataPoint(countList.get(1), 5),
-                new DataPoint(countList.get(2), 3)
-//                new DataPoint(3, 2),
-//                new DataPoint(4, 6)
-        };
+//        ArrayList<Trial> trialList = experiment.getTrials() ;
+//        CountBasedTrial x = (CountBasedTrial) trialList.get(0);
+
+        ArrayList<Integer> countList =  getDataHistogram(trialListController.getExperiment().getTrials());
+//        ArrayList<Integer> countList =  getDataHistogram(experiment.getTrials());
+        Map<Integer, Integer> hm = countFrequencies(countList);
+        DataPoint[] series = new DataPoint[getSize(hm)];
+        int i = 0;
+        for (Map.Entry<Integer, Integer> val : hm.entrySet()) {
+            Toast.makeText(getContext(), String.valueOf(val.getKey()), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), String.valueOf(val.getValue()), Toast.LENGTH_SHORT).show();
+            series[i] = new DataPoint(val.getKey(), val.getValue());
+            i = i +1;
+        }
+//        DataPoint[] series = new DataPoint[] {
+//                new DataPoint(countList.get(0) , 1),
+//                new DataPoint(2 , 4),
+//                new DataPoint(countList.get(1), 10),
+//                new DataPoint(countList.get(2), 3)
+////                new DataPoint(3, 2),
+////                new DataPoint(4, 6)
+//        };
         return series;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public  ArrayList<Integer> getDataHistogram(ArrayList<Trial> trialList) {
+        ArrayList<Integer> countList = new ArrayList<Integer>();
 
-    public void setUpFirebase() {
-        //set up firebase, realtime updates
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final CollectionReference ownedCol = db.collection("Experiments/"+experiment.getDescription()+"/Trials");
-        //final CollectionReference ownedCol = db.collection("Users/"+user.getId()+"/OwnedExperiments/"+experiment.getDescription()+"/Trials");
-        ownedCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                // clear the old list
-                experiment.getTrials().clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+        for (int i = 0; i < trialList.size(); i++) {
+            CountBasedTrial trial = (CountBasedTrial) trialList.get(i);
+            countList.add( trial.getCount());
+//            if (experiment.getTrialType().equals("count")) {
+//                CountBasedTrial trial = (CountBasedTrial) trialList.get(i);
+//                countList.add( trial.getCount());
+//            } else if (experiment.getTrialType().equals("binomial")) {
+//                BinomialTrial trial = (BinomialTrial) trialList.get(i);
+//                countList.add( trial.getOutcome());
+//            } else if (experiment.getTrialType().equals("nonNegativeCount")) {
+//
+//            }
+//            else {
+//
+//            }
 
-                    if (experiment.getTrialType().equals("count")) {
-                        Log.d(TAG, String.valueOf(doc.getData().get("description")));
-                        Long count = (Long) doc.getData().get("count");
-                        String id = (String) doc.getData().get("userAddedTrial");
-                        User addedUser = new User(id);
-                        experiment.addTrial( new CountBasedTrial(addedUser, new Date(), count.intValue()));
-                    }
-                    else if (experiment.getTrialType().equals("binomial")){
-                        Log.d(TAG, String.valueOf(doc.getData().get("description")));
-                        Boolean success= (Boolean) doc.getData().get("binomial");
-                        String id = (String) doc.getData().get("userAddedTrial");
-                        User addedUser = new User(id);
-                        experiment.addTrial(new BinomialTrial(addedUser, new Date(),success));
-                    }
-                    else if (experiment.getTrialType().equals("measurement")){
-                        Log.d(TAG, String.valueOf(doc.getData().get("measurement")));
-                        Double result = (Double) doc.getData().get("measurement");
-                        String id = (String) doc.getData().get("userAddedTrial");
-                        User addedUser = new User(id);
-                        experiment.addTrial(new MeasurementTrial(addedUser, new Date(), result));
-                    }
-                    else if (experiment.getTrialType().equals("nonNegativeCount")) {
-                        Log.d(TAG, String.valueOf(doc.getData().get("nonNegativeCount")));
-                        Long count = (Long) doc.getData().get("nonNegativeCount");
-                        String id = (String) doc.getData().get("userAddedTrial");
-                        User addedUser = new User(id);
-                        experiment.addTrial(new NonNegativeCountTrial(addedUser, new Date(), count.intValue()));
-                    }
-                }
-            }});
+        }
+        countList.sort(Comparator.naturalOrder());
+        return countList;
     }
+
+    public  Map<Integer, Integer> countFrequencies(ArrayList<Integer> list)
+    {
+        Map<Integer, Integer> hm = new HashMap<Integer, Integer>();
+        for (Integer i : list) {
+            // Get the current occurennce into j
+            Integer j = hm.get(i);
+            hm.put(i, (j == null) ? 1 : j + 1);
+        }
+        return hm;
+    }
+    public int getSize( Map<Integer, Integer> hm) {
+        int i =0;
+        for (Map.Entry<Integer, Integer> val : hm.entrySet()) {
+            i += 1;
+        }
+        return i;
+    }
+
+
 }

@@ -79,7 +79,6 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         // Get the experiment that started the activity
         Intent intent = getIntent();
         experiment = (Experiment) intent.getSerializableExtra("Experiment");
-
         currentUser = (User) intent.getSerializableExtra("User");
     }
 

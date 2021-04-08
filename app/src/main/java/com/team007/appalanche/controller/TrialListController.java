@@ -12,6 +12,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.team007.appalanche.experiment.CountBasedExperiment;
 import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.question.Question;
 import com.team007.appalanche.trial.BinomialTrial;
