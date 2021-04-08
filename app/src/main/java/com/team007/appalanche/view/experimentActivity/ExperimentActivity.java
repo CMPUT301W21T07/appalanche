@@ -71,6 +71,7 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         Intent intent = getIntent();
         experiment = (Experiment) intent.getSerializableExtra("Experiment");
 
+        // Get the user who is using the app
         currentUser = (User) intent.getSerializableExtra("User");
         experimentController = new ExperimentController(currentUser);
     }
@@ -94,7 +95,7 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         int itemID = item.getItemId();
         String expType = null;
         switch (itemID) {
-            // Selecting "Generate CR Code" menu item
+            // Selecting "Generate QR Code" menu item
             case R.id.generate_qr_code:
                 if (experiment != null) expType = experiment.getTrialType();
                 if (expType == null) expType = "binomial";
@@ -106,7 +107,7 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
                 return true;
             // Selecting "Subscribe" menu item
             case R.id.subscribe:
-                experimentController.addSubExperiment(experiment);
+                subscribeToExperiment();
                 //TODO: Either remove the subscribe button or grey it out for that specific experiment, after the user subscribed to it
                 return true;
             // Selecting "Unpublish experiment" menu item
@@ -130,6 +131,16 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
 
         // Notify the owner that the experiment was ended
         Toast.makeText(this, "The experiment has been closed.", Toast.LENGTH_LONG).show();
+    }
+
+    /** This method subscribes the user to the selected experiment.
+     */
+    private void subscribeToExperiment() {
+        // Subscribe to the experiment using the experiment controller
+        experimentController.addSubExperiment(experiment);
+
+        // Notify the owner that the subscription took place
+        Toast.makeText(this, "Subscribed", Toast.LENGTH_LONG).show();
     }
 
     /** This method starts the QR Code Fragment, passing the experiment type as a string
