@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,15 +26,19 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.R;
 import com.team007.appalanche.controller.ExperimentController;
 import com.team007.appalanche.custom.CustomList;
+import com.team007.appalanche.experiment.Experiment;
+import com.team007.appalanche.trial.BinomialTrial;
+import com.team007.appalanche.trial.CountBasedTrial;
+import com.team007.appalanche.trial.MeasurementTrial;
+import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.experimentActivity.ExperimentActivity;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static android.content.ContentValues.TAG;
 
@@ -72,7 +75,6 @@ public class SubscribedFragment extends Fragment {
 
         experimentController = new ExperimentController(currentUser);
         setUpFirebase();
-
     }
 
     @Override
@@ -97,7 +99,12 @@ public class SubscribedFragment extends Fragment {
                 getIgnoredList(experiment, new SetIgnoredList() {
                     @Override
                     public void setIgnore(Experiment experiment) {
-                        openExperimentActivity(experiment);
+                        getTrialList(experiment, new OwnedFragment.SetTrialList() {
+                            @Override
+                            public void setTrial(Experiment experiment) {
+                                openExperimentActivity(experiment);
+                            }
+                        });
                     }
                 });
             }
@@ -136,6 +143,55 @@ public class SubscribedFragment extends Fragment {
                 ignoredList.setIgnore(experiment);
             }
         });
+    }
+
+
+
+    interface SetTrialList {
+        void setTrial(Experiment experiment);
+    }
+    public void getTrialList(Experiment experiment, OwnedFragment.SetTrialList trialList) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final CollectionReference ownedCol = db.collection("Experiments/"+experiment.getDescription()+"/Trials");
+        ownedCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                // clear the old list
+                experiment.getTrials().clear();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+
+                    if (experiment.getTrialType().equals("count")) {
+                        Log.d(TAG, String.valueOf(doc.getData().get("description")));
+                        //Long count = (Long) doc.getData().get("count");
+                        String id = (String) doc.getData().get("userAddedTrial");
+                        User addedUser = new User(id);
+                        experiment.addTrial( new CountBasedTrial(addedUser, new Date()));
+                    }
+                    else if (experiment.getTrialType().equals("binomial")){
+                        Log.d(TAG, String.valueOf(doc.getData().get("description")));
+                        Boolean success= (Boolean) doc.getData().get("binomial");
+                        String id = (String) doc.getData().get("userAddedTrial");
+                        User addedUser = new User(id);
+                        experiment.addTrial(new BinomialTrial(addedUser, new Date(),success));
+                    }
+                    else if (experiment.getTrialType().equals("measurement")){
+                        Log.d(TAG, String.valueOf(doc.getData().get("measurement")));
+                        Double result = (Double) doc.getData().get("measurement");
+                        String id = (String) doc.getData().get("userAddedTrial");
+                        User addedUser = new User(id);
+                        experiment.addTrial(new MeasurementTrial(addedUser, new Date(), result));
+                    }
+                    else if (experiment.getTrialType().equals("nonNegativeCount")) {
+                        Log.d(TAG, String.valueOf(doc.getData().get("nonNegativeCount")));
+                        Long count = (Long) doc.getData().get("nonNegativeCount");
+                        String id = (String) doc.getData().get("userAddedTrial");
+                        User addedUser = new User(id);
+                        experiment.addTrial(new NonNegativeCountTrial(addedUser, new Date(), count.intValue()));
+                    }
+
+                }
+                trialList.setTrial(experiment);
+            }});
     }
 
     public void setUpFirebase() {
@@ -183,12 +239,5 @@ public class SubscribedFragment extends Fragment {
                 }
                 expAdapter.notifyDataSetChanged();
             }});
-
-        // TEST
-        // experimentController.addExperiment(new Experiment("How many jelly mans can a jelly bean fit in its mouth", "Edmonton", "NonNegative", 4, false, true, "123"));
-        // experimentController.addExperiment(new Experiment(userKey, "Edmonton", "NonNegative", 4, false, true, "123"));
-        //experimentController.addExperiment(new Experiment("How many jelly mans can a jelly bean fit in its mouth", "Edmonton", "NonNegative", 4, false, true, "123"), index);
-        experimentController.addExperiment(new Experiment("1234", "Edmonton", "NonNegative", 4, false, true, "123"));
-        experimentController.addSubExperiment(new Experiment("1234", "Edmonton", "NonNegative", 4, false, true, "123"));
     }
 }
