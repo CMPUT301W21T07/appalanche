@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
 
 import androidx.annotation.NonNull;
@@ -22,7 +24,6 @@ import com.team007.appalanche.user.User;
 
 import java.util.Date;
 
-
 public class AddCountTrialFragment extends DialogFragment  {
     private OnFragmentInteractionListener listener;
 
@@ -31,23 +32,53 @@ public class AddCountTrialFragment extends DialogFragment  {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.count_trial_fragment,null);
 
+        assert getArguments() != null;
+        User user = (User) getArguments().getSerializable("user");
+        boolean geoRequired = (boolean) getArguments().getBoolean("geoRequired");
 
-        EditText result = view.findViewById(R.id.addCountResult);
+        // Only show geolocation items if it's required
+        LinearLayout geo = view.findViewById(R.id.geolocation);
+        if (!geoRequired) {
+            geo.setVisibility(View.GONE);
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
-                .setTitle("ADD COUNT TO TRIAL")
+                .setTitle("ADD COUNT RESULT")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Post", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
-                        User user = (User) getArguments().getSerializable("user");
-                        CountBasedTrial newCountBasedTrial = new CountBasedTrial(user, new Date(), Integer.valueOf(result.getText().toString()));
+                        CountBasedTrial newCountBasedTrial;
+                        if (geoRequired) {
+                            // Get latitude and longitude
+                            double latitude;
+                            try {
+                                latitude =
+                                        Double.parseDouble(view.findViewById(R.id.latitude).toString());
+                            } catch (NumberFormatException e) {
+                                latitude = 0;
+                            }
+
+                            double longitude;
+                            try {
+                                longitude =
+                                        Double.parseDouble(view.findViewById(R.id.latitude).toString());
+                            } catch (NumberFormatException e) {
+                                longitude = 0;
+                            }
+
+                            Location location = new Location(latitude, longitude);
+
+                            newCountBasedTrial = new CountBasedTrial(user, location, new Date());
+                        } else {
+                            newCountBasedTrial = new CountBasedTrial(user, new Date());
+                        }
+
                         listener.addTrial(newCountBasedTrial);
                     }
                 })
-
                 .create();
     }
 
@@ -65,9 +96,11 @@ public class AddCountTrialFragment extends DialogFragment  {
                     + " must implement OnFragmentInteractionListener");
         }
     }
-    public static AddCountTrialFragment newInstance(User user) {
+
+    public static AddCountTrialFragment newInstance(User user, boolean geoRequired) {
         Bundle args = new Bundle();
         args.putSerializable("user", user);
+        args.putSerializable("geoRequired", geoRequired);
         AddCountTrialFragment fragment = new AddCountTrialFragment();
         fragment.setArguments(args);
         return fragment;

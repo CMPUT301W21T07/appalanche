@@ -14,7 +14,7 @@ import java.util.Date;
 
 public abstract class Trial implements Serializable {
     private Date date;
-    private Location location = new Location();
+    private Location location;
     private User userAddedTrial;
 
     /* constructor function for the trial class*/
@@ -34,7 +34,7 @@ public abstract class Trial implements Serializable {
         return date;
     }
 
-    public Location getLocationList() {
+    public Location getLocation() {
         return location;
     }
 
@@ -46,7 +46,7 @@ public abstract class Trial implements Serializable {
         this.date = date;
     }
 
-    public void setLocationList(Location location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 

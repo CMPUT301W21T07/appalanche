@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.team007.appalanche">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <permission
         android:name="com.example.permission.MAPS_RECEIVE"
         android:protectionLevel="signature"/>
@@ -35,6 +38,8 @@
                 android:value=".view.ui.mainActivity.MainActivity" />
         </activity>
         <activity android:name=".view.ReplyActivity" />
+        <activity android:name=".view.experimentActivity.MapActivity"
+            android:parentActivityName=".view.experimentActivity.ExperimentActivity"/>
         <activity android:name=".view.QRCodeActivity" />
         <activity android:name=".view.ui.mainActivity.MainActivity">
             <intent-filter>

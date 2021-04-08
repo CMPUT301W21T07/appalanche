@@ -200,10 +200,14 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
     }
 
     @Override
-    public void addTrial(MeasurementTrial trial) { trialListController.addMeasurementTrialToDb(trial); }
+    public void addTrial(MeasurementTrial trial) {
+        trialListController.addMeasurementTrialToDb(trial);
+    }
 
     @Override
-    public void addTrial(NonNegativeCountTrial trial) { trialListController.addNonNegTrialToDb(trial); }
+    public void addTrial(NonNegativeCountTrial trial) {
+        trialListController.addNonNegTrialToDb(trial);
+    }
 
     // IGNORE A USER HERE
     @Override

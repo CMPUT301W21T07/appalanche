@@ -16,12 +16,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentFactory;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.CollectionReference;
@@ -61,7 +63,7 @@ import static android.content.ContentValues.TAG;
 /**
  * A fragment containing the view rendered for the trials experiment tab.
  */
-public class TrialsFragment extends Fragment implements OnMapReadyCallback {
+public class TrialsFragment extends Fragment  {
     private static final String ARG_SECTION_NUMBER = "section_number";
     private ListView trialListView;
     private ArrayAdapter<Trial> trialAdapter;
@@ -70,8 +72,6 @@ public class TrialsFragment extends Fragment implements OnMapReadyCallback {
     private User user;
     public static TrialListController trialListController;
     FirebaseFirestore db;
-    private GoogleMap map;
-    private MapView mapView;
 
     public static TrialsFragment newInstance(int index) {
         TrialsFragment fragment = new TrialsFragment();
@@ -95,6 +95,7 @@ public class TrialsFragment extends Fragment implements OnMapReadyCallback {
         db = FirebaseFirestore.getInstance();
         final CollectionReference ownedCol =
                 db.collection("Experiments/" + experiment.getDescription() + "/Trials");
+
         ownedCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -106,14 +107,15 @@ public class TrialsFragment extends Fragment implements OnMapReadyCallback {
                         Long count = (Long) doc.getData().get("count");
                         String id = (String) doc.getData().get("userAddedTrial");
                         User addedUser = new User(id);
-                        trialListController.addTrial( new CountBasedTrial(addedUser, new Date(), count.intValue()));
+                        trialListController.addTrial( new CountBasedTrial(addedUser, new Date()));
                     }
                     else if (experiment.getTrialType().equals("binomial")){
                         Log.d(TAG, String.valueOf(doc.getData().get("description")));
                         Boolean success= (Boolean) doc.getData().get("binomial");
                         String id = (String) doc.getData().get("userAddedTrial");
                         User addedUser = new User(id);
-                        trialListController.addTrial(new BinomialTrial(addedUser, new Date(),success));
+                        trialListController.addTrial(new BinomialTrial(addedUser, new Date(),
+                                success));
                     }
                     else if (experiment.getTrialType().equals("measurement")){
                         Log.d(TAG, String.valueOf(doc.getData().get("measurement")));
@@ -139,23 +141,29 @@ public class TrialsFragment extends Fragment implements OnMapReadyCallback {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
-//        container.removeAllViews();
-
         View root = inflater.inflate(R.layout.fragment_experiment_trials, container, false);
+
+        ArrayList<Trial> trials = experiment.getTrials();
+        Toast.makeText(getActivity(), "Trials size = " + String.valueOf(trials.size()), Toast.LENGTH_LONG).show();
 
         // Set description text
         TextView description = root.findViewById(R.id.description);
         description.setText(experiment.getDescription());
 
-        // Map logic
-        mapView = (MapView) root.findViewById(R.id.map);
+        // Map Logic
+        Button viewMapButton = root.findViewById(R.id.viewMapButton);
+
         if (experiment.getLocationRequired()) {
-            // Create the google map
-            mapView.onCreate(savedInstanceState);
-            mapView.getMapAsync(this);
+            // Adding an onClick listener if the current trial is still open
+            viewMapButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openViewMapActivity();
+                }
+            });
         } else {
-            // Removing the map if geolocation is not required
-            mapView.setVisibility(View.GONE);
+            // Removing the add trial button if the current trial is ended
+            viewMapButton.setVisibility(View.GONE);
         }
 
         // Trial logic
@@ -190,6 +198,7 @@ public class TrialsFragment extends Fragment implements OnMapReadyCallback {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 long viewId = view.getId();
                 Trial trial = trialDataList.get(position);
+
                 // View a user profile
                 if (viewId == R.id.userID) {
                     viewAProfile(trial);
@@ -208,6 +217,12 @@ public class TrialsFragment extends Fragment implements OnMapReadyCallback {
         return root;
     }
 
+    private void openViewMapActivity() {
+        Intent intent = new Intent(getActivity(), MapActivity.class);
+        intent.putExtra("Trials", trialDataList);
+        startActivity(intent);
+    }
+
     public void openAddTrialActivity() {
         if (!experiment.getOpen()) {
             // Throw an exception if we're trying to add a trial to an ended experiment
@@ -216,20 +231,20 @@ public class TrialsFragment extends Fragment implements OnMapReadyCallback {
 
         switch(experiment.getTrialType()) {
             case "binomial":
-                new AddBinomialTrialFragment().newInstance(user).show(getFragmentManager(), "Add_Trial");
+                new AddBinomialTrialFragment().newInstance(user, experiment.getLocationRequired()).show(getFragmentManager(),
+                        "Add_Trial");
                 break;
             case "count":
-                new AddCountTrialFragment().newInstance(user).show(getFragmentManager(), "Add_Trial");
+                new AddCountTrialFragment().newInstance(user, experiment.getLocationRequired()).show(getFragmentManager(), "Add_Trial");
                 break;
             case "measurement":
-                new AddMeasurementTrialFragment().newInstance(user).show(getFragmentManager(), "Add_trial");
+                new AddMeasurementTrialFragment().newInstance(user, experiment.getLocationRequired()).show(getFragmentManager(), "Add_trial");
                 break;
             case "nonNegativeCount":
-                new AddNonNegTrialFragment().newInstance(user).show(getFragmentManager(), "Add_Trial");
+                new AddNonNegTrialFragment().newInstance(user, experiment.getLocationRequired()).show(getFragmentManager(), "Add_Trial");
             default:
                 break;
         }
-        // TODO: hook fragment result to update experiment and create trial
     }
 
     public void viewAProfile(Trial trial) {
@@ -249,18 +264,6 @@ public class TrialsFragment extends Fragment implements OnMapReadyCallback {
             }
         }
         return inIgnoredList;
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        map.addMarker(new MarkerOptions()
-                .position(sydney)
-                .title("Marker in Sydney"));
-        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
 }

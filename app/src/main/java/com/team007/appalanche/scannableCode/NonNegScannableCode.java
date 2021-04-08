@@ -50,8 +50,7 @@ public class NonNegScannableCode extends ScannableCode {
      */
     public NonNegativeCountTrial scan(User experimenter, Location location) {
         Date date = new Date();
-        NonNegativeCountTrial trial = new NonNegativeCountTrial(experimenter, location, date);
-        trial.setCount(result);
+        NonNegativeCountTrial trial = new NonNegativeCountTrial(experimenter, location, date, result);
         return trial;
     }
 
@@ -62,8 +61,7 @@ public class NonNegScannableCode extends ScannableCode {
      */
     public NonNegativeCountTrial scan(User experimenter) {
         Date date = new Date();
-        NonNegativeCountTrial trial = new NonNegativeCountTrial(experimenter, date);
-        trial.setCount(result);
+        NonNegativeCountTrial trial = new NonNegativeCountTrial(experimenter, date, result);
         return trial;
     }
 
