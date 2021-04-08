@@ -1,9 +1,13 @@
 package com.team007.appalanche;
 
 import com.team007.appalanche.experiment.*;
+import com.team007.appalanche.trial.BinomialTrial;
 import com.team007.appalanche.user.*;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -13,7 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ExperimentTest {
     ContactInfo contact = new ContactInfo(123, "link");
     Profile profile = new Profile("user", contact);
-    Experiment exp = new Experiment("description", "Alberta", "binomial", 1, false, true, "testId");
+    Experiment exp = new Experiment("description", "Alberta", "binomial", 1, false, true,
+            "testId");
 
     @Test
     void testGetDescription() {
@@ -69,17 +74,28 @@ public class ExperimentTest {
 
     @Test
     void testGetStatus() {
-        assertTrue(exp.getStatus());
+        assertTrue(exp.getOpen());
     }
 
     @Test
     void testSetStatus() {
-        exp.setStatus(false);
-        assertFalse(exp.getStatus());
+        exp.setOpen(false);
+        assertFalse(exp.getOpen());
     }
 
     @Test
     void testGetOwnerId() {
         assertEquals(exp.getExperimentOwnerID(), "testId");
+    }
+
+    @Test
+    void testEndExperiment() {
+        // The experiment should now allow new trials to be added
+        Experiment experiment = new Experiment("description", "Alberta", "binomial", 1, false, true,
+            "testId");
+        experiment.setOpen(false);
+        User user = new User();
+        BinomialTrial trial = new BinomialTrial(user, new Date());
+        assertThrows(RuntimeException.class, () -> experiment.addTrial(trial));
     }
 }

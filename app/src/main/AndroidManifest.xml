@@ -13,13 +13,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Appalanche">
+        <activity android:name=".view.profile.ProfileActivity"
+            android:parentActivityName=".view.ui.mainActivity.MainActivity"
+            ></activity>
         <activity android:name=".view.searching.SearchActivity"></activity>
         <activity
-            android:name=".view.profile.ProfileActivity"
-            android:parentActivityName=".view.ui.mainActivity.MainActivity" />
-        <activity
             android:name=".view.profile.OwnerProfileActivity"
-            android:parentActivityName=".view.ui.mainActivity.MainActivity" />
+            android:parentActivityName=".view.ui.mainActivity.MainActivity"
+             />
         <activity
             android:name=".view.experimentActivity.ExperimentActivity"
             android:parentActivityName=".view.ui.mainActivity.MainActivity">

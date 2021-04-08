@@ -153,7 +153,13 @@ public class SubscribedFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Experiment experiment = ExperimentDataList.get(position);
-                openExperimentActivity(experiment);
+                getIgnoredList(experiment, new SetIgnoredList() {
+                    @Override
+                    public void setIgnore(Experiment experiment) {
+                        //Toast.makeText(getContext(), String.valueOf(experiment.getIgnoredUsers().size()), Toast.LENGTH_SHORT).show();
+                        openExperimentActivity(experiment);
+                    }
+                });
             }
         });
 
@@ -171,4 +177,25 @@ public class SubscribedFragment extends Fragment {
         startActivityForResult(intent,1);
     }
 
+
+    interface SetIgnoredList {
+        void setIgnore(Experiment experiment);
+    }
+
+    public void getIgnoredList(Experiment experiment, SetIgnoredList ignoredList) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final CollectionReference collection = db.collection("Users/" + experiment.getExperimentOwnerID() +"/OwnedExperiments/"+ experiment.getDescription()+"/IgnoredExperimenters");
+        collection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                experiment.getIgnoredUsers().clear();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                    Log.d(TAG, String.valueOf(doc.getData().get("add ignored experimenters")));
+                    String ignoredUser = doc.getId();
+                    experiment.addIgnoredUser(new User(ignoredUser));
+                }
+                ignoredList.setIgnore(experiment);
+            }
+        });
+    }
 }
