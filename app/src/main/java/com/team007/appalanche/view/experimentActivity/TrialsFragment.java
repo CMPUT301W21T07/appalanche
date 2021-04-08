@@ -84,7 +84,6 @@ public class TrialsFragment extends Fragment {
         // Create trialController here
         trialListController = new TrialListController(experiment);
         setUpFirebase();
-
     }
 
     @Override
@@ -98,7 +97,6 @@ public class TrialsFragment extends Fragment {
 
         Button addTrialButton = root.findViewById(R.id.addTrialButton);
         boolean inIgnoredList = checkIgnoredExperimenters();
-
         if (experiment.getOpen()) {
             // Adding an onClick listener if the current trial is still open
             addTrialButton.setOnClickListener(new View.OnClickListener() {

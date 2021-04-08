@@ -10,6 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.BarGraphSeries;
+import com.jjoe64.graphview.series.DataPoint;
 import com.team007.appalanche.R;
 import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.user.User;
@@ -69,6 +72,12 @@ public class OverviewFragment extends Fragment {
         TextView minTrialNum = root.findViewById(R.id.minTrials);
         minTrialNum.setText("Minimum number of trials: " + experiment.getMinNumTrials().toString());
 
+        // SET UP HISTOGRAM HERE
+        GraphView histogram = root.findViewById(R.id.histogram);
+        BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(getDataPoint());
+        histogram.addSeries(series);
+
+
         return root;
     }
 
@@ -83,5 +92,21 @@ public class OverviewFragment extends Fragment {
                 startActivity(intent);
             }
         });
+    }
+
+
+    public void histogram() {
+
+    }
+
+    private DataPoint[] getDataPoint() {
+        DataPoint[] series = new DataPoint[] {
+                new DataPoint(0, 1),
+                new DataPoint(1, 5),
+                new DataPoint(2, 3),
+                new DataPoint(3, 2),
+                new DataPoint(4, 6)
+        };
+        return series;
     }
 }

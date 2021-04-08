@@ -1,8 +1,10 @@
 package com.team007.appalanche.experiment;
 
 import com.team007.appalanche.scannableCode.CountBasedScannableCode;
+import com.team007.appalanche.trial.Trial;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * This class that extends Experiment handles the creation of count-based trials.
@@ -40,6 +42,9 @@ public class CountBasedExperiment extends Experiment implements ExperimentInterf
     @Override
     public void obtainHistogram() {
         // TODO: implement
+        // Obtain the list of trials
+        ArrayList<Trial> trialList = getTrials();
+        
     }
 
     /**
