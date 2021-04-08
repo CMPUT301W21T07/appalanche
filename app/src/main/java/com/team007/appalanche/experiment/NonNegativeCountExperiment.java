@@ -3,6 +3,7 @@ package com.team007.appalanche.experiment;
 import com.team007.appalanche.scannableCode.NonNegScannableCode;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * This class that extends Experiment handles the creation of non-negative count trials.
@@ -37,10 +38,12 @@ public class NonNegativeCountExperiment extends Experiment implements Experiment
 
     /**
      * function to obtain experiment histogram
+     * @return
      */
     @Override
-    public void obtainHistogram() {
+    public ArrayList<Integer> obtainHistogram() {
         // TODO: implement
+        return null;
     }
 
     /**

@@ -1,11 +1,17 @@
 package com.team007.appalanche.experiment;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.team007.appalanche.scannableCode.CountBasedScannableCode;
 import com.team007.appalanche.trial.CountBasedTrial;
 import com.team007.appalanche.trial.Trial;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * This class that extends Experiment handles the creation of count-based trials.
@@ -40,18 +46,19 @@ public class CountBasedExperiment extends Experiment implements ExperimentInterf
     /**
      * function to obtain experiment histogram
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
-    public void obtainHistogram() {
+    public ArrayList<Integer> obtainHistogram() {
         // TODO: implement
         // Obtain the list of trials
         ArrayList<Trial> trialList = getTrials();
+        ArrayList<Integer> countList = new ArrayList<Integer>();
         for (int i = 0; i < trialList.size(); i++) {
             CountBasedTrial trial = (CountBasedTrial) trialList.get(i);
-            trial.getCount();
-
+            countList.add( trial.getCount());
         }
-
-        
+        countList.sort(Comparator.naturalOrder());
+        return countList;
     }
 
     /**

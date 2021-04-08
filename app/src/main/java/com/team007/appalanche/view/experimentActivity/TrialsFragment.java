@@ -199,6 +199,7 @@ public class TrialsFragment extends Fragment {
                 // clear the old list
                 trialListController.clearTrialList();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+
                     if (experiment.getTrialType().equals("count")) {
                         Log.d(TAG, String.valueOf(doc.getData().get("description")));
                         Long count = (Long) doc.getData().get("count");
