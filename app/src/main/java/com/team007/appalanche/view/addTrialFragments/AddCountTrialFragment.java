@@ -39,8 +39,6 @@ public class AddCountTrialFragment extends DialogFragment  {
             geo.setVisibility(View.GONE);
         }
 
-        EditText lat = view.findViewById(R.id.latitude);
-        EditText longi = view.findViewById(R.id.longitude);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
@@ -54,6 +52,7 @@ public class AddCountTrialFragment extends DialogFragment  {
                         if (geoRequired) {
                             // Get latitude and longitude
                             double latitude;
+                            EditText lat = view.findViewById(R.id.latitude);
                             try {
                                 latitude =
                                         Double.parseDouble(lat.getText().toString());
@@ -62,9 +61,10 @@ public class AddCountTrialFragment extends DialogFragment  {
                             }
 
                             double longitude;
+                            EditText lon = view.findViewById(R.id.latitude);
                             try {
                                 longitude =
-                                        Double.parseDouble(longi.getText().toString());
+                                        Double.parseDouble(lon.getText().toString());
                             } catch (NumberFormatException e) {
                                 longitude = 0;
                             }
