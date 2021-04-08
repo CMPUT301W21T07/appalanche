@@ -7,8 +7,8 @@
         android:title="End the experiment"
         android:id="@+id/end_button"/>
     <item
-        android:title="Close the experiment"
-        android:id="@+id/close_button"/>
+        android:title="Unpublish experiment"
+        android:id="@+id/unpublish_button"/>
     <item
         android:title="Generate QR Code"
         android:id="@+id/generate_qr_code"/>

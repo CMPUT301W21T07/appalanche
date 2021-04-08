@@ -49,8 +49,7 @@ public class BinomialScannableCode extends ScannableCode {
      */
     public BinomialTrial scan(User experimenter, Location location) {
         Date date = new Date();
-        BinomialTrial trial = new BinomialTrial(experimenter, location, date);
-        trial.setOutcome(result);
+        BinomialTrial trial = new BinomialTrial(experimenter, location, date, result);
         return trial;
     }
 
@@ -61,8 +60,7 @@ public class BinomialScannableCode extends ScannableCode {
      */
     public BinomialTrial scan(User experimenter) {
         Date date = new Date();
-        BinomialTrial trial = new BinomialTrial(experimenter, date);
-        trial.setOutcome(result);
+        BinomialTrial trial = new BinomialTrial(experimenter, date, result);
         return trial;
     }
 

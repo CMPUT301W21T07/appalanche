@@ -13,13 +13,11 @@ import java.util.Date;
 
 public class MeasurementTrial extends Trial implements Serializable {
     private double value;
-    /*Constructor for the measurement trial class*/
-    public MeasurementTrial(User userAddedTrial, Location location, Date date) {
-        super(userAddedTrial, location, date);
-    }
 
-    public MeasurementTrial(User userAddedTrial, Date date) {
-        super(userAddedTrial, date);
+    // Constructor for the measurement trial class
+    public MeasurementTrial(User userAddedTrial, Location location, Date date, double value) {
+        super(userAddedTrial, location, date);
+        this.value = value;
     }
 
     public MeasurementTrial(User userAddedTrial, Date date, double value) {
@@ -27,10 +25,11 @@ public class MeasurementTrial extends Trial implements Serializable {
         this.value = value;
     }
 
-    /*getter ans setter for the class*/
+    // Getter and setter for value
     public void setValue(double value){
         this.value=value;
     }
+
     public double getValue (){
         return value;
     }

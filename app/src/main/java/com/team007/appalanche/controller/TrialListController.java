@@ -39,7 +39,6 @@ public class TrialListController {
         return experiment;
     }
 
-
     public void clearTrialList() {
         experiment.getTrials().clear();
     }
@@ -56,7 +55,6 @@ public class TrialListController {
         final CollectionReference collectionReference = db.collection("Experiments/" + experiment.getDescription()+"/Trials");
         // We use a HashMap to store a key-value pair in firestore.
         HashMap<String, Object> data = new HashMap<>();
-        data.put("count", ((CountBasedTrial) newTrial).getCount());
         data.put("userAddedTrial", newTrial.getUserAddedTrial().getId());
         collectionReference
                 .document()

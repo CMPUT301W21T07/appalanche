@@ -50,8 +50,7 @@ public class MeasurementScannableCode extends ScannableCode {
      */
     public MeasurementTrial scan(User experimenter, Location location) {
         Date date = new Date();
-        MeasurementTrial trial = new MeasurementTrial(experimenter, location, date);
-        trial.setValue(result);
+        MeasurementTrial trial = new MeasurementTrial(experimenter, location, date, result);
         return trial;
     }
 
@@ -62,8 +61,7 @@ public class MeasurementScannableCode extends ScannableCode {
      */
     public MeasurementTrial scan(User experimenter) {
         Date date = new Date();
-        MeasurementTrial trial = new MeasurementTrial(experimenter, date);
-        trial.setValue(result);
+        MeasurementTrial trial = new MeasurementTrial(experimenter, date, result);
         return trial;
     }
 

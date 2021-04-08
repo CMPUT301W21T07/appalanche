@@ -43,7 +43,7 @@ public class TrialCustomList extends ArrayAdapter<Trial> {
             //FIX THIS
             CountBasedTrial trial = (CountBasedTrial) trials.get(position);
             // Display trial List
-            trialCount.setText(String.valueOf(trial.getCount()));
+//            trialCount.setText(String.valueOf(trial.getCount()));
             userAddedTrial.setText(trial.getUserAddedTrial().getId());
 
         } catch (Exception e0){

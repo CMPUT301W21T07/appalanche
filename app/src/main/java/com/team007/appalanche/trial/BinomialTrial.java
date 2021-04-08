@@ -13,13 +13,10 @@ import java.util.Date;
 public class BinomialTrial extends com.team007.appalanche.trial.Trial implements Serializable {
     private boolean outcome;
 
-    /*Constructor function for the binomial trial class*/
-    public BinomialTrial(User userAddedTrial, Location location, Date date) {
+    // Constructor function for the binomial trial class
+    public BinomialTrial(User userAddedTrial, Location location, Date date, boolean outcome) {
         super(userAddedTrial, location, date);
-    }
-
-    public BinomialTrial(User userAddedTrial, Date date) {
-        super(userAddedTrial, date);
+        this.outcome = outcome;
     }
 
     public BinomialTrial(User userAddedTrial, Date date, boolean outcome) {
@@ -27,7 +24,7 @@ public class BinomialTrial extends com.team007.appalanche.trial.Trial implements
         this.outcome = outcome;
     }
 
-    /*GETTER AND SETTER FOR THE CLASS THAT GIVES US THE BOOLEAN OUTCOME OF THE TRIAL*/
+    // Getter and setter for outcome
     public void setOutcome(boolean outcome){
         this.outcome= outcome;
     }
@@ -35,6 +32,4 @@ public class BinomialTrial extends com.team007.appalanche.trial.Trial implements
     public boolean getOutcome(){
         return  outcome;
     }
-
-    public boolean getValue() { return outcome; }
 }

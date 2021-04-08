@@ -7,7 +7,6 @@ import java.io.Serializable;
 /**
  * This class that extends Experiment handles the creation of count-based trials.
  */
-
 public class CountBasedExperiment extends Experiment implements ExperimentInterface, Serializable {
     /**
      * Constructor function for count based experiment class

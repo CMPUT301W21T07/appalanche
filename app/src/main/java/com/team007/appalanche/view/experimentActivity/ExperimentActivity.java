@@ -1,38 +1,34 @@
 package com.team007.appalanche.view.experimentActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import com.google.android.material.tabs.TabLayout;
-
-import androidx.annotation.Nullable;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.team007.appalanche.R;
 import com.team007.appalanche.controller.ExperimentController;
 import com.team007.appalanche.experiment.Experiment;
-import com.team007.appalanche.R;
-
-import com.team007.appalanche.trial.BinomialTrial;
 import com.team007.appalanche.question.Question;
+import com.team007.appalanche.trial.BinomialTrial;
 import com.team007.appalanche.trial.CountBasedTrial;
-
 import com.team007.appalanche.trial.MeasurementTrial;
 import com.team007.appalanche.trial.NonNegativeCountTrial;
-import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.AskQuestionFragment;
 import com.team007.appalanche.view.Capture;
@@ -40,17 +36,13 @@ import com.team007.appalanche.view.QRCodeActivity;
 import com.team007.appalanche.view.RegisterBarcodeActivity;
 import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddCountTrialFragment;
-
 import com.team007.appalanche.view.addTrialFragments.AddMeasurementTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddNonNegTrialFragment;
 
-
 import java.util.HashMap;
 
-import static com.team007.appalanche.view.experimentActivity.QuestionFragment.questionAdapter;
 import static com.team007.appalanche.view.experimentActivity.QuestionFragment.questionList;
 import static com.team007.appalanche.view.experimentActivity.TrialsFragment.trialListController;
-
 
 public class ExperimentActivity extends AppCompatActivity implements AskQuestionFragment.OnFragmentInteractionListener,
         AddBinomialTrialFragment.OnFragmentInteractionListener,
@@ -59,9 +51,9 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         AddNonNegTrialFragment.OnFragmentInteractionListener,
         IgnoreAUserFragment.OnFragmentInteractionListener
 {
-
     private Experiment experiment;
     private User currentUser;
+    private ExperimentController experimentController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,12 +72,13 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         experiment = (Experiment) intent.getSerializableExtra("Experiment");
 
         currentUser = (User) intent.getSerializableExtra("User");
+        experimentController = new ExperimentController(currentUser);
     }
 
     // Creating the 3-dot options menu on an experiment page
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (experiment.getExperimentOwnerID() == currentUser.getId()) {
+        if (experiment.getExperimentOwnerID().equals(currentUser.getId())) {
             // If the current user is the owner, give them more options
             getMenuInflater().inflate(R.menu.owner_experiment_settings, menu);
         } else {
@@ -113,18 +106,15 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
                 return true;
             // Selecting "Subscribe" menu item
             case R.id.subscribe:
-//                SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-//                String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
-//                User currentUser = new User(userKey);
-                ExperimentController experimentController = new ExperimentController(currentUser);
                 experimentController.addSubExperiment(experiment);
                 //TODO: Either remove the subscribe button or grey it out for that specific experiment, after the user subscribed to it
-            // Selecting "Close experiment" menu item
-            case R.id.close_button:
+            // Selecting "Unpublish experiment" menu item
+            case R.id.unpublish_button:
                 //TODO: implement
             // Selecting "End experiment" menu item
             case R.id.end_button:
                 endExperiment();
+                return true;
             default:
                 return false;
         }
@@ -133,14 +123,8 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
     /** This method sets the status of the current experiment to closed (ends the experiment)
      */
     private void endExperiment() {
-        if (experiment.getExperimentOwnerID() != currentUser.getId()) {
-            throw new RuntimeException("Current user not authorized to end the experiment");
-        }
-
-        // Change the status in the model
-        experiment.setOpen(false);
-
-        // TODO: Connect with firebase
+        // End the experiment using the experiment controller
+        experimentController.endExperiment(experiment);
 
         // Notify the owner that the experiment was ended
         Toast.makeText(this, "The experiment has been closed.", Toast.LENGTH_LONG).show();
@@ -168,18 +152,15 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
 
     @Override
     public void askQuestion(Question question) {
-        //questionList.addQuestionToDb(question, db);
         questionList.addQuestionToDb(question);
-        //questionAdapter.notifyDataSetChanged();
     }
-
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
     }
 
     private void scanCode() {
-        // scan the code from the zxing library
+        // Scan the code from the zxing library
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setPrompt("Scan the desired barcode");
         integrator.setBeepEnabled(true);
@@ -193,15 +174,18 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode,
                 data);
-        if (scanResult.getContents() != null) {
-            String barcode = scanResult.getContents();
-            Intent intent = new Intent(this, RegisterBarcodeActivity.class);
-            intent.putExtra("Barcode", barcode);
-            intent.putExtra("Experiment", experiment);
-            startActivity(intent);
-        } else {
-            Toast.makeText(getApplicationContext(), "Oops, you didn't scan anything",
-                    Toast.LENGTH_SHORT).show();
+
+        if (scanResult != null) {
+            if (scanResult.getContents() != null) {
+                String barcode = scanResult.getContents();
+                Intent intent = new Intent(this, RegisterBarcodeActivity.class);
+                intent.putExtra("Barcode", barcode);
+                intent.putExtra("Experiment", experiment);
+                startActivity(intent);
+            } else {
+                Toast.makeText(getApplicationContext(), "Oops, you didn't scan anything",
+                        Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -216,10 +200,14 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
     }
 
     @Override
-    public void addTrial(MeasurementTrial trial) { trialListController.addMeasurementTrialToDb(trial); }
+    public void addTrial(MeasurementTrial trial) {
+        trialListController.addMeasurementTrialToDb(trial);
+    }
 
     @Override
-    public void addTrial(NonNegativeCountTrial trial) { trialListController.addNonNegTrialToDb(trial); }
+    public void addTrial(NonNegativeCountTrial trial) {
+        trialListController.addNonNegTrialToDb(trial);
+    }
 
     // IGNORE A USER HERE
     @Override
@@ -227,7 +215,6 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         experiment.addIgnoredUser(ignoredUser);
         addIgnoredUserToDB(ignoredUser);
         trialListController.deleteTrials(ignoredUser);
-
     }
 
     public void addIgnoredUserToDB(User ignoredUser) {
@@ -238,6 +225,4 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
                 .document(ignoredUser.getId())
                 .set(data);
     }
-
-
 }
