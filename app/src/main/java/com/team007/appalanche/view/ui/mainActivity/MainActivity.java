@@ -4,20 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +11,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -32,16 +30,16 @@ import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.R;
+import com.team007.appalanche.experiment.Experiment;
+import com.team007.appalanche.scannableCode.ScannableCode;
 import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
-import com.team007.appalanche.scannableCode.ScannableCode;
 import com.team007.appalanche.view.AddExperimentFragment;
 import com.team007.appalanche.view.AddUserIDFragment;
 import com.team007.appalanche.view.Capture;
-import com.team007.appalanche.view.experimentActivity.ExperimentActivity;
 import com.team007.appalanche.view.profile.OwnerProfileActivity;
+import com.team007.appalanche.view.experimentActivity.ExperimentActivity;
 import com.team007.appalanche.view.searching.SearchActivity;
 
 import java.util.HashMap;

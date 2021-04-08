@@ -56,7 +56,6 @@ public class UniqueUsernameTest {
 
     @Test
     public void testNewUser(){
-
         // Test new user
         preferencesEditor.putString("com.team007.Appalanche.user_key", null);
         preferencesEditor.commit();
@@ -66,9 +65,6 @@ public class UniqueUsernameTest {
         solo.enterText((EditText) solo.getView(R.id.textView2),"check");
         Activity current = solo.getCurrentActivity();
         //Fragment fragment = solo.getCurrentActivity().getFragmentManager().findFragmentByID(0);
-
         final AddUserIDFragment fragment = new AddUserIDFragment();
-
     }
-
 }

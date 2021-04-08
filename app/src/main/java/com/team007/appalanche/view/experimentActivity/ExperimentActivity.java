@@ -38,6 +38,7 @@ import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddCountTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddMeasurementTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddNonNegTrialFragment;
+import com.team007.appalanche.view.ui.mainActivity.MainActivity;
 
 import java.util.HashMap;
 
@@ -70,8 +71,6 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         // Get the experiment that started the activity
         Intent intent = getIntent();
         experiment = (Experiment) intent.getSerializableExtra("Experiment");
-
-        // Get the user who is using the app
         currentUser = (User) intent.getSerializableExtra("User");
         experimentController = new ExperimentController(currentUser);
     }
@@ -79,6 +78,7 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
     // Creating the 3-dot options menu on an experiment page
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         if (experiment.getExperimentOwnerID().equals(currentUser.getId())) {
             // If the current user is the owner, give them more options
             getMenuInflater().inflate(R.menu.owner_experiment_settings, menu);
@@ -94,8 +94,9 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemID = item.getItemId();
         String expType = null;
+        ExperimentController experimentController = new ExperimentController(currentUser);
         switch (itemID) {
-            // Selecting "Generate QR Code" menu item
+            // Selecting "Generate CR Code" menu item
             case R.id.generate_qr_code:
                 if (experiment != null) expType = experiment.getTrialType();
                 if (expType == null) expType = "binomial";
@@ -107,14 +108,16 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
                 return true;
             // Selecting "Subscribe" menu item
             case R.id.subscribe:
-                subscribeToExperiment();
-                //TODO: Either remove the subscribe button or grey it out for that specific experiment, after the user subscribed to it
+                experimentController.addSubExperiment(experiment);
                 return true;
+                //TODO: Either remove the subscribe button or grey it out for that specific experiment, after the user subscribed to it
             // Selecting "Unpublish experiment" menu item
             case R.id.unpublish_button:
-                //TODO: implement
+                if(currentUser.getId().matches(experiment.getExperimentOwnerID()))
+                    experimentController.unpublishExp(experiment);
+                else
+                    Toast.makeText(ExperimentActivity.this, "Sorry, you're not the owner of this experiment, you can't unpublish this experiment", Toast.LENGTH_LONG).show();
                 return true;
-            // Selecting "End experiment" menu item
             case R.id.end_button:
                 endExperiment();
                 return true;
@@ -131,16 +134,6 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
 
         // Notify the owner that the experiment was ended
         Toast.makeText(this, "The experiment has been closed.", Toast.LENGTH_LONG).show();
-    }
-
-    /** This method subscribes the user to the selected experiment.
-     */
-    private void subscribeToExperiment() {
-        // Subscribe to the experiment using the experiment controller
-        experimentController.addSubExperiment(experiment);
-
-        // Notify the owner that the subscription took place
-        Toast.makeText(this, "Subscribed", Toast.LENGTH_LONG).show();
     }
 
     /** This method starts the QR Code Fragment, passing the experiment type as a string
@@ -232,7 +225,7 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
 
     public void addIgnoredUserToDB(User ignoredUser) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = db.collection("Users/" + currentUser.getId() +"/OwnedExperiments/"+experiment.getDescription()+"/IgnoredExperimenters");
+        final CollectionReference collectionReference = db.collection("Users/" + currentUser.getId() +"/OwnedExperiments/"+ experiment.getDescription()+"/IgnoredExperimenters");
         HashMap<String, Object> data = new HashMap<>();
         collectionReference
                 .document(ignoredUser.getId())

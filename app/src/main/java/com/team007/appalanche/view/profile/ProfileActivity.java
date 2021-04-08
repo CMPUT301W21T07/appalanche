@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -26,7 +25,6 @@ import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.user.ContactInfo;
 import com.team007.appalanche.user.Profile;
 import com.team007.appalanche.user.User;
-import com.team007.appalanche.view.ui.mainActivity.MainActivity;
 
 import java.util.ArrayList;
 

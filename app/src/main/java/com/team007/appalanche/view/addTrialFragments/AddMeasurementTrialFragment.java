@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,8 +16,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.team007.appalanche.Location;
 import com.team007.appalanche.R;
-import com.team007.appalanche.trial.*;
-import com.team007.appalanche.user.Experimenter;
+import com.team007.appalanche.trial.MeasurementTrial;
 import com.team007.appalanche.user.User;
 
 import java.util.Date;
@@ -52,7 +49,16 @@ public class AddMeasurementTrialFragment extends DialogFragment  {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         MeasurementTrial newMeasurementTrial;
-                        double value = Double.parseDouble(result.toString());
+                        double value;
+                        try {
+                            value = Double.parseDouble(result.getText().toString());
+                        } catch (NumberFormatException param){
+                            try {
+                                value =  Integer.parseInt(result.getText().toString());
+                            } catch (NumberFormatException e){
+                                value = 0;
+                            }
+                        }
 
                         if (geoRequired) {
                             // Get latitude and longitude

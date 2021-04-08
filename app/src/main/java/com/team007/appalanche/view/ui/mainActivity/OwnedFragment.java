@@ -16,21 +16,26 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.team007.appalanche.Location;
 import com.team007.appalanche.R;
 import com.team007.appalanche.controller.ExperimentController;
 import com.team007.appalanche.custom.CustomList;
 import com.team007.appalanche.experiment.Experiment;
+import com.team007.appalanche.trial.BinomialTrial;
+import com.team007.appalanche.trial.CountBasedTrial;
+import com.team007.appalanche.trial.MeasurementTrial;
+import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.experimentActivity.ExperimentActivity;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import static android.content.ContentValues.TAG;
 
@@ -89,7 +94,13 @@ public class OwnedFragment extends Fragment {
                 getIgnoredList(experiment, new SetIgnoredList() {
                     @Override
                     public void setIgnore(Experiment experiment) {
-                        openExperimentActivity(experiment);
+                        //Toast.makeText(getContext(), String.valueOf(experiment.getIgnoredUsers().size()), Toast.LENGTH_SHORT).show();
+                        getTrialList(experiment, new SetTrialList() {
+                            @Override
+                            public void setTrial(Experiment experiment) {
+                                openExperimentActivity(experiment);
+                            }
+                        });
                     }
                 });
             }
@@ -165,9 +176,100 @@ public class OwnedFragment extends Fragment {
                     String ignoredUser = doc.getId();
                     experiment.addIgnoredUser(new User(ignoredUser));
                 }
-
                 ignoredList.setIgnore(experiment);
             }
         });
+    }
+
+    interface SetTrialList {
+        void setTrial(Experiment experiment);
+    }
+
+    public void getTrialList(Experiment experiment, SetTrialList trialList) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final CollectionReference ownedCol = db.collection("Experiments/"+experiment.getDescription()+"/Trials");
+        ownedCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                // clear the old list
+                experiment.getTrials().clear();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                    if (experiment.getTrialType().equals("count")) {
+                        Log.d(TAG, String.valueOf(doc.getData().get("description")));
+                        String id = (String) doc.getData().get("userAddedTrial");
+                        Date date = (Date) doc.getTimestamp("date").toDate();
+                        User addedUser = new User(id);
+
+                        if (experiment.getLocationRequired()) {
+                            Double longitude = (Double) doc.getData().get("longitude");
+                            Double latitude = (Double) doc.getData().get("latitude");
+                            Location location = new Location(latitude, longitude);
+
+                            experiment.addTrial( new CountBasedTrial(addedUser, location, date));
+                        } else {
+                            experiment.addTrial( new CountBasedTrial(addedUser, date));
+                        }
+                    }
+                    else if (experiment.getTrialType().equals("binomial")){
+                        Log.d(TAG, String.valueOf(doc.getData().get("description")));
+                        Boolean success= (Boolean) doc.getData().get("binomial");
+                        String id = (String) doc.getData().get("userAddedTrial");
+                        Date date = (Date) doc.getTimestamp("date").toDate();
+                        User addedUser = new User(id);
+
+                        if (experiment.getLocationRequired()) {
+                            Double longitude = (Double) doc.getData().get("longitude");
+                            Double latitude = (Double) doc.getData().get("latitude");
+
+                            Location location = new Location(0, 0);
+
+                            experiment.addTrial( new BinomialTrial(addedUser, location, date, success));
+                        } else {
+                            experiment.addTrial( new BinomialTrial(addedUser, date, success));
+                        }
+                    }
+                    else if (experiment.getTrialType().equals("measurement")){
+                        Log.d(TAG, String.valueOf(doc.getData().get("measurement")));
+                        Double result = (Double) doc.getData().get("measurement");
+                        String id = (String) doc.getData().get("userAddedTrial");
+                        Date date = (Date) doc.getTimestamp("date").toDate();
+                        User addedUser = new User(id);
+
+                        if (experiment.getLocationRequired()) {
+                            Double longitude = (Double) doc.getData().get("longitude");
+                            Double latitude = (Double) doc.getData().get("latitude");
+                            Location location = new Location(latitude, longitude);
+
+                            experiment.addTrial(new MeasurementTrial(addedUser, location, date,
+                                    result));
+                        } else {
+                            experiment.addTrial(new MeasurementTrial(addedUser, date,
+                                    result));
+                        }
+                    }
+                    else if (experiment.getTrialType().equals("nonNegativeCount")) {
+                        Log.d(TAG, String.valueOf(doc.getData().get("nonNegativeCount")));
+                        Long count = (Long) doc.getData().get("nonNegativeCount");
+                        String id = (String) doc.getData().get("userAddedTrial");
+                        Date date = (Date) doc.getTimestamp("date").toDate();
+                        User addedUser = new User(id);
+
+                        if (experiment.getLocationRequired()) {
+                            Double longitude = (Double) doc.getData().get("longitude");
+                            Double latitude = (Double) doc.getData().get("latitude");
+                            Location location = new Location(latitude, longitude);
+
+                            experiment.addTrial(new NonNegativeCountTrial(addedUser, location, date,
+                                    count.intValue()));
+                        } else {
+                            experiment.addTrial(new NonNegativeCountTrial(addedUser, date,
+                                    count.intValue()));
+                        }
+                    }
+
+                }
+                trialList.setTrial(experiment);
+            }});
+
     }
 }
