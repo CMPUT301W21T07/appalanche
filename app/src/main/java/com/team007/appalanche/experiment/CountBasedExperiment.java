@@ -1,6 +1,7 @@
 package com.team007.appalanche.experiment;
 
 import com.team007.appalanche.scannableCode.CountBasedScannableCode;
+import com.team007.appalanche.trial.CountBasedTrial;
 import com.team007.appalanche.trial.Trial;
 
 import java.io.Serializable;
@@ -44,6 +45,12 @@ public class CountBasedExperiment extends Experiment implements ExperimentInterf
         // TODO: implement
         // Obtain the list of trials
         ArrayList<Trial> trialList = getTrials();
+        for (int i = 0; i < trialList.size(); i++) {
+            CountBasedTrial trial = (CountBasedTrial) trialList.get(i);
+            trial.getCount();
+
+        }
+
         
     }
 
