@@ -43,7 +43,7 @@ public class CustomList extends ArrayAdapter<Experiment> {
 
         description.setText(exp.getDescription());
         userID.setText(exp.getExperimentOwnerID());
-        if (exp.getStatus()) {
+        if (exp.getOpen()) {
             status.setText("Open");
         } else {
             status.setText("Closed");
