@@ -12,29 +12,11 @@ import java.util.Date;
  */
 
 public class  NonNegativeCountTrial extends Trial implements Serializable {
-    private Integer count;
-    /*constructor function for the count based trial class*/
-    public NonNegativeCountTrial(User userAddedTrial, Location location, Date date) {
+    private int count;
+
+    // Constructor function for the count based trial class
+    public NonNegativeCountTrial(User userAddedTrial, Location location, Date date, int count) {
         super(userAddedTrial, location, date);
-    }
-
-    public NonNegativeCountTrial(User userAddedTrial, Date date) {
-        super(userAddedTrial, date);
-    }
-
-    public NonNegativeCountTrial(User userAddedTrial, Date date, Integer count) {
-        super(userAddedTrial, date);
-        if (count >= 0) {
-            this.count = count;
-        }
-    }
-
-    /*This function returns the total number of count at the end*/
-    public int getCount(){
-        return this.count;
-    }
-
-    public void setCount(Integer count) {
         if (count >= 0) {
             this.count = count;
         } else {
@@ -42,4 +24,25 @@ public class  NonNegativeCountTrial extends Trial implements Serializable {
         }
     }
 
+    public NonNegativeCountTrial(User userAddedTrial, Date date, int count) {
+        super(userAddedTrial, date);
+        if (count >= 0) {
+            this.count = count;
+        } else {
+            throw new Error("NonNegativeCountTrial cannot set a negative value");
+        }
+    }
+
+    // This function returns the total number of count at the end
+    public int getCount(){
+        return this.count;
+    }
+
+    public void setCount(int count) {
+        if (count >= 0) {
+            this.count = count;
+        } else {
+            throw new Error("NonNegativeCountTrial cannot set a negative value");
+        }
+    }
 }

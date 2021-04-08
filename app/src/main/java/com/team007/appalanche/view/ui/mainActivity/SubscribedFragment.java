@@ -43,9 +43,7 @@ import static android.content.ContentValues.TAG;
  * A placeholder fragment containing a simple view.
  */
 public class SubscribedFragment extends Fragment {
-
     private static final String ARG_SECTION_NUMBER = "section_number";
-
 
     public static ExperimentController experimentController;
     ListView expList;
@@ -83,8 +81,6 @@ public class SubscribedFragment extends Fragment {
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.mainpage_tab_fragment, container, false);
 
-        Toast.makeText(getActivity(), "Oops, you didn't scan anything",
-                Toast.LENGTH_LONG).show();
         // Obtain the IDs
         expList = root.findViewById(R.id.expList);
         ExperimentDataList = experimentController.getCurrentUser().getSubscribedExperiments();
@@ -120,7 +116,6 @@ public class SubscribedFragment extends Fragment {
         intent.putExtra("User", experimentController.getCurrentUser());
         startActivityForResult(intent,1);
     }
-
 
     interface SetIgnoredList {
         void setIgnore(Experiment experiment);

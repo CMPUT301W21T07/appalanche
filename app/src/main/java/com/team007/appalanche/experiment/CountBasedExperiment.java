@@ -10,13 +10,11 @@ import com.team007.appalanche.trial.Trial;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 /**
  * This class that extends Experiment handles the creation of count-based trials.
  */
-
 public class CountBasedExperiment extends Experiment implements ExperimentInterface, Serializable {
     /**
      * Constructor function for count based experiment class
@@ -50,15 +48,16 @@ public class CountBasedExperiment extends Experiment implements ExperimentInterf
     @Override
     public ArrayList<Integer> obtainHistogram() {
         // TODO: implement
-        // Obtain the list of trials
+         //Obtain the list of trials
         ArrayList<Trial> trialList = getTrials();
         ArrayList<Integer> countList = new ArrayList<Integer>();
         for (int i = 0; i < trialList.size(); i++) {
             CountBasedTrial trial = (CountBasedTrial) trialList.get(i);
-            countList.add( trial.getCount());
+            //countList.add( trial.getCount());
         }
         countList.sort(Comparator.naturalOrder());
         return countList;
+
     }
 
     /**

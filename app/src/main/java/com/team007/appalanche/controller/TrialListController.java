@@ -9,20 +9,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.team007.appalanche.experiment.CountBasedExperiment;
 import com.team007.appalanche.experiment.Experiment;
-import com.team007.appalanche.question.Question;
 import com.team007.appalanche.trial.BinomialTrial;
-import com.team007.appalanche.trial.CountBasedTrial;
 import com.team007.appalanche.trial.MeasurementTrial;
 import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,7 +35,6 @@ public class TrialListController {
         return experiment;
     }
 
-
     public void clearTrialList() {
         experiment.getTrials().clear();
     }
@@ -57,7 +51,6 @@ public class TrialListController {
         final CollectionReference collectionReference = db.collection("Experiments/" + experiment.getDescription()+"/Trials");
         // We use a HashMap to store a key-value pair in firestore.
         HashMap<String, Object> data = new HashMap<>();
-        data.put("count", ((CountBasedTrial) newTrial).getCount());
         data.put("userAddedTrial", newTrial.getUserAddedTrial().getId());
         collectionReference
                 .document()

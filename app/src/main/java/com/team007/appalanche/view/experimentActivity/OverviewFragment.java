@@ -3,7 +3,6 @@ package com.team007.appalanche.view.experimentActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,38 +10,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.team007.appalanche.R;
-import com.team007.appalanche.controller.TrialListController;
-import com.team007.appalanche.experiment.CountBasedExperiment;
 import com.team007.appalanche.experiment.Experiment;
-import com.team007.appalanche.trial.BinomialTrial;
-import com.team007.appalanche.trial.CountBasedTrial;
-import com.team007.appalanche.trial.MeasurementTrial;
-import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.profile.ProfileActivity;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static android.content.ContentValues.TAG;
 import static com.team007.appalanche.view.experimentActivity.TrialsFragment.trialListController;
 
 /**
@@ -119,7 +103,8 @@ public class OverviewFragment extends Fragment {
         owner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                Intent intent = new Intent(getActivity(),
+                        ProfileActivity.class);
                 String string = owner.getText().toString();
                 String userID = (String) string.subSequence(7, string.length());
                 intent.putExtra("Profile", new User(userID));
@@ -162,8 +147,8 @@ public class OverviewFragment extends Fragment {
         ArrayList<Integer> countList = new ArrayList<Integer>();
 
         for (int i = 0; i < trialList.size(); i++) {
-            CountBasedTrial trial = (CountBasedTrial) trialList.get(i);
-            countList.add( trial.getCount());
+            //CountBasedTrial trial = (CountBasedTrial) trialList.get(i);
+            //countList.add( trial.getCount());
 //            if (experiment.getTrialType().equals("count")) {
 //                CountBasedTrial trial = (CountBasedTrial) trialList.get(i);
 //                countList.add( trial.getCount());

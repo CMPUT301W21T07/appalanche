@@ -50,7 +50,6 @@ public class AddUserIDFragment extends DialogFragment {
         EditText newUserID = view.findViewById(R.id.addUserID);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-
         // SET UP BUTTON
         Button addButton = view.findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +58,7 @@ public class AddUserIDFragment extends DialogFragment {
                 // Check if the field is empty
 
                 String newID = "@" + newUserID.getText().toString();
+
                 // Validate newID
                 validateUserID(newID, new Validate() {
                     @Override

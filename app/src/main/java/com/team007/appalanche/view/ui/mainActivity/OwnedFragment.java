@@ -42,9 +42,7 @@ import static android.content.ContentValues.TAG;
  * A placeholder fragment containing a simple view.
  */
 public class OwnedFragment extends Fragment {
-
     private static final String ARG_SECTION_NUMBER = "section_number";
-
 
     public static ExperimentController experimentController;
     public ListView expList;
@@ -71,8 +69,6 @@ public class OwnedFragment extends Fragment {
 
         experimentController = new ExperimentController(currentUser);
         setUpFirebase(currentUser);
-
-
     }
 
     @Override
@@ -80,9 +76,11 @@ public class OwnedFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.mainpage_tab_fragment, container, false);
+
         // Obtain the IDs
         expList = root.findViewById(R.id.expList);
         ExperimentDataList = experimentController.getCurrentUser().getOwnedExperiments();
+
         // Set up the adapter for Experiment List View
         expAdapter = new CustomList(this.getActivity(), ExperimentDataList);
         expList.setAdapter(expAdapter);
@@ -123,50 +121,54 @@ public class OwnedFragment extends Fragment {
 
     public void setUpFirebase(User currentUser) {
         db = FirebaseFirestore.getInstance();
-        //SET UP REAL TIME CHANGES FOR UI, ANYTHING IS CHANGED IN THIS COLLECTION PATH, UI ALSO CHANGES
-        final CollectionReference collection = db.collection("Users/"+ currentUser.getId()+"/OwnedExperiments");
+
+        // Set up realtime changes for UI
+        // (Anything changes in user's owned experiments collection path, UI changes)
+        final CollectionReference collection = db.collection("Users/"+ currentUser.getId() +
+                "/OwnedExperiments");
         collection.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
 
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 // clear the old list, because we're not appending here, we load the whole list over again
                 experimentController.clearOwnedList();
-                // for every document in this collection path
+
+                // For every document in this collection path
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
                     Log.d(TAG, String.valueOf(doc.getData().get("description")));
                     String description = doc.getId();
                     String trialType = (String) doc.getData().get("trialType");
                     Boolean expOpen =  doc.getBoolean("expOpen");
-                    Long minNumTrials  = (Long)    doc.getData().get("minNumTrials");
+                    Long minNumTrials  = (Long) doc.getData().get("minNumTrials");
                     String expOwnerID = (String) doc.getData().get("expOwnerID");
                     String region = (String) doc.getData().get("region");
                     Boolean locationRequired =  doc.getBoolean("locationRequired");
-                    Experiment newExp = new Experiment(description, region, trialType, minNumTrials.intValue(), locationRequired, expOpen, expOwnerID );
+
+                    Experiment newExp = new Experiment(description, region, trialType,
+                            minNumTrials.intValue(), locationRequired, expOpen, expOwnerID );
                     // add to owned experiment in the user owned list
                     //if (experimentController.getCurrentUser().getSubscribedExperiments().contains(newExp) == false )
                     experimentController.addOwnExperiment(newExp);
-
                 }
+
                 expAdapter.notifyDataSetChanged();
             }});
-
-        // TEST
-        // experimentController.addExperiment(new Experiment("How many jelly mans can a jelly bean fit in its mouth", "Edmonton", "NonNegative", 4, false, true, "123"));
-        // experimentController.addExperiment(new Experiment(userKey, "Edmonton", "NonNegative", 4, false, true, "123"));
-        // experimentController.addExperiment(new Experiment("How many jelly mans can a jelly bean fit in its mouth", "Edmonton", "NonNegative", 4, false, true, "123"), index);
-         //experimentController.addExperiment(new Experiment(String.valueOf(index), "Edmonton", "NonNegative", 4, false, true, "123"), index);
-        //experimentController.addExperiment(new Experiment(currentUser.getId(), "Edmonton", "NonNegative", 4, false, true, "123"));
     }
+
     interface SetIgnoredList {
         void setIgnore(Experiment experiment);
     }
 
     public void getIgnoredList(Experiment experiment, SetIgnoredList ignoredList) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final CollectionReference collection = db.collection("Users/" + experiment.getExperimentOwnerID() +"/OwnedExperiments/"+ experiment.getDescription()+"/IgnoredExperimenters");
+
+        final CollectionReference collection =
+                db.collection("Users/" + experiment.getExperimentOwnerID() + "/OwnedExperiments/" + experiment.getDescription() + "/IgnoredExperimenters");
+
         collection.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
+                                @Nullable FirebaseFirestoreException e) {
                 experiment.getIgnoredUsers().clear();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
                     Log.d(TAG, String.valueOf(doc.getData().get("add ignored experimenters")));
@@ -177,7 +179,6 @@ public class OwnedFragment extends Fragment {
             }
         });
     }
-
 
     interface SetTrialList {
         void setTrial(Experiment experiment);
@@ -194,10 +195,10 @@ public class OwnedFragment extends Fragment {
 
                     if (experiment.getTrialType().equals("count")) {
                         Log.d(TAG, String.valueOf(doc.getData().get("description")));
-                        Long count = (Long) doc.getData().get("count");
+                        //Long count = (Long) doc.getData().get("count");
                         String id = (String) doc.getData().get("userAddedTrial");
                         User addedUser = new User(id);
-                        experiment.addTrial( new CountBasedTrial(addedUser, new Date(), count.intValue()));
+                        experiment.addTrial( new CountBasedTrial(addedUser, new Date()));
                     }
                     else if (experiment.getTrialType().equals("binomial")){
                         Log.d(TAG, String.valueOf(doc.getData().get("description")));
@@ -226,5 +227,4 @@ public class OwnedFragment extends Fragment {
             }});
 
     }
-
 }

@@ -4,20 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +11,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -32,27 +30,26 @@ import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.R;
+import com.team007.appalanche.experiment.Experiment;
+import com.team007.appalanche.scannableCode.ScannableCode;
 import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
-import com.team007.appalanche.scannableCode.ScannableCode;
 import com.team007.appalanche.view.AddExperimentFragment;
 import com.team007.appalanche.view.AddUserIDFragment;
 import com.team007.appalanche.view.Capture;
-import com.team007.appalanche.view.experimentActivity.ExperimentActivity;
 import com.team007.appalanche.view.profile.OwnerProfileActivity;
+import com.team007.appalanche.view.experimentActivity.ExperimentActivity;
+import com.team007.appalanche.view.searching.SearchActivity;
 
 import java.util.HashMap;
 
 import static com.team007.appalanche.view.ui.mainActivity.SubscribedFragment.experimentController;
 
-public class MainActivity extends AppCompatActivity  implements AddExperimentFragment.OnFragmentInteractionListener, AddUserIDFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements AddExperimentFragment.OnFragmentInteractionListener, AddUserIDFragment.OnFragmentInteractionListener {
     FirebaseFirestore db;
     public static User currentUser;
-    String ID;
     private static final String TAG = "Fragment Activity";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,33 +64,28 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
 
-        /* Create the current user in the shared preferences, if the user does not already exist */
+        // Create the current user in the shared preferences, if the user does not already exist
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-
-//        SharedPreferences.Editor editor1 = sharedPref.edit();
-//        editor1.putString("com.team007.Appalanche.user_key", null);
-//        editor1.apply();
 
         // Check if we have a user already logged in
         String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
 
-
         db = FirebaseFirestore.getInstance();
         if (userKey == null) {
-            // GET THE TEXT FROM THE FRAGMENT AND CREATE A NEW USER ID
+            // Get the text from the fragment and get the new user ID
             DialogFragment dialog = new AddUserIDFragment();
             dialog.show(getSupportFragmentManager(), "New UserID Fragment");
         } else {
-            getExistedUser(userKey);
+            getExistingUser(userKey);
         }
 
         // Add floating action button click listeners
         FloatingActionButton addExperimentButton = findViewById(R.id.addExperimentButton);
-        String finalUserKey = userKey;
+
         addExperimentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AddExperimentFragment().newInstance(currentUser).show(getSupportFragmentManager(), "New ");
+                new AddExperimentFragment().newInstance(currentUser).show(getSupportFragmentManager(), "New");
             }
         });
 
@@ -106,12 +98,10 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
         });
     }
 
-
     private void scanCode() {
-        // scan the code from the zxing library
+        // Scan the code from the zxing library
         IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setPrompt("For flash, use volume up key");
-        integrator.setBeepEnabled(true);
+        integrator.setPrompt("Scan the barcode or QR code");
         integrator.setOrientationLocked(true);
         integrator.setCaptureActivity(Capture.class);
         integrator.initiateScan();
@@ -154,21 +144,22 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode,
                 data);
-        if (scanResult.getContents() != null) {
-            if (scanResult.getFormatName() == BarcodeFormat.QR_CODE.toString()) {
-                // We have scanned a QR code
-                getScannedTrialQR(scanResult.getContents());
-            } else {
-                // We have scanned a barcode
-                getScannedTrialBarcode(scanResult.getContents());
-            }
-        } else {
-            Toast.makeText(getApplicationContext(), "Oops, you didn't scan anything",
+
+        // If the activity is a scan activity
+        if (scanResult != null) {
+            if (scanResult.getContents() != null) {
+                if (scanResult.getFormatName().equals(BarcodeFormat.QR_CODE.toString())) {
+                   // We have scanned a QR code
+                   getScannedTrialQR(scanResult.getContents());
+                } else {
+                   // We have scanned a barcode
+                   getScannedTrialBarcode(scanResult.getContents());
+                }
+            } else Toast.makeText(getApplicationContext(), "Oops, you did not scan anything",
                     Toast.LENGTH_SHORT).show();
-        }
+        } else super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -177,17 +168,17 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
      * @param contents This is the serialized QR code class.
      */
     private void getScannedTrialQR(String contents) {
-        // deserialize
+        // Deserialize
         ScannableCode scannedCode = deserialize(contents);
 
-        // get the trial from the deserialization
+        // Get the trial from the deserialization
         Trial trial = scannedCode.scan(currentUser);
 
-        // add the trial to the appropriate experiment
+        // Add the trial to the appropriate experiment
         Experiment experiment = scannedCode.getExperiment();
         experiment.addTrial(trial);
 
-        // go to that experiment
+        // Go to that experiment
         openExperimentActivity(experiment);
     }
 
@@ -206,14 +197,14 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             ScannableCode scannedCode = document.toObject(ScannableCode.class);
-                            // get the trial from the deserialization
+                            // Get the trial from the deserialization
                             Trial trial = scannedCode.scan(currentUser);
 
-                            // add the trial to the appropriate experiment
+                            // Add the trial to the appropriate experiment
                             Experiment experiment = scannedCode.getExperiment();
                             experiment.addTrial(trial);
 
-                            // go to that experiment
+                            // Go to that experiment
                             openExperimentActivity(experiment);
                         } else {
                             Toast.makeText(MainActivity.this, "This barcode is not registered to " +
@@ -257,23 +248,24 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
     }
 
     private void searchActivity() {
-        //TODO: Implement
+        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+        intent.putExtra("User", currentUser);
+        MainActivity.this.startActivity(intent);
     }
-
 
     @Override
     public void addExperiment(Experiment newExp) {
         experimentController.addExperiment(newExp);
+        experimentController.addSubExperiment(newExp);
     }
 
-    // OVERRIDE NEW USER ID HAS BEEN ENTERED
     @Override
     public void addUserID(User newUser) {
         currentUser = newUser;
         newUserSetup();
     }
 
-    /* Set up new user on firebase and shared preference */
+    // Set up new user on firebase and shared preference
     public void newUserSetup() {
         // Set up firebase for new user
         DocumentReference docRef = db.collection("Users").document(currentUser.getId());
@@ -290,24 +282,22 @@ public class MainActivity extends AppCompatActivity  implements AddExperimentFra
             }
         });
 
-        // add value into sharePreference file so that user will be recognized next time using the app
+        // Add value into sharePreference file so that user will be recognized next time using
+        // the app
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        // with the same key, value next time will not be null anymore
         editor.putString("com.team007.Appalanche.user_key", currentUser.getId());
         editor.apply();
     }
 
-    /* Get existed user info on firebase */
-    public void getExistedUser(String userKey) {
+    // Get existing user info on firebase
+    public void getExistingUser(String userKey) {
         DocumentReference docRef;
         docRef = db.collection("Users").document(userKey);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 currentUser = new User(documentSnapshot.getId());
-                // NEED TO SET UP PROFILE ON FIREBASE HERE
-                //currentUser.setProfile();
             }
         });
     }

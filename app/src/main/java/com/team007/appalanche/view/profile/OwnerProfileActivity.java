@@ -1,23 +1,17 @@
 package com.team007.appalanche.view.profile;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -32,12 +26,10 @@ import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.user.ContactInfo;
 import com.team007.appalanche.user.Profile;
 import com.team007.appalanche.user.User;
-import com.team007.appalanche.view.AddExperimentFragment;
 import com.team007.appalanche.view.EditUserInfoFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.PrimitiveIterator;
 
 import static android.content.ContentValues.TAG;
 

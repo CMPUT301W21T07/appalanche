@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:title="Subscribe to Experiment"
-        android:id="@+id/subscribe"/>
-    <item
         android:title="End the experiment"
         android:id="@+id/end_button"/>
     <item
-        android:title="Close the experiment"
-        android:id="@+id/close_button"/>
+        android:title="Unpublish experiment"
+        android:id="@+id/unpublish_button"/>
     <item
         android:title="Unpublish the experiment"
         android:id="@+id/unpublish_button"/>
