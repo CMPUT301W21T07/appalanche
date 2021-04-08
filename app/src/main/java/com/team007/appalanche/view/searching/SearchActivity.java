@@ -63,10 +63,8 @@ public class SearchActivity extends AppCompatActivity {
         expAdapter = new CustomList(this, expDataList);
         expListView.setAdapter(expAdapter);
 
-        // Load user currently using the app
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        String userKey = sharedPref.getString("com.team007.Appalanche.user_key", null);
-        currentUser = new User(userKey);
+        Intent intent = getIntent();
+        currentUser = (User) intent.getSerializableExtra("User");
 
         // Open the experiment
         expListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
