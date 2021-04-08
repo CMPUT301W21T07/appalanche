@@ -12,6 +12,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -71,26 +72,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 LatLng latLng = new LatLng(location.getLat(), location.getLon());
                 map.addMarker(new MarkerOptions()
                         .position(latLng)
-                        .title("Trial" + i));
+                        .title("Trial" + i)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                 builder.include(latLng);
-                System.out.println("Latitude" + location.getLat());
-                System.out.println("Longitude" + location.getLon());
-            } else {
-                System.out.println("Location is null");
             }
         }
 
-        // As a test
-        LatLng sydney = new LatLng(-34, 151);
-        map.addMarker(new MarkerOptions()
-                .position(sydney)
-                .title("Marker in Sydney"));
-//        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        builder.include(sydney);
+        CameraUpdate cu;
+        try {
+            LatLngBounds bounds = builder.build();
+            int padding = 0; // offset from edges of the map in pixels
+            cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        } catch (IllegalStateException e) {
+            LatLng latLng = new LatLng(0, 0);
+            cu = CameraUpdateFactory.newLatLng(latLng);
+        }
 
-        LatLngBounds bounds = builder.build();
-        int padding = 0; // offset from edges of the map in pixels
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         googleMap.moveCamera(cu);
     }
 
