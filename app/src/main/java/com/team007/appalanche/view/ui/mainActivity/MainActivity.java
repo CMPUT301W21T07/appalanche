@@ -42,6 +42,7 @@ import com.team007.appalanche.view.AddUserIDFragment;
 import com.team007.appalanche.view.Capture;
 import com.team007.appalanche.view.experimentActivity.ExperimentActivity;
 import com.team007.appalanche.view.profile.OwnerProfileActivity;
+import com.team007.appalanche.view.searching.SearchActivity;
 
 import java.util.HashMap;
 
@@ -249,7 +250,8 @@ public class MainActivity extends AppCompatActivity implements AddExperimentFrag
     }
 
     private void searchActivity() {
-        //TODO: Implement
+        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+        MainActivity.this.startActivity(intent);
     }
 
     @Override

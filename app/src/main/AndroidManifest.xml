@@ -26,6 +26,8 @@
         <activity
             android:name=".view.profile.ProfileActivity"
             android:parentActivityName=".view.ui.mainActivity.MainActivity" />
+        <activity android:name=".view.searching.SearchActivity"></activity>
+       
         <activity
             android:name=".view.profile.OwnerProfileActivity"
             android:parentActivityName=".view.ui.mainActivity.MainActivity"
