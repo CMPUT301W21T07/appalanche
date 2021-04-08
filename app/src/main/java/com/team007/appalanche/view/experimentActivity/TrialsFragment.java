@@ -95,19 +95,6 @@ public class TrialsFragment extends Fragment  {
         // Map Logic
         Button viewMapButton = root.findViewById(R.id.viewMapButton);
 
-        if (experiment.getLocationRequired()) {
-            // Adding an onClick listener if the current trial is still open
-            viewMapButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openViewMapActivity();
-                }
-            });
-        } else {
-            // Removing the add trial button if the current trial is ended
-            viewMapButton.setVisibility(View.GONE);
-        }
-
         // Trial logic
         Button addTrialButton = root.findViewById(R.id.addTrialButton);
         boolean inIgnoredList = checkIgnoredExperimenters();
@@ -133,6 +120,19 @@ public class TrialsFragment extends Fragment  {
         trialAdapter = new TrialCustomList(this.getContext(), trialDataList);
         trialListView = root.findViewById(R.id.trialList);
         trialListView.setAdapter(trialAdapter);
+
+        if (experiment.getLocationRequired()) {
+            // Adding an onClick listener if the current trial is still open
+            viewMapButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openViewMapActivity();
+                }
+            });
+        } else {
+            // Removing the add trial button if the current trial is ended
+            viewMapButton.setVisibility(View.GONE);
+        }
 
         trialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -160,7 +160,8 @@ public class TrialsFragment extends Fragment  {
 
     private void openViewMapActivity() {
         Intent intent = new Intent(getActivity(), MapActivity.class);
-        intent.putExtra("Trials", trialDataList);
+//        intent.putExtra("Trials", trialDataList);
+        intent.putExtra("Experiment", experiment);
         startActivity(intent);
     }
 

@@ -22,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.team007.appalanche.Location;
 import com.team007.appalanche.R;
 import com.team007.appalanche.controller.ExperimentController;
 import com.team007.appalanche.custom.CustomList;
@@ -183,6 +184,7 @@ public class OwnedFragment extends Fragment {
     interface SetTrialList {
         void setTrial(Experiment experiment);
     }
+
     public void getTrialList(Experiment experiment, SetTrialList trialList) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         final CollectionReference ownedCol = db.collection("Experiments/"+experiment.getDescription()+"/Trials");
@@ -192,34 +194,77 @@ public class OwnedFragment extends Fragment {
                 // clear the old list
                 experiment.getTrials().clear();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
-
                     if (experiment.getTrialType().equals("count")) {
                         Log.d(TAG, String.valueOf(doc.getData().get("description")));
-                        //Long count = (Long) doc.getData().get("count");
                         String id = (String) doc.getData().get("userAddedTrial");
+                        Date date = (Date) doc.getTimestamp("date").toDate();
                         User addedUser = new User(id);
-                        experiment.addTrial( new CountBasedTrial(addedUser, new Date()));
+
+                        if (experiment.getLocationRequired()) {
+                            Double longitude = (Double) doc.getData().get("longitude");
+                            Double latitude = (Double) doc.getData().get("latitude");
+                            Location location = new Location(latitude, longitude);
+
+                            experiment.addTrial( new CountBasedTrial(addedUser, location, date));
+                        } else {
+                            experiment.addTrial( new CountBasedTrial(addedUser, date));
+                        }
                     }
                     else if (experiment.getTrialType().equals("binomial")){
                         Log.d(TAG, String.valueOf(doc.getData().get("description")));
                         Boolean success= (Boolean) doc.getData().get("binomial");
                         String id = (String) doc.getData().get("userAddedTrial");
+                        Date date = (Date) doc.getTimestamp("date").toDate();
                         User addedUser = new User(id);
-                        experiment.addTrial(new BinomialTrial(addedUser, new Date(),success));
+
+                        if (experiment.getLocationRequired()) {
+                            Double longitude = (Double) doc.getData().get("longitude");
+                            Double latitude = (Double) doc.getData().get("latitude");
+
+                            Location location = new Location(0, 0);
+
+                            experiment.addTrial( new BinomialTrial(addedUser, location, date, success));
+                        } else {
+                            experiment.addTrial( new BinomialTrial(addedUser, date, success));
+                        }
                     }
                     else if (experiment.getTrialType().equals("measurement")){
                         Log.d(TAG, String.valueOf(doc.getData().get("measurement")));
                         Double result = (Double) doc.getData().get("measurement");
                         String id = (String) doc.getData().get("userAddedTrial");
+                        Date date = (Date) doc.getTimestamp("date").toDate();
                         User addedUser = new User(id);
-                        experiment.addTrial(new MeasurementTrial(addedUser, new Date(), result));
+
+                        if (experiment.getLocationRequired()) {
+                            Double longitude = (Double) doc.getData().get("longitude");
+                            Double latitude = (Double) doc.getData().get("latitude");
+                            Location location = new Location(latitude, longitude);
+
+                            experiment.addTrial(new MeasurementTrial(addedUser, location, date,
+                                    result));
+                        } else {
+                            experiment.addTrial(new MeasurementTrial(addedUser, date,
+                                    result));
+                        }
                     }
                     else if (experiment.getTrialType().equals("nonNegativeCount")) {
                         Log.d(TAG, String.valueOf(doc.getData().get("nonNegativeCount")));
                         Long count = (Long) doc.getData().get("nonNegativeCount");
                         String id = (String) doc.getData().get("userAddedTrial");
+                        Date date = (Date) doc.getTimestamp("date").toDate();
                         User addedUser = new User(id);
-                        experiment.addTrial(new NonNegativeCountTrial(addedUser, new Date(), count.intValue()));
+
+                        if (experiment.getLocationRequired()) {
+                            Double longitude = (Double) doc.getData().get("longitude");
+                            Double latitude = (Double) doc.getData().get("latitude");
+                            Location location = new Location(latitude, longitude);
+
+                            experiment.addTrial(new NonNegativeCountTrial(addedUser, location, date,
+                                    count.intValue()));
+                        } else {
+                            experiment.addTrial(new NonNegativeCountTrial(addedUser, date,
+                                    count.intValue()));
+                        }
                     }
 
                 }

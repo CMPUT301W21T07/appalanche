@@ -1,5 +1,6 @@
 package com.team007.appalanche.controller;
 
+import android.text.format.DateFormat;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,8 @@ import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -52,6 +55,16 @@ public class TrialListController {
         // We use a HashMap to store a key-value pair in firestore.
         HashMap<String, Object> data = new HashMap<>();
         data.put("userAddedTrial", newTrial.getUserAddedTrial().getId());
+
+//        String date = new SimpleDateFormat("dd-MM-yyyy").format(newTrial.getDate());
+        data.put("date", newTrial.getDate());
+
+        if (experiment.getLocationRequired()) {
+//            data.put("location", newTrial.getLocation());
+            data.put("longitude", newTrial.getLocation().getLon());
+            data.put("latitude", newTrial.getLocation().getLat());
+        }
+
         collectionReference
                 .document()
                 .set(data);
@@ -68,6 +81,16 @@ public class TrialListController {
         HashMap<String, Object> data = new HashMap<>();
         data.put("binomial", ((BinomialTrial) newTrial).getOutcome());
         data.put("userAddedTrial", newTrial.getUserAddedTrial().getId());
+
+//        String date = new SimpleDateFormat("dd-MM-yyyy").format(newTrial.getDate());
+        data.put("date", newTrial.getDate());
+
+        if (experiment.getLocationRequired()) {
+//            data.put("location", newTrial.getLocation());
+            data.put("longitude", newTrial.getLocation().getLon());
+            data.put("latitude", newTrial.getLocation().getLat());
+        }
+
         collectionReference
                 .document()
                 .set(data);
@@ -83,6 +106,16 @@ public class TrialListController {
         HashMap<String, Object> data = new HashMap<>();
         data.put("measurement", ((MeasurementTrial) newTrial).getValue());
         data.put("userAddedTrial", newTrial.getUserAddedTrial().getId());
+
+//        String date = new SimpleDateFormat("dd-MM-yyyy").format(newTrial.getDate());
+        data.put("date", newTrial.getDate());
+
+        if (experiment.getLocationRequired()) {
+//            data.put("location", newTrial.getLocation());
+            data.put("longitude", newTrial.getLocation().getLon());
+            data.put("latitude", newTrial.getLocation().getLat());
+        }
+
         collectionReference
                 .document()
                 .set(data);
@@ -98,6 +131,16 @@ public class TrialListController {
         HashMap<String, Object> data = new HashMap<>();
         data.put("nonNegativeCount", ((NonNegativeCountTrial) newTrial).getCount());
         data.put("userAddedTrial", newTrial.getUserAddedTrial().getId());
+
+//        String date = new SimpleDateFormat("dd-MM-yyyy").format(newTrial.getDate());
+        data.put("date", newTrial.getDate());
+
+        if (experiment.getLocationRequired()) {
+//            data.put("location", newTrial.getLocation());
+            data.put("longitude", newTrial.getLocation().getLon());
+            data.put("latitude", newTrial.getLocation().getLat());
+        }
+
         collectionReference
                 .document()
                 .set(data);
