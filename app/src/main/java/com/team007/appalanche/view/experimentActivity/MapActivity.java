@@ -73,6 +73,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         .position(latLng)
                         .title("Trial" + i));
                 builder.include(latLng);
+                System.out.println("Latitude" + location.getLat());
+                System.out.println("Longitude" + location.getLon());
             } else {
                 System.out.println("Location is null");
             }

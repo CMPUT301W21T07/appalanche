@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,8 +16,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.team007.appalanche.Location;
 import com.team007.appalanche.R;
-import com.team007.appalanche.trial.*;
-import com.team007.appalanche.user.Experimenter;
+import com.team007.appalanche.trial.CountBasedTrial;
 import com.team007.appalanche.user.User;
 
 import java.util.Date;
@@ -41,6 +38,7 @@ public class AddCountTrialFragment extends DialogFragment  {
         if (!geoRequired) {
             geo.setVisibility(View.GONE);
         }
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
