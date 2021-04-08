@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,8 +16,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.team007.appalanche.Location;
 import com.team007.appalanche.R;
-import com.team007.appalanche.trial.*;
-import com.team007.appalanche.user.Experimenter;
+import com.team007.appalanche.trial.CountBasedTrial;
 import com.team007.appalanche.user.User;
 
 import java.util.Date;
@@ -42,6 +39,9 @@ public class AddCountTrialFragment extends DialogFragment  {
             geo.setVisibility(View.GONE);
         }
 
+        EditText lat = view.findViewById(R.id.latitude);
+        EditText longi = view.findViewById(R.id.longitude);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
@@ -56,7 +56,7 @@ public class AddCountTrialFragment extends DialogFragment  {
                             double latitude;
                             try {
                                 latitude =
-                                        Double.parseDouble(view.findViewById(R.id.latitude).toString());
+                                        Double.parseDouble(lat.getText().toString());
                             } catch (NumberFormatException e) {
                                 latitude = 0;
                             }
@@ -64,7 +64,7 @@ public class AddCountTrialFragment extends DialogFragment  {
                             double longitude;
                             try {
                                 longitude =
-                                        Double.parseDouble(view.findViewById(R.id.latitude).toString());
+                                        Double.parseDouble(longi.getText().toString());
                             } catch (NumberFormatException e) {
                                 longitude = 0;
                             }
