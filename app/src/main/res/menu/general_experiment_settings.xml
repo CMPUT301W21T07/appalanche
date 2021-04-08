@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="Subscribe to Experiment"
+        android:id="@+id/subscribe"/>
+    <item
+        android:title="Generate QR Code"
+        android:id="@+id/generate_qr_code"/>
+    <item
+        android:title="Register Barcode"
+        android:id="@+id/register_barcode"/>
+</menu>

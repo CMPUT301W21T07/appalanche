@@ -56,17 +56,16 @@ public class ExperimentController {
     public void addOwnExperiment(Experiment experiment) {currentUser.addOwnedExperiment(experiment);}
     public void addSubscribedExperiment(Experiment experiment) {currentUser.addSubscribedExperiment(experiment);}
 
+
     public void addExperiment(Experiment experiment) {
         db = FirebaseFirestore.getInstance();
-
-
         CollectionReference collection = db.collection("Experiments");
 
         // We use a HashMap to store a key-value pair in firestore.
         HashMap<String, Object> data = new HashMap<>();
         data.put("trialType", experiment.getTrialType());
         data.put("expOwnerID", experiment.getExperimentOwnerID());
-        data.put("expOpen",experiment.getStatus());
+        data.put("expOpen",experiment.getOpen());
         data.put("minNumTrials", experiment.getMinNumTrials());
         data.put("region",experiment.getRegion());
         data.put("locationRequired",experiment.getLocationRequired());
@@ -77,14 +76,17 @@ public class ExperimentController {
                 .set(data);
 
         // ADD EXPERIMENT TO OWNED LIST EXPERIMENT INSIDE USER BECAUSE WE WANT TO KEEP THE EXPERIMENT WHEN UNPUBLISH EXPERIMENT
-        final DocumentReference document = db.collection("Users/"+currentUser.getId()+"/OwnedExperiments").document(experiment.getDescription());
-        document.set(data);
+        final CollectionReference ownerCol = db.collection("Users/"+currentUser.getId()+"/OwnedExperiments");
+        ownerCol
+                .document(experiment.getDescription())
+                .set(data);
     }
     public void addSubExperiment(Experiment experiment) {
         db = FirebaseFirestore.getInstance();
         // add a document key to subscribedExperiment collection
         final DocumentReference document = db.collection("Users/"+currentUser.getId()+"/SubscribedExperiments").document(experiment.getDescription());
         HashMap<String, Object> data = new HashMap<>();
+
         document.set(data);
     }
 
