@@ -108,9 +108,11 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
             case R.id.subscribe:
                 experimentController.addSubExperiment(experiment);
                 //TODO: Either remove the subscribe button or grey it out for that specific experiment, after the user subscribed to it
+                return true;
             // Selecting "Unpublish experiment" menu item
             case R.id.unpublish_button:
                 //TODO: implement
+                return true;
             // Selecting "End experiment" menu item
             case R.id.end_button:
                 endExperiment();

@@ -251,12 +251,14 @@ public class MainActivity extends AppCompatActivity implements AddExperimentFrag
 
     private void searchActivity() {
         Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+        intent.putExtra("User", currentUser);
         MainActivity.this.startActivity(intent);
     }
 
     @Override
     public void addExperiment(Experiment newExp) {
         experimentController.addExperiment(newExp);
+        experimentController.addSubExperiment(newExp);
     }
 
     @Override
