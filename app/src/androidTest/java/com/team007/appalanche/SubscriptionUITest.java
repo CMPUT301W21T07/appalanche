@@ -47,9 +47,9 @@ public class SubscriptionUITest {
         // Creating a mock experiment so that subscription can be tested
         User autoGenUser = new User("@opulence63", null);
         solo.clickOnView(solo.getView(R.id.addExperimentButton));
-        solo.enterText((EditText) solo.getView(R.id.textView2), randomDesc);
-        solo.enterText((EditText) solo.getView(R.id.textView3), "Albania");
-        solo.enterText((EditText) solo.getView(R.id.textView4), "2");
+        solo.enterText((EditText) solo.getView(R.id.expDescription), randomDesc);
+        solo.enterText((EditText) solo.getView(R.id.expRegion), "Albania");
+        solo.enterText((EditText) solo.getView(R.id.expTrials), "2");
         solo.clickOnButton("binomial");
         solo.clickOnButton("Post");
 

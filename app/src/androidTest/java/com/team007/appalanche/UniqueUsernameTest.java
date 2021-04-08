@@ -63,7 +63,7 @@ public class UniqueUsernameTest {
         assertEquals(sharedPref.getString("com.team007.Appalanche.user_key", null),null );
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
         Fragment dialog = solo.getCurrentActivity().getFragmentManager().findFragmentByTag("New UserID Fragment");
-        solo.enterText((EditText) solo.getView(R.id.textView2),"check");
+        solo.enterText((EditText) solo.getView(R.id.expDescription),"check");
         Activity current = solo.getCurrentActivity();
         //Fragment fragment = solo.getCurrentActivity().getFragmentManager().findFragmentByID(0);
 
