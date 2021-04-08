@@ -28,30 +28,13 @@ public class CustomList extends ArrayAdapter<Experiment> {
         this.experiments = experiments;
     }
 
-    public void update(ArrayList<Experiment> results){
-        experiments = new ArrayList<>();
-        experiments.addAll(results);
-        notifyDataSetChanged();
-    }
-
     @SuppressLint("DefaultLocale")
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.content_search_result,parent,false);
         }
-        Experiment exp;
-//        Experiment exp = experiments.get(position);
-
-        try{
-            exp = experiments.get(position);
-        }
-        catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            position--;
-            exp = experiments.get(position);
-            // exp = experiments.get(0); <-- sometimes a fix but doesn't make much sense why lol
-        }
-
+        Experiment exp = experiments.get(position);
 
         // Date and Description display
         TextView description = view.findViewById(R.id.expDescSearchResult);
