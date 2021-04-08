@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class User implements Serializable {
     private String ID;
     private Profile profile;
+    private String userName;
     private ArrayList<Experiment> subscribedExperiments = new ArrayList<Experiment>();
     private ArrayList<Experiment> ownedExperiments=  new ArrayList<Experiment>();
 
