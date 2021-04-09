@@ -70,25 +70,25 @@ public class AddExperimentFragmentTest {
 
     @Test
     public void AddNonNegativeCountExperimentTest(){
-        preferencesEditor.putString("com.team007.Appalanche.user_key","@8337" );
+        preferencesEditor.putString("com.team007.Appalanche.user_key",null );
         preferencesEditor.commit();
-        assertEquals(sharedPref.getString("com.team007.Appalanche.user_key", null),"@8337" );
+        assertEquals(sharedPref.getString("com.team007.Appalanche.user_key", null),null);
         solo.assertCurrentActivity("Wrong Activity",MainActivity.class);
         solo.clickOnView(solo.getView(R.id.addExperimentButton));
-        solo.enterText((EditText) solo.getView(R.id.expDescription),"Experiment2");
+        solo.enterText((EditText) solo.getView(R.id.expDescription),"Experiment21");
         solo.enterText((EditText) solo.getView(R.id.expRegion),"Edmonton");
         solo.enterText((EditText) solo.getView(R.id.expTrials),"4");
         solo.clickOnView(solo.getView(R.id.expType));
         solo.clickOnText("NON NEGATIVE COUNT");
         solo.clickOnButton("Post");
-        assertTrue(solo.searchText("Experiment2"));
+        assertTrue(solo.searchText("Experiment21"));
     }
 
     @Test
     public void AddBinomialExperimentTest() {
-        preferencesEditor.putString("com.team007.Appalanche.user_key","@8337" );
+        preferencesEditor.putString("com.team007.Appalanche.user_key",null );
         preferencesEditor.commit();
-        assertEquals(sharedPref.getString("com.team007.Appalanche.user_key", null),"@8337" );
+        assertEquals(sharedPref.getString("com.team007.Appalanche.user_key", null),null );
         solo.assertCurrentActivity("Wrong Activity",MainActivity.class);
         solo.clickOnView(solo.getView(R.id.addExperimentButton));
         solo.enterText((EditText) solo.getView(R.id.expDescription),"Experiment3");
@@ -102,9 +102,9 @@ public class AddExperimentFragmentTest {
 
     @Test
     public void AddMeasurementExperimentTest(){
-        preferencesEditor.putString("com.team007.Appalanche.user_key","@8337" );
+        preferencesEditor.putString("com.team007.Appalanche.user_key",null );
         preferencesEditor.commit();
-        assertEquals(sharedPref.getString("com.team007.Appalanche.user_key", null),"@8337" );
+        assertEquals(sharedPref.getString("com.team007.Appalanche.user_key", null),null);
         solo.assertCurrentActivity("Wrong Activity",MainActivity.class);
         solo.clickOnView(solo.getView(R.id.addExperimentButton));
         solo.enterText((EditText) solo.getView(R.id.expDescription),"Experiment4");
