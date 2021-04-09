@@ -5,10 +5,8 @@ import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
-
-import com.robotium.solo.Solo;
-import com.team007.appalanche.view.experimentActivity.QuestionFragment;
 import com.team007.appalanche.view.ui.mainActivity.MainActivity;
+import com.robotium.solo.Solo;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -16,8 +14,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
-
-public class AskQuestionFragmentTest {
+public class GeoMapTest {
     private Solo solo;
     @Rule
     public ActivityTestRule<MainActivity> rule =
@@ -33,13 +30,14 @@ public class AskQuestionFragmentTest {
         Activity activity = rule.getActivity();
     }
     @Test
-    public void TestAskQuestion(){
+    public void TestGeomap() throws InterruptedException {
         solo.assertCurrentActivity("Wrong Activity",MainActivity.class);
         solo.clickOnText("Test1");
-        solo.clickOnText("Questions");
-        solo.clickOnButton("ASK NEW QUESTION");
-        solo.enterText((EditText) solo.getView(R.id.askQuestion),"Question");
-        solo.clickOnButton("Post");
-        assertTrue(solo.searchText("Question"));
+        solo.clickOnText("Trials");
+        solo.clickOnButton("VIEW MAP");
+        solo.sleep(4000);
+        solo.clickOnActionBarHomeButton();
+        solo.clickOnText("Overview");
+        assertTrue(solo.searchText("Test1"));
     }
 }
