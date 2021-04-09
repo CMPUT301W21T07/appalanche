@@ -1,6 +1,8 @@
 package com.team007.appalanche;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -19,6 +21,9 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.UUID; // https://stackoverflow.com/a/41762
+
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -27,6 +32,9 @@ import static org.junit.Assert.assertTrue;
 
 public class SubscriptionUITest {
     private Solo solo;
+    SharedPreferences.Editor preferencesEditor;
+    SharedPreferences sharedPref;
+    ExperimentController experimentController;
 
     @Rule
     public ActivityTestRule<MainActivity> rule =
@@ -35,6 +43,9 @@ public class SubscriptionUITest {
     @Before
     public void setUp() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
+        Context targetContext = getInstrumentation().getTargetContext();
+        sharedPref = rule.getActivity().getPreferences(Context.MODE_PRIVATE);
+        preferencesEditor = sharedPref.edit();
     }
     @Test
     public void start() throws Exception{
@@ -43,24 +54,19 @@ public class SubscriptionUITest {
 
     @Test
     public void mainTest(){
-        String randomDesc = UUID.randomUUID().toString(); // https://stackoverflow.com/a/41762
-        // Creating a mock experiment so that subscription can be tested
-        User autoGenUser = new User("@opulence63", null);
-        solo.clickOnView(solo.getView(R.id.addExperimentButton));
-        solo.enterText((EditText) solo.getView(R.id.expDescription), randomDesc);
-        solo.enterText((EditText) solo.getView(R.id.expRegion), "Albania");
-        solo.enterText((EditText) solo.getView(R.id.expTrials), "2");
-        solo.clickOnButton("binomial");
-        solo.clickOnButton("Post");
+        // current user
+        preferencesEditor.putString("com.team007.Appalanche.user_key", "@yoloswag");
+        preferencesEditor.commit();
+        assertEquals(sharedPref.getString("com.team007.Appalanche.user_key", null),"@yoloswag" );
 
-        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+        solo.clickOnView(solo.getView(R.id.app_bar_search)); // get ID of MainActivity search icon
+        solo.clickOnText("Measurement3");
 
-        solo.clickOnText(randomDesc);
         solo.assertCurrentActivity("Wrong Activity", ExperimentActivity.class);
         solo.clickOnMenuItem("Subscribe to Experiment");
         solo.clickOnActionBarHomeButton();
         solo.clickOnText("Subscribed");
         // check if subscribed item is in list
-        assertTrue(solo.searchText(randomDesc));
+        assertTrue(solo.searchText("Measurement3"));
     }
 }
