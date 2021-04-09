@@ -78,6 +78,7 @@ public class SearchActivityTest {
         solo.assertCurrentActivity("Wrong activity", SearchActivity.class);
 
         SearchActivity activity = (SearchActivity) solo.getCurrentActivity();
+        solo.sleep(1000);
         ListView searchResults = activity.expListView;
         //solo.clickInList(0);
 
