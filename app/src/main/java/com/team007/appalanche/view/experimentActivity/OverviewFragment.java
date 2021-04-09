@@ -1,6 +1,7 @@
 package com.team007.appalanche.view.experimentActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -95,10 +96,28 @@ public class OverviewFragment extends Fragment {
         GraphView histogram = root.findViewById(R.id.histogram);
         histogram.getGridLabelRenderer().setHorizontalAxisTitle("Trial Result");
         histogram.getGridLabelRenderer().setVerticalAxisTitle("Number of Trials");
+        histogram.getViewport().setMinY(0.0);
+        histogram.getViewport().setMaxY(15.0);
+        histogram.getViewport().setYAxisBoundsManual(true);
+
         // count-based does not have any histogram graph
         if (!experiment.getTrialType().equals("count")) {
             BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(getDataPoint());
-            histogram.addSeries(series);}
+            histogram.addSeries(series);
+            series.setSpacing(50);
+            series.setDrawValuesOnTop(true);
+            series.setValuesOnTopColor(Color.RED);
+            if (experiment.getTrialType().equals("measurement")) {
+                histogram.getViewport().setMaxX(100.0);
+            }
+            else if (experiment.getTrialType().equals("binomial")) {
+                histogram.getViewport().setMaxX(3.0);
+            }
+            else if (experiment.getTrialType().equals("nonNegativeCount")) {
+                histogram.getViewport().setMaxX(20.0);
+            }
+            histogram.getViewport().setXAxisBoundsManual(true);
+        }
 
 
         ArrayList<Trial> trialDataList = experiment.getTrials();

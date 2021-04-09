@@ -1,15 +1,14 @@
 package com.team007.appalanche;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.EditText;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.test.rule.ActivityTestRule;
 
 import com.robotium.solo.Solo;
-import com.team007.appalanche.view.AddUserIDFragment;
 import com.team007.appalanche.view.ui.mainActivity.MainActivity;
 
 import org.junit.Before;
@@ -49,16 +48,15 @@ public class UniqueUsernameTest {
     }
 
     @Test
-    public void testNewUser(){
+    public void testValidNewUser(){
         // Test new user
-        preferencesEditor.putString("com.team007.Appalanche.user_key", "@dn");
+        preferencesEditor.putString("com.team007.Appalanche.user_key", null);
         preferencesEditor.commit();
-        assertEquals(sharedPref.getString("com.team007.Appalanche.user_key", null),"@dn" );
-        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
-        Fragment dialog = solo.getCurrentActivity().getFragmentManager().findFragmentByTag("New UserID Fragment");
-        //solo.enterText((EditText) solo.getView(R.id.expDescription),"check");
-        //Activity current = solo.getCurrentActivity();
-        //Fragment fragment = solo.getCurrentActivity().getFragmentManager().findFragmentByID(0);
-        final AddUserIDFragment fragment = new AddUserIDFragment();
+        assertEquals(sharedPref.getString("com.team007.Appalanche.user_key", null),null );
+
+        solo.enterText((EditText) solo.getView(R.id.addUserID),"UserID_TEST");
+        solo.clickOnButton("ADD");
+        //assertEquals(sharedPref.getString("com.team007.Appalanche.user_key", null), "UserID_TEST");
+
     }
 }
