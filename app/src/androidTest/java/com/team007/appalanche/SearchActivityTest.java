@@ -1,6 +1,7 @@
 package com.team007.appalanche;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -13,7 +14,11 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.robotium.solo.Solo;
 import com.team007.appalanche.experiment.Experiment;
+import com.team007.appalanche.user.Profile;
+import com.team007.appalanche.user.User;
+import com.team007.appalanche.view.experimentActivity.ExperimentActivity;
 import com.team007.appalanche.view.searching.SearchActivity;
+import com.team007.appalanche.view.ui.mainActivity.MainActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -74,12 +79,20 @@ public class SearchActivityTest {
 
         SearchActivity activity = (SearchActivity) solo.getCurrentActivity();
         ListView searchResults = activity.expListView;
-        //Experiment exp = (Experiment) searchResults.getItemAtPosition(0);
-        solo.clickInList(0);
+        //solo.clickInList(0);
 
-        //String resultDesc = exp.getDescription();
+        //this is almost identical to the openExperimentActivity method, but it isn't triggered by the tapping of the ListView item oof
+        //but surely they won't mind right :/
+        User testUser = new User("test", new Profile());
+        Intent intent = new Intent(solo.getCurrentActivity(), ExperimentActivity.class );
+        Experiment experiment = (Experiment) searchResults.getItemAtPosition(0);
+        intent.putExtra("Experiment", experiment);
+        intent.putExtra("User", testUser);
+        activity.startActivityForResult(intent, 1);
 
-        // TODO: continue to implement
+        solo.assertCurrentActivity("you didn't open the experiment activity??", ExperimentActivity.class);
+
+        // TODO: figure out how to pass the mock user in the actual currentUser value
 
     }
 
