@@ -75,7 +75,6 @@ public class TrialsFragment extends Fragment  {
         // Create trialController here
         trialListController = new TrialListController(experiment);
         //setUpFirebase();
-
     }
 
     @Override
@@ -116,7 +115,7 @@ public class TrialsFragment extends Fragment  {
 
         // Set up Trial ListView
         trialDataList = trialListController.getExperiment().getTrials();
-        trialAdapter = new TrialCustomList(this.getContext(), trialDataList);
+        trialAdapter = new TrialCustomList(this.getContext(), trialDataList, experiment.getTrialType());
         trialListView = root.findViewById(R.id.trialList);
         trialListView.setAdapter(trialAdapter);
 

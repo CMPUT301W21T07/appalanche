@@ -21,12 +21,13 @@ import java.util.ArrayList;
 public class ReplyCustomList extends ArrayAdapter<Reply> {
     private ArrayList<Reply> replies;
     private Context context;
+
     public ReplyCustomList(Context context, ArrayList<Reply> replies) {
         super(context, 0, replies);
         this.context = context;
         this.replies = replies;
     }
-    @SuppressLint("DefaultLocale")
+
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
@@ -37,6 +38,7 @@ public class ReplyCustomList extends ArrayAdapter<Reply> {
         // Display Reply List
         TextView ReplyContent = view.findViewById(R.id.questionContent);
         ReplyContent.setText(reply.getReplyText());
+
         // Display user ID
         TextView userReplied = view.findViewById(R.id.user_posted_question);
         userReplied.setText(reply.getUserReplied().getId());
