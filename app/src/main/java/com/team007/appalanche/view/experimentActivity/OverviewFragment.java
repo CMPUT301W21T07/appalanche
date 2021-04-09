@@ -17,8 +17,10 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.team007.appalanche.R;
+import com.team007.appalanche.StatFunctions;
 import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.trial.BinomialTrial;
+import com.team007.appalanche.trial.CountBasedTrial;
 import com.team007.appalanche.trial.MeasurementTrial;
 import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.trial.Trial;
@@ -27,6 +29,7 @@ import com.team007.appalanche.view.profile.ProfileActivity;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Collections;
 import java.util.TreeMap;
 
 import static com.team007.appalanche.view.experimentActivity.TrialsFragment.trialListController;
@@ -98,6 +101,95 @@ public class OverviewFragment extends Fragment {
             BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(getDataPoint());
             histogram.addSeries(series);}
 
+
+        ArrayList<Trial> trialDataList = experiment.getTrials();
+        Double stdevValue = 0.0;
+        double[] quartiles = new double[3];
+        Double meanVal = 0.0;
+        Integer medianVal = 0;
+        Double doubleMedianVal = 0.0;
+
+        Integer total = 0;
+        Double doubleTotal = 0.0;
+
+        if(trialDataList.size() > 0) {
+            if (experiment.getTrialType().equals("count")) {
+                ArrayList<Integer> valueList = new ArrayList<Integer>();
+                for (int i = 0; i < trialDataList.size(); i++) {
+                    // CountBasedTrial trial = (CountBasedTrial) trialDataList.get(i);
+                    valueList.add(1);
+                }
+                Collections.sort(valueList);
+                for (int i = 0; i < trialDataList.size(); i++) {
+                    // CountBasedTrial trial = (CountBasedTrial) trialDataList.get(i);
+                    total++;
+                }
+                meanVal = Double.valueOf(total) / trialDataList.size();
+                medianVal = valueList.get(valueList.size()/2);
+                stdevValue = StatFunctions.calculateSD(valueList);
+                quartiles = StatFunctions.calculateQuartiles(valueList);
+            } else if (experiment.getTrialType().equals("binomial")) {
+                ArrayList<Integer> valueList = new ArrayList<Integer>();
+                for (int i = 0; i < trialDataList.size(); i++) {
+                    BinomialTrial trial = (BinomialTrial) trialDataList.get(i);
+                    valueList.add(trial.getOutcome() ? 1 : 0);
+                }
+                Collections.sort(valueList);
+                for (int i = 0; i < trialDataList.size(); i++) {
+                    BinomialTrial trial = (BinomialTrial) trialDataList.get(i);
+                    Integer boolValue = trial.getOutcome() ? 1 : 0;
+                    total = total + boolValue;
+                }
+                meanVal = Double.valueOf(total) / trialDataList.size();
+                medianVal = valueList.get(valueList.size()/2);
+                stdevValue = StatFunctions.calculateSD(valueList);
+                quartiles = StatFunctions.calculateQuartiles(valueList);
+            } else if (experiment.getTrialType().equals("nonNegativeCount")) {
+                ArrayList<Integer> valueList = new ArrayList<Integer>();
+                for (int i = 0; i < trialDataList.size(); i++) {
+                    NonNegativeCountTrial trial = (NonNegativeCountTrial) trialDataList.get(i);
+                    valueList.add(trial.getCount());
+                }
+                Collections.sort(valueList);
+                for (int i = 0; i < trialDataList.size(); i++) {
+                    NonNegativeCountTrial trial = (NonNegativeCountTrial) trialDataList.get(i);
+                    total = total + trial.getCount();
+                }
+                meanVal = Double.valueOf(total) / trialDataList.size();
+                medianVal = valueList.get(valueList.size()/2);
+                stdevValue = StatFunctions.calculateSD(valueList);
+                quartiles = StatFunctions.calculateQuartiles(valueList);
+            } else if (experiment.getTrialType().equals("measurement")) {
+                ArrayList<Double> valueList = new ArrayList<Double>();
+                for (int i = 0; i < trialDataList.size(); i++) {
+                    MeasurementTrial trial = (MeasurementTrial) trialDataList.get(i);
+                    valueList.add(trial.getValue());
+                }
+                Collections.sort(valueList);
+                for (int i = 0; i < trialDataList.size(); i++) {
+                    MeasurementTrial trial = (MeasurementTrial) trialDataList.get(i);
+                    doubleTotal = doubleTotal + trial.getValue();
+                }
+                meanVal = Double.valueOf(doubleTotal) / trialDataList.size();
+                doubleMedianVal = valueList.get(valueList.size()/2);
+                stdevValue = StatFunctions.doubleCalculateSD(valueList);
+                quartiles = StatFunctions.doubleCalculateQuartiles(valueList);
+            }
+        }
+
+
+        // STATISTIC FIELDS
+        TextView stdev = root.findViewById(R.id.stdv);
+        stdev.setText("Standard Deviation: " + String.valueOf(stdevValue));
+
+        TextView q = root.findViewById(R.id.q);
+        q.setText("Quartiles: Q2=" + String.valueOf(quartiles[1]) + ", Q3=" + String.valueOf(quartiles[2]));
+
+        TextView mean = root.findViewById(R.id.mean);
+        mean.setText("Mean: " + String.valueOf(meanVal));
+
+        TextView median = root.findViewById(R.id.median);
+        median.setText("Median: " + String.valueOf(experiment.getTrialType().equals("measurement") ? doubleMedianVal : medianVal));
 
 
         return root;
@@ -188,6 +280,4 @@ public class OverviewFragment extends Fragment {
         }
         return tm;
     }
-
-
 }

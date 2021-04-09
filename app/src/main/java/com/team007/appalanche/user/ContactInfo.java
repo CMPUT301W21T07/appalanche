@@ -6,7 +6,7 @@ package com.team007.appalanche.user;
  */
 
 public class ContactInfo {
-    private Integer phoneNumber;
+    private String phoneNumber;
     private String githubLink;
 
     /**
@@ -14,16 +14,19 @@ public class ContactInfo {
      * @param phoneNumber
      * @param githubLink
      */
-    public ContactInfo(Integer phoneNumber, String githubLink) {
+    public ContactInfo(String phoneNumber, String githubLink) {
         this.phoneNumber = phoneNumber;
         this.githubLink = githubLink;
     }
-    public ContactInfo(Integer phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
+
+//    public ContactInfo(String phoneNumber) {
+//        this.phoneNumber = phoneNumber;
+//    }
+//
     public ContactInfo(String githubLink) {
         this.githubLink = githubLink;
     }
+
     public ContactInfo() {
     }
 
@@ -32,12 +35,12 @@ public class ContactInfo {
      * @param phoneNumber
      * @param githubLink
      */
-    public void setContactInfo(Integer phoneNumber, String githubLink) {
+    public void setContactInfo(String phoneNumber, String githubLink) {
         this.phoneNumber = phoneNumber;
         this.githubLink = githubLink;
     }
 
-    public Integer getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
