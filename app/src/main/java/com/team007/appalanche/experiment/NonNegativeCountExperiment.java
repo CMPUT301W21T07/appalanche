@@ -1,5 +1,6 @@
 package com.team007.appalanche.experiment;
 
+import com.jjoe64.graphview.series.DataPoint;
 import com.team007.appalanche.scannableCode.NonNegScannableCode;
 
 import java.io.Serializable;
@@ -50,16 +51,9 @@ public class NonNegativeCountExperiment extends Experiment implements Experiment
      * function to obtain experiment time plot
      */
     @Override
-    public void obtainPlot() {
+    public DataPoint[] obtainPlot() {
         // TODO: implement
-    }
-
-    /**
-     * function to obtain map of trial locations
-     */
-    @Override
-    public void obtainMap() {
-        // TODO: implement
+        return new DataPoint[0];
     }
 
     /**

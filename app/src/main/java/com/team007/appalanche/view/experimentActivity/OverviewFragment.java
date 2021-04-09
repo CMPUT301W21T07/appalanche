@@ -14,8 +14,10 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 import com.team007.appalanche.R;
 import com.team007.appalanche.StatFunctions;
 import com.team007.appalanche.experiment.Experiment;
@@ -28,6 +30,9 @@ import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.profile.ProfileActivity;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Collections;
 import java.util.TreeMap;
@@ -38,7 +43,6 @@ import static com.team007.appalanche.view.experimentActivity.TrialsFragment.tria
  * A placeholder fragment containing a simple view.
  */
 public class OverviewFragment extends Fragment {
-
     private static final String ARG_SECTION_NUMBER = "section_number";
     private Experiment experiment;
 
@@ -83,7 +87,7 @@ public class OverviewFragment extends Fragment {
         }
 
         TextView region = root.findViewById(R.id.region);
-        region.setText("Region:" + experiment.getRegion());
+        region.setText("Region: " + experiment.getRegion());
 
         TextView currentTrialNum = root.findViewById(R.id.currentNumbTrials);
         currentTrialNum.setText("Current number of trials: " + experiment.getTrials().size());
@@ -91,8 +95,7 @@ public class OverviewFragment extends Fragment {
         TextView minTrialNum = root.findViewById(R.id.minTrials);
         minTrialNum.setText("Minimum number of trials: " + experiment.getMinNumTrials().toString());
 
-        // SET UP HISTOGRAM HERE
-//        setUpFirebase();
+        // Histogram set-up
         GraphView histogram = root.findViewById(R.id.histogram);
         histogram.getGridLabelRenderer().setHorizontalAxisTitle("Trial Result");
         histogram.getGridLabelRenderer().setVerticalAxisTitle("Number of Trials");
@@ -191,8 +194,188 @@ public class OverviewFragment extends Fragment {
         TextView median = root.findViewById(R.id.median);
         median.setText("Median: " + String.valueOf(experiment.getTrialType().equals("measurement") ? doubleMedianVal : medianVal));
 
+        // Time plot set up
+        // US US 01.07.01
+        // As an owner or experimenter, I want to see plots of the results of trials over time.
+        GraphView timePlot = root.findViewById(R.id.plot);
+        ArrayList<Trial> trials = experiment.getTrials();
+
+        switch (experiment.getTrialType()) {
+            case "binomial":
+                getBinomialPlot(timePlot, trials);
+                break;
+            case "count":
+                getCountPlot(timePlot, trials);
+                break;
+            case "measurement":
+                getMeasurementPlot(timePlot, trials);
+                break;
+            case "nonNegativeCount":
+                getNonNegPlot(timePlot, trials);
+                break;
+            default:
+                break;
+        }
 
         return root;
+    }
+
+    private void getBinomialPlot(GraphView timePlot, ArrayList<Trial> trials) {
+        Map<Date, ArrayList<Integer>> map = new TreeMap<Date, ArrayList<Integer>>();
+
+        for(Trial trial: trials) {
+            ArrayList<Integer> values = map.get(trial.getDate()) != null ?
+                    map.get(trial.getDate()): new ArrayList<Integer>();
+            int outcome = ((BinomialTrial) trial).getOutcome() ? 1 : 0;
+            values.add(outcome);
+            map.put(trial.getDate(), values);
+        }
+
+        DataPoint[] points = new DataPoint[map.keySet().size()];
+
+        int i = 0;
+        for(Map.Entry<Date, ArrayList<Integer>> val : map.entrySet()) {
+            int proportion = 0;
+            for(Integer j: val.getValue()) {
+                proportion += j;
+            }
+            proportion = proportion / val.getValue().size();
+
+            points[i] = new DataPoint(val.getKey(), proportion);
+            i++;
+        }
+
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(points);
+
+        // Format the series
+        series.setDrawDataPoints(true);
+        series.setDataPointsRadius(10);
+        series.setThickness(8);
+
+        // Format the time plot
+        timePlot.addSeries(series);
+        timePlot.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
+        timePlot.getGridLabelRenderer().setHumanRounding(false);
+        timePlot.getGridLabelRenderer().setPadding(60);
+        timePlot.getGridLabelRenderer().setHorizontalLabelsAngle(90);
+        timePlot.setTitle("Proportion of Success vs Time");
+    }
+
+    private void getCountPlot(GraphView timePlot, ArrayList<Trial> trials) {
+        Map<Date, Integer> map = new TreeMap<Date, Integer>();
+
+        for(Trial trial: trials) {
+            int value = map.get(trial.getDate()) != null ?
+                    map.get(trial.getDate()) + 1 : 1;
+            map.put(trial.getDate(), value);
+        }
+
+        DataPoint[] points = new DataPoint[map.keySet().size()];
+
+        int i = 0;
+        int count = 0;
+        for(Map.Entry<Date, Integer> val : map.entrySet()) {
+            count += val.getValue();
+            points[i] = new DataPoint(val.getKey(), count);
+            i++;
+        }
+
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(points);
+
+        // Format the series
+        series.setDrawDataPoints(true);
+        series.setDataPointsRadius(10);
+        series.setThickness(8);
+
+        // Format the time plot
+        timePlot.addSeries(series);
+        timePlot.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
+        timePlot.getGridLabelRenderer().setHumanRounding(false);
+        timePlot.getGridLabelRenderer().setPadding(60);
+        timePlot.getGridLabelRenderer().setHorizontalLabelsAngle(90);
+        timePlot.setTitle("Count vs Time");
+    }
+
+    private void getMeasurementPlot(GraphView timePlot, ArrayList<Trial> trials) {
+        Map<Date, ArrayList<Double>> map = new TreeMap<Date, ArrayList<Double>>();
+
+        for(Trial trial: trials) {
+            ArrayList<Double> values = map.get(trial.getDate()) != null ?
+                    map.get(trial.getDate()): new ArrayList<Double>();
+            double result = ((MeasurementTrial) trial).getValue();
+            values.add(result);
+            map.put(trial.getDate(), values);
+        }
+
+        DataPoint[] points = new DataPoint[map.keySet().size()];
+
+        int i = 0;
+        for(Map.Entry<Date, ArrayList<Double>> val : map.entrySet()) {
+            int proportion = 0;
+            for(double j: val.getValue()) {
+                proportion += j;
+            }
+            proportion = proportion / val.getValue().size();
+
+            points[i] = new DataPoint(val.getKey(), proportion);
+            i++;
+        }
+
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(points);
+
+        // Format the series
+        series.setDrawDataPoints(true);
+        series.setDataPointsRadius(10);
+        series.setThickness(8);
+
+        // Format the time plot
+        timePlot.addSeries(series);
+        timePlot.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
+        timePlot.getGridLabelRenderer().setHumanRounding(false);
+        timePlot.getGridLabelRenderer().setPadding(60);
+        timePlot.getGridLabelRenderer().setHorizontalLabelsAngle(90);
+        timePlot.setTitle("Mean vs Time");
+    }
+
+    private void getNonNegPlot(GraphView timePlot, ArrayList<Trial> trials) {
+        Map<Date, ArrayList<Integer>> map = new TreeMap<Date, ArrayList<Integer>>();
+
+        for (Trial trial : trials) {
+            ArrayList<Integer> values = map.get(trial.getDate()) != null ?
+                    map.get(trial.getDate()) : new ArrayList<Integer>();
+            int count = ((NonNegativeCountTrial) trial).getCount();
+            values.add(count);
+            map.put(trial.getDate(), values);
+        }
+
+        DataPoint[] points = new DataPoint[map.keySet().size()];
+
+        int i = 0;
+        for (Map.Entry<Date, ArrayList<Integer>> val : map.entrySet()) {
+            int mean = 0;
+            for (Integer j : val.getValue()) {
+                mean += j;
+            }
+            mean = mean / val.getValue().size();
+
+            points[i] = new DataPoint(val.getKey(), mean);
+            i++;
+        }
+
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(points);
+
+        // Format the series
+        series.setDrawDataPoints(true);
+        series.setDataPointsRadius(10);
+        series.setThickness(8);
+
+        // Format the time plot
+        timePlot.addSeries(series);
+        timePlot.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
+        timePlot.getGridLabelRenderer().setHumanRounding(false);
+        timePlot.getGridLabelRenderer().setPadding(60);
+        timePlot.getGridLabelRenderer().setHorizontalLabelsAngle(90);
+        timePlot.setTitle("Mean vs Time");
     }
 
     public void viewAProfile(TextView owner) {
@@ -232,6 +415,7 @@ public class OverviewFragment extends Fragment {
             series[i] = new DataPoint(val.getKey(), val.getValue());
             i = i +1;
         }
+
         return series;
     }
 
@@ -246,7 +430,6 @@ public class OverviewFragment extends Fragment {
 
         return countList;
     }
-
     
     public double[] getDataHistogram2(ArrayList<Trial> trialList) {
         double[] MeasurementList  = new double[trialList.size()];
