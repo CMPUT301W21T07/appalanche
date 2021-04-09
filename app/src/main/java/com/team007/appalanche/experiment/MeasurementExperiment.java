@@ -28,6 +28,9 @@ public class MeasurementExperiment extends Experiment implements ExperimentInter
         super(description, region, "measurement", minNumTrials, locationRequired, status, experimentOwner);
     }
 
+    //No argument constructor for firebase
+    public MeasurementExperiment(){}
+
     /**
      * function to obtain experiment statistics
      */

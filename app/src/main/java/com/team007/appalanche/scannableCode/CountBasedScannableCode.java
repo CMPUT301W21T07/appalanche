@@ -34,6 +34,9 @@ public class CountBasedScannableCode extends ScannableCode {
         super(experiment, experiment.getTrialType(), null);
     }
 
+    // No argument constructor for firebase
+    public CountBasedScannableCode() {}
+
     /**
      * Based on the scanned code, this method creates a count-based trial and returns it.
      * @param experimenter The experimenter who scanned the code

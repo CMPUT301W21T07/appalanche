@@ -45,10 +45,11 @@
         <activity android:name=".view.experimentActivity.MapActivity"
             android:parentActivityName=".view.experimentActivity.ExperimentActivity"/>
         <activity android:name=".view.QRCodeActivity" />
+        <activity android:name=".view.RegisterBarcodeActivity"
+            android:parentActivityName=".view.experimentActivity.ExperimentActivity" />
         <activity android:name=".view.ui.mainActivity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

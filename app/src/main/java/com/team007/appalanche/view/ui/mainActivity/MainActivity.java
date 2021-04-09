@@ -31,13 +31,28 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.team007.appalanche.R;
+import com.team007.appalanche.controller.ExperimentController;
+import com.team007.appalanche.controller.TrialListController;
+import com.team007.appalanche.experiment.BinomialExperiment;
 import com.team007.appalanche.experiment.Experiment;
+import com.team007.appalanche.scannableCode.BinomialScannableCode;
+import com.team007.appalanche.scannableCode.CountBasedScannableCode;
+import com.team007.appalanche.scannableCode.MeasurementScannableCode;
+import com.team007.appalanche.scannableCode.NonNegScannableCode;
 import com.team007.appalanche.scannableCode.ScannableCode;
+import com.team007.appalanche.trial.BinomialTrial;
+import com.team007.appalanche.trial.CountBasedTrial;
+import com.team007.appalanche.trial.MeasurementTrial;
+import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.AddExperimentFragment;
 import com.team007.appalanche.view.AddUserIDFragment;
 import com.team007.appalanche.view.Capture;
+import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
+import com.team007.appalanche.view.addTrialFragments.AddCountTrialFragment;
+import com.team007.appalanche.view.addTrialFragments.AddMeasurementTrialFragment;
+import com.team007.appalanche.view.addTrialFragments.AddNonNegTrialFragment;
 import com.team007.appalanche.view.profile.OwnerProfileActivity;
 import com.team007.appalanche.view.experimentActivity.ExperimentActivity;
 import com.team007.appalanche.view.searching.SearchActivity;
@@ -171,15 +186,40 @@ public class MainActivity extends AppCompatActivity implements AddExperimentFrag
         // Deserialize
         ScannableCode scannedCode = deserialize(contents);
 
-        // Get the trial from the deserialization
-        Trial trial = scannedCode.scan(currentUser);
-
-        // Add the trial to the appropriate experiment
+        // Get experiment information
         Experiment experiment = scannedCode.getExperiment();
-        experiment.addTrial(trial);
+        TrialListController trialListController = new TrialListController(experiment);
+
+        switch(experiment.getTrialType()) {
+            case "binomial":
+                BinomialTrial binomialTrial =
+                        ((BinomialScannableCode) scannedCode).scan(currentUser);
+                trialListController.addBinomialTrialToDb(binomialTrial);
+                break;
+            case "count":
+                CountBasedTrial countBasedTrial =
+                        ((CountBasedScannableCode) scannedCode).scan(currentUser);
+                trialListController.addCountTrialToDb(countBasedTrial);
+                break;
+            case "measurement":
+                MeasurementTrial measurementTrial =
+                        ((MeasurementScannableCode) scannedCode).scan(currentUser);
+                trialListController.addMeasurementTrialToDb(measurementTrial);
+                break;
+            case "nonNegativeCount":
+                NonNegativeCountTrial nonNegativeCountTrial =
+                        ((NonNegScannableCode) scannedCode).scan(currentUser);
+                trialListController.addNonNegTrialToDb(nonNegativeCountTrial);
+            default:
+                System.out.println("There was an error adding the trial to " +
+                        "the database");
+                break;
+        }
 
         // Go to that experiment
-        openExperimentActivity(experiment);
+        Toast.makeText(this, "Your trial has been " +
+                        "successfully added to the experiment: " + experiment.getDescription(),
+                Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -191,28 +231,62 @@ public class MainActivity extends AppCompatActivity implements AddExperimentFrag
     private void getScannedTrialBarcode(String barcode) {
         db.collection("Barcodes").document(barcode).get()
             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             ScannableCode scannedCode = document.toObject(ScannableCode.class);
-                            // Get the trial from the deserialization
-                            Trial trial = scannedCode.scan(currentUser);
 
                             // Add the trial to the appropriate experiment
                             Experiment experiment = scannedCode.getExperiment();
-                            experiment.addTrial(trial);
+                            TrialListController trialListController = new TrialListController(experiment);
 
-                            // Go to that experiment
-                            openExperimentActivity(experiment);
+                            switch(experiment.getTrialType()) {
+                                case "binomial":
+                                    BinomialScannableCode binomialScannableCode =
+                                            document.toObject(BinomialScannableCode.class);
+                                    BinomialTrial binomialTrial =
+                                            (binomialScannableCode).scan(currentUser);
+                                    trialListController.addBinomialTrialToDb(binomialTrial);
+                                    break;
+                                case "count":
+                                    CountBasedScannableCode countBasedScannableCode =
+                                            document.toObject(CountBasedScannableCode.class);
+                                    CountBasedTrial countBasedTrial =
+                                            (countBasedScannableCode).scan(currentUser);
+                                    trialListController.addCountTrialToDb(countBasedTrial);
+                                    break;
+                                case "measurement":
+                                    MeasurementScannableCode measurementScannableCode =
+                                            document.toObject(MeasurementScannableCode.class);
+                                    MeasurementTrial measurementTrial =
+                                            (measurementScannableCode).scan(currentUser);
+                                    trialListController.addMeasurementTrialToDb(measurementTrial);
+                                    break;
+                                case "nonNegativeCount":
+                                    NonNegScannableCode nonNegScannableCode =
+                                            document.toObject(NonNegScannableCode.class);
+                                    NonNegativeCountTrial nonNegativeCountTrial =
+                                            (nonNegScannableCode).scan(currentUser);
+                                    trialListController.addNonNegTrialToDb(nonNegativeCountTrial);
+                                default:
+                                    System.out.println("There was an error adding the trial to " +
+                                            "the database");
+                                    break;
+                            }
+
+                            Toast.makeText(getApplicationContext(), "Your trial has been " +
+                                            "successfully added to the experiment: " + experiment.getDescription(),
+                                    Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(MainActivity.this, "This barcode is not registered to " +
+                            Toast.makeText(getApplicationContext(), "This barcode is not registered to " +
                                             "anything",
                                     Toast.LENGTH_LONG).show();
                         }
                     } else {
-                        Toast.makeText(MainActivity.this, "There was an error fetching the result" +
+                        Toast.makeText(getApplicationContext(), "There was an error fetching the result" +
                                         " of this barcode",
                                 Toast.LENGTH_LONG).show();
                     }

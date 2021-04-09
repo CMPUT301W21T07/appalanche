@@ -14,7 +14,7 @@ import java.util.Date;
  */
 
 public class MeasurementScannableCode extends ScannableCode {
-    private final double result;
+    private double result;
 
     /**
      * This is the measurement code class constructor function for a barcode.
@@ -41,6 +41,9 @@ public class MeasurementScannableCode extends ScannableCode {
         super(experiment, experiment.getTrialType(), null);
         this.result = result;
     }
+
+    // No argument constructor for firebase
+    public MeasurementScannableCode(){}
 
     /**
      * Based on the scanned code, this method creates a measurement trial and returns it.

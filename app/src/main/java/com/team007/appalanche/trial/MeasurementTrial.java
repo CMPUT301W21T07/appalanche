@@ -25,6 +25,9 @@ public class MeasurementTrial extends Trial implements Serializable {
         this.value = value;
     }
 
+    // No argument constructor for firebase
+    public MeasurementTrial(){}
+
     // Getter and setter for value
     public void setValue(double value){
         this.value=value;

@@ -13,7 +13,7 @@ import java.util.Date;
  * trial.
  */
 public class BinomialScannableCode extends ScannableCode {
-    private final boolean result;
+    private boolean result;
 
     /**
      * This is the binomial code class constructor function for a barcode.
@@ -40,6 +40,9 @@ public class BinomialScannableCode extends ScannableCode {
         super(experiment, experiment.getTrialType(), null);
         this.result = result;
     }
+
+    // No argument constructor for firebase
+    public BinomialScannableCode(){}
 
     /**
      * Based on the scanned code, this method creates a binomial trial and returns it.

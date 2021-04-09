@@ -33,6 +33,9 @@ public class  NonNegativeCountTrial extends Trial implements Serializable {
         }
     }
 
+    // No argument constructor for firebase
+    public NonNegativeCountTrial(){}
+
     // This function returns the total number of count at the end
     public int getCount(){
         return this.count;

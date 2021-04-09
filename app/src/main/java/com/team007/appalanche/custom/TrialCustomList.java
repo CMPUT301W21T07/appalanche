@@ -47,8 +47,11 @@ public class TrialCustomList extends ArrayAdapter<Trial> {
         TextView trialCount = view.findViewById(R.id.trialCount);
         TextView userAddedTrial = view.findViewById(R.id.userID);
         TextView date = view.findViewById(R.id.date);
+
+        // Create date format pattern
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
         switch(trialType) {
             case "binomial":
                 BinomialTrial binomialTrial = (BinomialTrial) trials.get(position);

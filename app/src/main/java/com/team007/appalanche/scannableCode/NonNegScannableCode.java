@@ -14,7 +14,7 @@ import java.util.Date;
  */
 
 public class NonNegScannableCode extends ScannableCode {
-    private final int result;
+    private int result;
 
     /**
      * This is the non-negative code class constructor function for a barcode.
@@ -41,6 +41,9 @@ public class NonNegScannableCode extends ScannableCode {
         super(experiment, experiment.getTrialType(), null);
         this.result = result;
     }
+
+    // No argument constructor for firebase
+    public NonNegScannableCode(){}
 
     /**
      * Based on the scanned code, this method creates a non-negative trial and returns it.

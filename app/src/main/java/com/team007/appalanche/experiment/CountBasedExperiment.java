@@ -34,6 +34,9 @@ public class CountBasedExperiment extends Experiment implements ExperimentInterf
         super(description, region, "count", minNumTrials, locationRequired, status, experimentOwner);
     }
 
+    // Nno argument constructor for firebasr
+    public CountBasedExperiment(){}
+
     /**
      * function to obtain experiment statistics
      */
