@@ -15,10 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.team007.appalanche.R;
-import com.team007.appalanche.user.Experimenter;
 import com.team007.appalanche.question.Question;
 import com.team007.appalanche.user.User;
-import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
 
 import java.util.Date;
 
