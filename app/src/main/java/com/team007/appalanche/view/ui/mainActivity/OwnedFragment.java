@@ -266,7 +266,6 @@ public class OwnedFragment extends Fragment {
                                     count.intValue()));
                         }
                     }
-
                 }
                 trialList.setTrial(experiment);
             }});
