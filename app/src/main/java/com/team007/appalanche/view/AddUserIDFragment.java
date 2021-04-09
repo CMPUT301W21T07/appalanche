@@ -3,7 +3,6 @@ package com.team007.appalanche.view;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,14 +18,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.team007.appalanche.R;
-import com.team007.appalanche.question.Question;
-import com.team007.appalanche.user.Experimenter;
 import com.team007.appalanche.user.User;
 
-import java.util.Date;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
