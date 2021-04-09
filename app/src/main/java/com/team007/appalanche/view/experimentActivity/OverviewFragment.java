@@ -18,14 +18,16 @@ import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.team007.appalanche.R;
 import com.team007.appalanche.experiment.Experiment;
+import com.team007.appalanche.trial.BinomialTrial;
+import com.team007.appalanche.trial.MeasurementTrial;
+import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.profile.ProfileActivity;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import static com.team007.appalanche.view.experimentActivity.TrialsFragment.trialListController;
 
@@ -91,9 +93,11 @@ public class OverviewFragment extends Fragment {
         GraphView histogram = root.findViewById(R.id.histogram);
         histogram.getGridLabelRenderer().setHorizontalAxisTitle("Trial Result");
         histogram.getGridLabelRenderer().setVerticalAxisTitle("Number of Trials");
+        // count-based does not have any histogram graph
+        if (!experiment.getTrialType().equals("count")) {
+            BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(getDataPoint());
+            histogram.addSeries(series);}
 
-        BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(getDataPoint());
-        histogram.addSeries(series);
 
 
         return root;
@@ -113,76 +117,76 @@ public class OverviewFragment extends Fragment {
         });
     }
 
-
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     private DataPoint[] getDataPoint() {
-//        ArrayList<Trial> trialList = experiment.getTrials() ;
-//        CountBasedTrial x = (CountBasedTrial) trialList.get(0);
-
-        ArrayList<Integer> countList =  getDataHistogram(trialListController.getExperiment().getTrials());
-//        ArrayList<Integer> countList =  getDataHistogram(experiment.getTrials());
-        Map<Integer, Integer> hm = countFrequencies(countList);
-        DataPoint[] series = new DataPoint[getSize(hm)];
+        int size1 = trialListController.getExperiment().getTrials().size();
+        Map<Double, Integer> hm;
+        double[] resultList = new double[size1];
+        if (experiment.getTrialType().equals("nonNegativeCount")) {
+            resultList =  getDataHistogram1(trialListController.getExperiment().getTrials());
+            hm = countFrequenciesForDouble(resultList);
+        }
+        else if (experiment.getTrialType().equals("binomial")) {
+            resultList = getDataHistogram3(trialListController.getExperiment().getTrials());
+            hm = countFrequenciesForDouble(resultList);
+        }
+        else {
+            resultList = getDataHistogram2(trialListController.getExperiment().getTrials());
+            hm = countFrequenciesForDouble(resultList);
+        }
+        DataPoint[] series = new DataPoint[hm.size()];
         int i = 0;
-        for (Map.Entry<Integer, Integer> val : hm.entrySet()) {
-            Toast.makeText(getContext(), String.valueOf(val.getKey()), Toast.LENGTH_SHORT).show();
-            Toast.makeText(getContext(), String.valueOf(val.getValue()), Toast.LENGTH_SHORT).show();
+        for (Map.Entry<Double, Integer> val : hm.entrySet()) {
             series[i] = new DataPoint(val.getKey(), val.getValue());
             i = i +1;
         }
-//        DataPoint[] series = new DataPoint[] {
-//                new DataPoint(countList.get(0) , 1),
-//                new DataPoint(2 , 4),
-//                new DataPoint(countList.get(1), 10),
-//                new DataPoint(countList.get(2), 3)
-////                new DataPoint(3, 2),
-////                new DataPoint(4, 6)
-//        };
         return series;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public  ArrayList<Integer> getDataHistogram(ArrayList<Trial> trialList) {
-        ArrayList<Integer> countList = new ArrayList<Integer>();
+    // GET DATA FUNCTION FOR NON-NEGATIVE COUNT TRIALS
+    public double[] getDataHistogram1(ArrayList<Trial> trialList) {
+        double[] countList = new  double[trialList.size()];
 
         for (int i = 0; i < trialList.size(); i++) {
-            //CountBasedTrial trial = (CountBasedTrial) trialList.get(i);
-            //countList.add( trial.getCount());
-//            if (experiment.getTrialType().equals("count")) {
-//                CountBasedTrial trial = (CountBasedTrial) trialList.get(i);
-//                countList.add( trial.getCount());
-//            } else if (experiment.getTrialType().equals("binomial")) {
-//                BinomialTrial trial = (BinomialTrial) trialList.get(i);
-//                countList.add( trial.getOutcome());
-//            } else if (experiment.getTrialType().equals("nonNegativeCount")) {
-//
-//            }
-//            else {
-//
-//            }
-
+            NonNegativeCountTrial trial = (NonNegativeCountTrial) trialList.get(i);
+            countList[i] = trial.getCount();
         }
-        countList.sort(Comparator.naturalOrder());
+
         return countList;
     }
 
-    public  Map<Integer, Integer> countFrequencies(ArrayList<Integer> list)
-    {
-        Map<Integer, Integer> hm = new HashMap<Integer, Integer>();
-        for (Integer i : list) {
-            // Get the current occurennce into j
-            Integer j = hm.get(i);
-            hm.put(i, (j == null) ? 1 : j + 1);
+    
+    public double[] getDataHistogram2(ArrayList<Trial> trialList) {
+        double[] MeasurementList  = new double[trialList.size()];
+        for (int i = 0; i < trialList.size(); i++) {
+            MeasurementTrial trial = (MeasurementTrial) trialList.get(i);
+            MeasurementList[i] =  trial.getValue();
         }
-        return hm;
+        return MeasurementList;
     }
-    public int getSize( Map<Integer, Integer> hm) {
-        int i =0;
-        for (Map.Entry<Integer, Integer> val : hm.entrySet()) {
-            i += 1;
+
+    public double[] getDataHistogram3(ArrayList<Trial> trialList) {
+        double[] binomialList = new double[trialList.size()];
+        for (int i = 0; i < trialList.size(); i++) {
+            BinomialTrial trial = (BinomialTrial) trialList.get(i);
+            if (trial.getOutcome())
+                binomialList[i] = 1.0; // ADD 1 FOR TRUE
+            else
+                binomialList[i] = 2.0;  // ADD 2 FOR FALSE
         }
-        return i;
+        return binomialList;
+    }
+
+    public  Map<Double, Integer> countFrequenciesForDouble(double[] list)
+    {
+        Map<Double, Integer> tm = new TreeMap<>();
+        for (Double i : list) {
+            // Get the current occurence into j -> y-axis
+            // The value is in i -> x axis
+            Integer j = tm.get(i);
+            tm.put(i, (j == null) ? 1 : j + 1);
+        }
+        return tm;
     }
 
 
