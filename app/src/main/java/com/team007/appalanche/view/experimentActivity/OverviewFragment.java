@@ -98,11 +98,12 @@ public class OverviewFragment extends Fragment {
         GraphView histogram = root.findViewById(R.id.histogram);
         histogram.getGridLabelRenderer().setHorizontalAxisTitle("Trial Result");
         histogram.getGridLabelRenderer().setVerticalAxisTitle("Number of Trials");
-        // count-based does not have any histogram graph
+
+        // Count-based does not have any histogram graph
         if (!experiment.getTrialType().equals("count")) {
             BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(getDataPoint());
-            histogram.addSeries(series);}
-
+            histogram.addSeries(series);
+        }
 
         ArrayList<Trial> trialDataList = experiment.getTrials();
         Double stdevValue = 0.0;
@@ -179,7 +180,6 @@ public class OverviewFragment extends Fragment {
             }
         }
 
-
         // STATISTIC FIELDS
         TextView stdev = root.findViewById(R.id.stdv);
         stdev.setText("Standard Deviation: " + stdevValue);
@@ -195,20 +195,7 @@ public class OverviewFragment extends Fragment {
 
         // Time plot set up
         GraphView timePlot = root.findViewById(R.id.plot);
-        ArrayList<Trial> trials = experiment.getTrials();
         createPlot(timePlot);
-
-        switch (experiment.getTrialType()) {
-            case "binomial":
-                timePlot.setTitle("Proportion of Success vs Time");
-                break;
-            case "count":
-                timePlot.setTitle("Count vs Time");
-                break;
-            default:
-                timePlot.setTitle("Mean vs Time");
-
-        }
 
         return root;
     }
@@ -229,7 +216,18 @@ public class OverviewFragment extends Fragment {
         timePlot.getGridLabelRenderer().setHumanRounding(false);
         timePlot.getGridLabelRenderer().setPadding(60);
         timePlot.getGridLabelRenderer().setHorizontalLabelsAngle(90);
-        timePlot.setTitle("Mean vs Time");
+
+        switch (experiment.getTrialType()) {
+            case "binomial":
+                timePlot.setTitle("Proportion of Success vs Time");
+                break;
+            case "count":
+                timePlot.setTitle("Count vs Time");
+                break;
+            default:
+                timePlot.setTitle("Mean vs Time");
+
+        }
     }
 
     public void viewAProfile(TextView owner) {
@@ -246,13 +244,13 @@ public class OverviewFragment extends Fragment {
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+//    @RequiresApi(api = Build.VERSION_CODES.N)
     private DataPoint[] getDataPoint() {
         int size1 = trialListController.getExperiment().getTrials().size();
         Map<Double, Integer> hm;
-        double[] resultList = new double[size1];
+        double[] resultList;
         if (experiment.getTrialType().equals("nonNegativeCount")) {
-            resultList =  getDataHistogram1(trialListController.getExperiment().getTrials());
+            resultList = getDataHistogram1(trialListController.getExperiment().getTrials());
             hm = countFrequenciesForDouble(resultList);
         }
         else if (experiment.getTrialType().equals("binomial")) {
