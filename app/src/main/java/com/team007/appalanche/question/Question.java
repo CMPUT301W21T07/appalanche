@@ -25,6 +25,7 @@ public class Question implements Serializable {
     public Question(String content, User userPostedQuestion, Date dateAsked) {
         this.content = content;
         this.userPostedQuestion = userPostedQuestion;
+        this.dateAsked = dateAsked;
     }
 
     /**
@@ -36,6 +37,13 @@ public class Question implements Serializable {
         return content;
     }
 
+    /**
+     * This is a getter for the date when the question has been asked
+     * @return
+     */
+    public Date getDateAsked() {
+        return dateAsked;
+    }
 
     /**
      * This adds a reply to the reply list of a question

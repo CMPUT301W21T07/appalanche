@@ -22,7 +22,6 @@ import com.team007.appalanche.R;
 import com.team007.appalanche.StatFunctions;
 import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.trial.BinomialTrial;
-import com.team007.appalanche.trial.CountBasedTrial;
 import com.team007.appalanche.trial.MeasurementTrial;
 import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.trial.Trial;
@@ -30,10 +29,8 @@ import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.profile.ProfileActivity;
 
 import java.util.ArrayList;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Collections;
+import java.util.Map;
 import java.util.TreeMap;
 
 import static com.team007.appalanche.view.experimentActivity.TrialsFragment.trialListController;
@@ -193,7 +190,7 @@ public class OverviewFragment extends Fragment {
         TextView median = root.findViewById(R.id.median);
         median.setText("Median: " + (experiment.getTrialType().equals("measurement") ? doubleMedianVal : medianVal));
 
-        // Time plot set up
+         //Time plot set up
         GraphView timePlot = root.findViewById(R.id.plot);
         ArrayList<Trial> trials = experiment.getTrials();
         createPlot(timePlot);
