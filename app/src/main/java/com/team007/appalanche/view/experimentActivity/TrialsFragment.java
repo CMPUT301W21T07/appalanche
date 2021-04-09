@@ -87,8 +87,7 @@ public class TrialsFragment extends Fragment  {
 
         ArrayList<Trial> trials = experiment.getTrials();
 //        Toast.makeText(getActivity(), "Trials size = " + String.valueOf(trials.size()), Toast.LENGTH_LONG).show();
-        // Toast.makeText(getActivity(), "Trials size = " + experiment.getTrials().get(0).getLocation().getLat(), Toast.LENGTH_LONG).show();
-//
+
         // Set description text
         TextView description = root.findViewById(R.id.description);
         description.setText(experiment.getDescription());
