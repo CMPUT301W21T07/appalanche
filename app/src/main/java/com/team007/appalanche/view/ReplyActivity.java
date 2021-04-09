@@ -23,12 +23,12 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.team007.appalanche.R;
-import com.team007.appalanche.experiment.Experiment;
-import com.team007.appalanche.user.User;
 import com.team007.appalanche.controller.ReplyListController;
 import com.team007.appalanche.custom.ReplyCustomList;
+import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.question.Question;
 import com.team007.appalanche.question.Reply;
+import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.profile.ProfileActivity;
 
 import java.util.ArrayList;
@@ -126,7 +126,6 @@ public class ReplyActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
 
     }
 
