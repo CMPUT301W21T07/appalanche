@@ -12,7 +12,7 @@ import java.util.Date;
  * this class.
  */
 
-public abstract class Trial implements Serializable, Comparable<Trial> {
+public class Trial implements Serializable, Comparable<Trial> {
     private Date date;
     private Location location;
     private User userAddedTrial;
@@ -28,6 +28,9 @@ public abstract class Trial implements Serializable, Comparable<Trial> {
         this.userAddedTrial = userAddedTrial;
         this.date = date;
     }
+
+    // No argument constructor for firebase
+    public Trial(){}
 
     /*getters and setters for the variables in the trial class*/
     public Date getDate() {

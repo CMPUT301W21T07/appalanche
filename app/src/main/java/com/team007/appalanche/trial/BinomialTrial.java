@@ -24,6 +24,9 @@ public class BinomialTrial extends com.team007.appalanche.trial.Trial implements
         this.outcome = outcome;
     }
 
+    // No argument constructor for firebase
+    public BinomialTrial(){}
+
     // Getter and setter for outcome
     public void setOutcome(boolean outcome){
         this.outcome= outcome;

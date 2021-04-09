@@ -146,16 +146,6 @@ public class ExperimentActivity extends AppCompatActivity implements AskQuestion
         startActivityForResult(intent,3);
     }
 
-    /** This method starts the QR Code Fragment, passing the experiment type as a string
-     *
-     * @param expType is a string representing the type of the current experiment
-     */
-    public void openBarcodeActivity(String expType) {
-        Intent intent = new Intent(this, RegisterBarcodeActivity.class);
-        //intent.putExtra("type", expType);
-        startActivityForResult(intent,3);
-    }
-
     @Override
     public void askQuestion(Question question) {
         questionList.addQuestionToDb(question);

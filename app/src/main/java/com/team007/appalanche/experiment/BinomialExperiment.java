@@ -33,6 +33,9 @@ public class BinomialExperiment extends Experiment implements ExperimentInterfac
         super(description, region, "binomial", minNumTrials, locationRequired, status, experimentOwner);
     }
 
+    // No argument constructor for firebase
+    public BinomialExperiment(){}
+
     /**
      * function to obtain experiment statistics
      */

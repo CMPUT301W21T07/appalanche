@@ -29,6 +29,9 @@ public class NonNegativeCountExperiment extends Experiment implements Experiment
         super(description, region, "nonNegativeCount", minNumTrials, locationRequired, status, experimentOwner);
     }
 
+    // No argument constructor for firebase
+    public NonNegativeCountExperiment(){}
+
     /**
      * function to obtain experiment statistics
      */

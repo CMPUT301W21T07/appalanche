@@ -1,15 +1,25 @@
 package com.team007.appalanche.scannableCode;
 
+import com.google.firebase.firestore.Exclude;
+import com.team007.appalanche.Location;
 import com.team007.appalanche.experiment.*;
+import com.team007.appalanche.trial.BinomialTrial;
+import com.team007.appalanche.trial.CountBasedTrial;
+import com.team007.appalanche.trial.MeasurementTrial;
+import com.team007.appalanche.trial.NonNegativeCountTrial;
+import com.team007.appalanche.trial.Trial;
+import com.team007.appalanche.user.User;
+
+import java.util.Date;
 
 /**
  * This is the ScannableCode abstract class that represents a QR code or a barcode.
  * - if the barcode is -1, then it is a QR code
  */
-public abstract class ScannableCode implements scannable {
-    private final Experiment experiment;
-    private final String barcode;
-    private final String experimentType;
+public class ScannableCode {
+    private Experiment experiment;
+    private String barcode;
+    private String experimentType;
 
     /**
      * This is the barcode class constructor function.
@@ -26,6 +36,9 @@ public abstract class ScannableCode implements scannable {
         this.experimentType = experimentType;
     }
 
+    // No argument constructor for firebase
+    public ScannableCode(){}
+
     // Getter functions
     public Experiment getExperiment() {
         return experiment;
@@ -39,6 +52,7 @@ public abstract class ScannableCode implements scannable {
         return experimentType;
     }
 
+    @Exclude
     public boolean isBarcode() {
         return barcode != null;
     }
