@@ -28,6 +28,7 @@ import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.profile.ProfileActivity;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
@@ -100,6 +101,14 @@ public class OverviewFragment extends Fragment {
         if (!experiment.getTrialType().equals("count")) {
             BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(getDataPoint());
             histogram.addSeries(series);
+        }
+
+        // Time plot set-up
+        GraphView timePlot = root.findViewById(R.id.plot);
+        try {
+            createPlot(timePlot);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
         ArrayList<Trial> trialDataList = experiment.getTrials();
@@ -190,14 +199,10 @@ public class OverviewFragment extends Fragment {
         TextView median = root.findViewById(R.id.median);
         median.setText("Median: " + (experiment.getTrialType().equals("measurement") ? doubleMedianVal : medianVal));
 
-         //Time plot set up
-        GraphView timePlot = root.findViewById(R.id.plot);
-        createPlot(timePlot);
-
         return root;
     }
 
-    private void createPlot(GraphView timePlot) {
+    private void createPlot(GraphView timePlot) throws ParseException {
         DataPoint[] points = experiment.obtainPlot();
 
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(points);
@@ -210,20 +215,22 @@ public class OverviewFragment extends Fragment {
         // Format the time plot
         timePlot.addSeries(series);
         timePlot.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
-        timePlot.getGridLabelRenderer().setHumanRounding(false);
-        timePlot.getGridLabelRenderer().setPadding(60);
-        timePlot.getGridLabelRenderer().setHorizontalLabelsAngle(90);
+        timePlot.getGridLabelRenderer().setHumanRounding(true);
+        timePlot.getGridLabelRenderer().setHorizontalLabelsAngle(135);
+        timePlot.getGridLabelRenderer().setHorizontalAxisTitle("Date");
 
         switch (experiment.getTrialType()) {
             case "binomial":
+                timePlot.getGridLabelRenderer().setVerticalAxisTitle("Proportion of Success");
                 timePlot.setTitle("Proportion of Success vs Time");
                 break;
             case "count":
+                timePlot.getGridLabelRenderer().setVerticalAxisTitle("Count");
                 timePlot.setTitle("Count vs Time");
                 break;
             default:
+                timePlot.getGridLabelRenderer().setVerticalAxisTitle("Mean");
                 timePlot.setTitle("Mean vs Time");
-
         }
     }
 
@@ -241,7 +248,7 @@ public class OverviewFragment extends Fragment {
         });
     }
 
-//    @RequiresApi(api = Build.VERSION_CODES.N)
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private DataPoint[] getDataPoint() {
         int size1 = trialListController.getExperiment().getTrials().size();
         Map<Double, Integer> hm;

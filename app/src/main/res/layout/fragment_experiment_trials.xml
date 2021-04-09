@@ -24,9 +24,10 @@
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:text="Experiment Description"
-        android:textSize="20dp" />
+        android:textSize="24sp" />
 
     <ListView
         android:id="@+id/trialList"
