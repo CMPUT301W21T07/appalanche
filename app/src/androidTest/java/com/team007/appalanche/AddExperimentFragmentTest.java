@@ -17,17 +17,21 @@ import static org.junit.Assert.assertTrue;
 
 public class AddExperimentFragmentTest {
     private Solo solo;
+
     @Rule
     public ActivityTestRule<MainActivity> rule =
             new ActivityTestRule<>(MainActivity.class,true,true);
+
     @Before
     public void Setup(){
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
     }
+
     @Test
     public void start() throws Exception{
         Activity activity = rule.getActivity();
     }
+
     @Test
     public void AddCountExperimentTest(){
         solo.assertCurrentActivity("Wrong Activity",MainActivity.class);
@@ -40,6 +44,7 @@ public class AddExperimentFragmentTest {
         solo.clickOnButton("Post");
         assertTrue(solo.searchText("Experiment1"));
     }
+
     @Test
     public void AddNonNegativeCountExperimentTest(){
         solo.assertCurrentActivity("Wrong Activity",MainActivity.class);
@@ -52,6 +57,7 @@ public class AddExperimentFragmentTest {
         solo.clickOnButton("Post");
         assertTrue(solo.searchText("Experiment2"));
     }
+
     @Test
     public void AddBinomialExperimentTest() {
         solo.assertCurrentActivity("Wrong Activity",MainActivity.class);
@@ -65,17 +71,17 @@ public class AddExperimentFragmentTest {
         assertTrue(solo.searchText("Experiment3"));
     }
 
-        @Test
-        public void AddMeasurementExperimentTest(){
-            solo.assertCurrentActivity("Wrong Activity",MainActivity.class);
-            solo.clickOnView(solo.getView(R.id.addExperimentButton));
-            solo.enterText((EditText) solo.getView(R.id.expDescription),"Experiment4");
-            solo.enterText((EditText) solo.getView(R.id.expRegion),"Edmonton");
-            solo.enterText((EditText) solo.getView(R.id.expTrials),"4");
-            solo.clickOnView(solo.getView(R.id.expType));
-            solo.clickOnText("MEASUREMENT");
-            solo.clickOnButton("Post");
-            assertTrue(solo.searchText("Experiment4"));
-        }
+    @Test
+    public void AddMeasurementExperimentTest(){
+        solo.assertCurrentActivity("Wrong Activity",MainActivity.class);
+        solo.clickOnView(solo.getView(R.id.addExperimentButton));
+        solo.enterText((EditText) solo.getView(R.id.expDescription),"Experiment4");
+        solo.enterText((EditText) solo.getView(R.id.expRegion),"Edmonton");
+        solo.enterText((EditText) solo.getView(R.id.expTrials),"4");
+        solo.clickOnView(solo.getView(R.id.expType));
+        solo.clickOnText("MEASUREMENT");
+        solo.clickOnButton("Post");
+        assertTrue(solo.searchText("Experiment4"));
     }
+}
 

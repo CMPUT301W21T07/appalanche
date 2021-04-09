@@ -1,5 +1,6 @@
 package com.team007.appalanche.experiment;
 
+import com.jjoe64.graphview.series.DataPoint;
 import com.team007.appalanche.scannableCode.MeasurementScannableCode;
 
 import java.io.Serializable;
@@ -49,17 +50,11 @@ public class MeasurementExperiment extends Experiment implements ExperimentInter
      * function to obtain experiment time plot
      */
     @Override
-    public void obtainPlot() {
+    public DataPoint[] obtainPlot() {
         // TODO: implement
+        return new DataPoint[0];
     }
 
-    /**
-     * function to obtain map of trial locations
-     */
-    @Override
-    public void obtainMap() {
-        // TODO: implement
-    }
 
     /**
      * function to add questions to experiment

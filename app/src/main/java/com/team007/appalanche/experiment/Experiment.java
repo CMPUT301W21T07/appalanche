@@ -154,7 +154,6 @@ public class Experiment implements Serializable {
         return trials;
     }
 
-
     /**
      * This method adds a trial to the experiment class (only if the experiment if open)
      * @param trial The trial you would like to add to the experiment
