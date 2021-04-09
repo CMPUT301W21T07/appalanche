@@ -57,20 +57,28 @@ public class StatFunctions {
     }
 
     public static double[] doubleCalculateQuartiles(ArrayList<Double> list){
+        // Sort the list in ascending order
+        Collections.sort(list);
+        float length = list.size();
+
         double quartiles[] = new double[3];
+
         for (int i = 1; i < 4; i++) {
-            float length = list.size() + 1;
             double quartile;
-            float newArraySize = (length * ((float) (i) * 25 / 100)) - 1;
-            Collections.sort(list);
-            if (newArraySize % 1 == 0) {
-                quartile = list.get((int) newArraySize);
+
+            // Get the position of the ith quartile
+            float position = (float) (length * ((float) (i)) * 0.25);
+
+            if (position % 1 == 0 || Math.ceil(position) >= length) {
+                quartile = list.get((int) position);
             } else {
-                int newArraySize1 = (int) newArraySize;
-                quartile = (list.get(newArraySize1) + list.get(newArraySize1 + 1)) / 2;
+                quartile =
+                        ((double) list.get((int) Math.floor(position)) + (double) list.get((int) Math.ceil(position))) / 2;
             }
+
             quartiles[i - 1] = quartile;
         }
+
         return quartiles;
     }
 }

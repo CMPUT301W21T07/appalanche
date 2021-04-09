@@ -179,16 +179,16 @@ public class OverviewFragment extends Fragment {
 
         // STATISTIC FIELDS
         TextView stdev = root.findViewById(R.id.stdv);
-        stdev.setText("Standard Deviation: " + String.valueOf(stdevValue));
+        stdev.setText("Standard Deviation: " + stdevValue);
 
         TextView q = root.findViewById(R.id.q);
-        q.setText("Quartiles: Q2=" + String.valueOf(quartiles[1]) + ", Q3=" + String.valueOf(quartiles[2]));
+        q.setText("Quartiles: Q1 = " + quartiles[0] + ", Q3 = " + quartiles[2]);
 
         TextView mean = root.findViewById(R.id.mean);
-        mean.setText("Mean: " + String.valueOf(meanVal));
+        mean.setText("Mean: " + meanVal);
 
         TextView median = root.findViewById(R.id.median);
-        median.setText("Median: " + String.valueOf(experiment.getTrialType().equals("measurement") ? doubleMedianVal : medianVal));
+        median.setText("Median: " + (experiment.getTrialType().equals("measurement") ? doubleMedianVal : medianVal));
 
          //Time plot set up
         GraphView timePlot = root.findViewById(R.id.plot);
