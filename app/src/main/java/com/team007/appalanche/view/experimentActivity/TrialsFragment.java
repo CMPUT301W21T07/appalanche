@@ -87,7 +87,6 @@ public class TrialsFragment extends Fragment  {
         View root = inflater.inflate(R.layout.fragment_experiment_trials, container, false);
 
         ArrayList<Trial> trials = experiment.getTrials();
-//        Toast.makeText(getActivity(), "Trials size = " + String.valueOf(trials.size()), Toast.LENGTH_LONG).show();
 
         // Set description text
         TextView description = root.findViewById(R.id.description);
@@ -161,7 +160,6 @@ public class TrialsFragment extends Fragment  {
 
     private void openViewMapActivity() {
         Intent intent = new Intent(getActivity(), MapActivity.class);
-//        intent.putExtra("Trials", trialDataList);
         intent.putExtra("Experiment", experiment);
         startActivity(intent);
     }
@@ -211,10 +209,10 @@ public class TrialsFragment extends Fragment  {
 
 
     public void setUpFirebase() {
-        //set up firebase, realtime updates
+        // Set up firebase, realtime updates
         db = FirebaseFirestore.getInstance();
         final CollectionReference ownedCol = db.collection("Experiments/"+experiment.getDescription()+"/Trials");
-        //final CollectionReference ownedCol = db.collection("Users/"+user.getId()+"/OwnedExperiments/"+experiment.getDescription()+"/Trials");
+
         ownedCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -296,7 +294,6 @@ public class TrialsFragment extends Fragment  {
                 }
                 trialAdapter.notifyDataSetChanged();
             }});
-//        //TEST
-        //trialListController.addCountTrialToDb( new MeasurementTrial(new User("@pm"), new Date(), 4.0));
+
     }
 }

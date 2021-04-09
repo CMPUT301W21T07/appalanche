@@ -4,6 +4,7 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.jjoe64.graphview.series.DataPoint;
 import com.team007.appalanche.scannableCode.CountBasedScannableCode;
 import com.team007.appalanche.trial.CountBasedTrial;
 import com.team007.appalanche.trial.Trial;
@@ -61,19 +62,13 @@ public class CountBasedExperiment extends Experiment implements ExperimentInterf
     }
 
     /**
-     * function to obtain experiment time plot
-     */
-    @Override
-    public void obtainPlot() {
-        // TODO: implement
-    }
-
-    /**
      * function to obtain map of trial locations
+     * @return
      */
     @Override
-    public void obtainMap() {
+    public DataPoint[] obtainPlot() {
         // TODO: implement
+        return new DataPoint[0];
     }
 
     /**
