@@ -29,6 +29,7 @@ import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.profile.ProfileActivity;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
@@ -96,6 +97,7 @@ public class OverviewFragment extends Fragment {
         GraphView histogram = root.findViewById(R.id.histogram);
         histogram.getGridLabelRenderer().setHorizontalAxisTitle("Trial Result");
         histogram.getGridLabelRenderer().setVerticalAxisTitle("Number of Trials");
+
         histogram.getViewport().setMinY(0.0);
         histogram.getViewport().setMaxY(15.0);
         histogram.getViewport().setYAxisBoundsManual(true);
@@ -117,8 +119,16 @@ public class OverviewFragment extends Fragment {
                 histogram.getViewport().setMaxX(20.0);
             }
             histogram.getViewport().setXAxisBoundsManual(true);
+
         }
 
+        // Time plot set-up
+        GraphView timePlot = root.findViewById(R.id.plot);
+        try {
+            createPlot(timePlot);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         ArrayList<Trial> trialDataList = experiment.getTrials();
         Double stdevValue = 0.0;
@@ -195,7 +205,6 @@ public class OverviewFragment extends Fragment {
             }
         }
 
-
         // STATISTIC FIELDS
         TextView stdev = root.findViewById(R.id.stdv);
         stdev.setText("Standard Deviation: " + stdevValue);
@@ -209,27 +218,10 @@ public class OverviewFragment extends Fragment {
         TextView median = root.findViewById(R.id.median);
         median.setText("Median: " + (experiment.getTrialType().equals("measurement") ? doubleMedianVal : medianVal));
 
-         //Time plot set up
-        GraphView timePlot = root.findViewById(R.id.plot);
-        ArrayList<Trial> trials = experiment.getTrials();
-        createPlot(timePlot);
-
-        switch (experiment.getTrialType()) {
-            case "binomial":
-                timePlot.setTitle("Proportion of Success vs Time");
-                break;
-            case "count":
-                timePlot.setTitle("Count vs Time");
-                break;
-            default:
-                timePlot.setTitle("Mean vs Time");
-
-        }
-
         return root;
     }
 
-    private void createPlot(GraphView timePlot) {
+    private void createPlot(GraphView timePlot) throws ParseException {
         DataPoint[] points = experiment.obtainPlot();
 
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(points);
@@ -242,10 +234,23 @@ public class OverviewFragment extends Fragment {
         // Format the time plot
         timePlot.addSeries(series);
         timePlot.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
-        timePlot.getGridLabelRenderer().setHumanRounding(false);
-        timePlot.getGridLabelRenderer().setPadding(60);
-        timePlot.getGridLabelRenderer().setHorizontalLabelsAngle(90);
-        timePlot.setTitle("Mean vs Time");
+        timePlot.getGridLabelRenderer().setHumanRounding(true);
+        timePlot.getGridLabelRenderer().setHorizontalLabelsAngle(135);
+        timePlot.getGridLabelRenderer().setHorizontalAxisTitle("Date");
+
+        switch (experiment.getTrialType()) {
+            case "binomial":
+                timePlot.getGridLabelRenderer().setVerticalAxisTitle("Proportion of Success");
+                timePlot.setTitle("Proportion of Success vs Time");
+                break;
+            case "count":
+                timePlot.getGridLabelRenderer().setVerticalAxisTitle("Count");
+                timePlot.setTitle("Count vs Time");
+                break;
+            default:
+                timePlot.getGridLabelRenderer().setVerticalAxisTitle("Mean");
+                timePlot.setTitle("Mean vs Time");
+        }
     }
 
     public void viewAProfile(TextView owner) {
@@ -266,9 +271,9 @@ public class OverviewFragment extends Fragment {
     private DataPoint[] getDataPoint() {
         int size1 = trialListController.getExperiment().getTrials().size();
         Map<Double, Integer> hm;
-        double[] resultList = new double[size1];
+        double[] resultList;
         if (experiment.getTrialType().equals("nonNegativeCount")) {
-            resultList =  getDataHistogram1(trialListController.getExperiment().getTrials());
+            resultList = getDataHistogram1(trialListController.getExperiment().getTrials());
             hm = countFrequenciesForDouble(resultList);
         }
         else if (experiment.getTrialType().equals("binomial")) {

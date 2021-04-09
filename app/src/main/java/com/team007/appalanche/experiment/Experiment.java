@@ -9,6 +9,8 @@ import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
@@ -185,7 +187,7 @@ public class Experiment implements Serializable {
         return ignoredUsers;
     }
 
-    public DataPoint[] obtainPlot() {
+    public DataPoint[] obtainPlot() throws ParseException {
         switch (getTrialType()) {
             case "binomial":
                 return getBinomialPlot();
@@ -200,22 +202,29 @@ public class Experiment implements Serializable {
         }
     }
 
-    private DataPoint[] getBinomialPlot() {
+    private DataPoint[] getBinomialPlot() throws ParseException {
         Map<Date, ArrayList<Integer>> map = new TreeMap<Date, ArrayList<Integer>>();
 
         for(Trial trial: trials) {
-            ArrayList<Integer> values = map.get(trial.getDate()) != null ?
-                    map.get(trial.getDate()): new ArrayList<Integer>();
+            // Get the date without time
+            // Taken from stackoverflow.com
+            // Post: https://stackoverflow.com/q/5050170
+            // User: https://stackoverflow.com/users/193634/rosdi-kasim
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = sdf.parse(sdf.format(trial.getDate()));
+
+            ArrayList<Integer> values = map.get(date) != null ?
+                    map.get(date): new ArrayList<Integer>();
             int outcome = ((BinomialTrial) trial).getOutcome() ? 1 : 0;
             values.add(outcome);
-            map.put(trial.getDate(), values);
+            map.put(date, values);
         }
 
         DataPoint[] points = new DataPoint[map.keySet().size()];
 
         int i = 0;
         for(Map.Entry<Date, ArrayList<Integer>> val : map.entrySet()) {
-            int proportion = 0;
+            double proportion = 0;
             for(Integer j: val.getValue()) {
                 proportion += j;
             }
@@ -228,13 +237,20 @@ public class Experiment implements Serializable {
         return points;
     }
 
-    private DataPoint[] getCountPlot() {
+    private DataPoint[] getCountPlot() throws ParseException {
         Map<Date, Integer> map = new TreeMap<Date, Integer>();
 
         for(Trial trial: trials) {
-            int value = map.get(trial.getDate()) != null ?
-                    map.get(trial.getDate()) + 1 : 1;
-            map.put(trial.getDate(), value);
+            // Get the date without time
+            // Taken from stackoverflow.com
+            // Post: https://stackoverflow.com/q/5050170
+            // User: https://stackoverflow.com/users/193634/rosdi-kasim
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = sdf.parse(sdf.format(trial.getDate()));
+
+            int value = map.get(date) != null ?
+                    map.get(date) + 1 : 1;
+            map.put(date, value);
         }
 
         DataPoint[] points = new DataPoint[map.keySet().size()];
@@ -250,51 +266,30 @@ public class Experiment implements Serializable {
         return points;
     }
 
-    private DataPoint[] getMeasurementPlot() {
+    private DataPoint[] getMeasurementPlot() throws ParseException {
         Map<Date, ArrayList<Double>> map = new TreeMap<Date, ArrayList<Double>>();
 
         for(Trial trial: trials) {
-            ArrayList<Double> values = map.get(trial.getDate()) != null ?
-                    map.get(trial.getDate()): new ArrayList<Double>();
+            // Get the date without time
+            // Taken from stackoverflow.com
+            // Post: https://stackoverflow.com/q/5050170
+            // User: https://stackoverflow.com/users/193634/rosdi-kasim
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = sdf.parse(sdf.format(trial.getDate()));
+
+            ArrayList<Double> values = map.get(date) != null ?
+                    map.get(date): new ArrayList<Double>();
             double result = ((MeasurementTrial) trial).getValue();
             values.add(result);
-            map.put(trial.getDate(), values);
+            map.put(date, values);
         }
 
         DataPoint[] points = new DataPoint[map.keySet().size()];
 
         int i = 0;
         for(Map.Entry<Date, ArrayList<Double>> val : map.entrySet()) {
-            int proportion = 0;
+            double mean = 0;
             for(double j: val.getValue()) {
-                proportion += j;
-            }
-            proportion = proportion / val.getValue().size();
-
-            points[i] = new DataPoint(val.getKey(), proportion);
-            i++;
-        }
-
-        return points;
-    }
-
-    private DataPoint[] getNonNegPlot() {
-        Map<Date, ArrayList<Integer>> map = new TreeMap<Date, ArrayList<Integer>>();
-
-        for (Trial trial : trials) {
-            ArrayList<Integer> values = map.get(trial.getDate()) != null ?
-                    map.get(trial.getDate()) : new ArrayList<Integer>();
-            int count = ((NonNegativeCountTrial) trial).getCount();
-            values.add(count);
-            map.put(trial.getDate(), values);
-        }
-
-        DataPoint[] points = new DataPoint[map.keySet().size()];
-
-        int i = 0;
-        for (Map.Entry<Date, ArrayList<Integer>> val : map.entrySet()) {
-            int mean = 0;
-            for (Integer j : val.getValue()) {
                 mean += j;
             }
             mean = mean / val.getValue().size();
@@ -306,4 +301,38 @@ public class Experiment implements Serializable {
         return points;
     }
 
+    private DataPoint[] getNonNegPlot() throws ParseException {
+        Map<Date, ArrayList<Integer>> map = new TreeMap<Date, ArrayList<Integer>>();
+
+        for (Trial trial : trials) {
+            // Get the date without time
+            // Taken from stackoverflow.com
+            // Post: https://stackoverflow.com/q/5050170
+            // User: https://stackoverflow.com/users/193634/rosdi-kasim
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = sdf.parse(sdf.format(trial.getDate()));
+
+            ArrayList<Integer> values = map.get(date) != null ?
+                    map.get(date) : new ArrayList<Integer>();
+            int count = ((NonNegativeCountTrial) trial).getCount();
+            values.add(count);
+            map.put(date, values);
+        }
+
+        DataPoint[] points = new DataPoint[map.keySet().size()];
+
+        int i = 0;
+        for (Map.Entry<Date, ArrayList<Integer>> val : map.entrySet()) {
+            double mean = 0;
+            for (Integer j : val.getValue()) {
+                mean += j;
+            }
+            mean = mean / val.getValue().size();
+
+            points[i] = new DataPoint(val.getKey(), mean);
+            i++;
+        }
+
+        return points;
+    }
 }
