@@ -1,7 +1,12 @@
 package com.team007.appalanche;
 
 import android.app.Activity;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
@@ -39,16 +44,28 @@ public class SearchActivityTest {
          * checks if the search bar text is included in all the filtered results
          */
         solo.assertCurrentActivity("Wrong activity", SearchActivity.class);
+        SearchActivity activity = (SearchActivity) solo.getCurrentActivity();
+        ListView searchResults = activity.expListView;
 
-        //click on the first search icon
+        //click on the search icon
         solo.clickOnView(solo.getView(R.id.search_item));
 
-        //click on the second search icon
-
         //enter text on the search bar
+        String testString = "Test";
+        solo.enterText(0, testString);
+        solo.sleep(1000);
 
-        //wait and iterate through the filtered ListView to check if each item contains the text
-
+        //iterate through the filtered ListView to check if each item contains the text
+        String toCompare;
+        View v;
+        TextView textView;
+        for (int i = 0; i < searchResults.getCount(); i++) {
+            v = searchResults.getChildAt(i);
+            textView = (TextView) v.findViewById(R.id.expDescSearchResult);
+            toCompare = textView.getText().toString();
+            Log.i("what toCompare is", toCompare);
+            assert(toCompare.contains(testString));
+        }
     }
 
     @Test
@@ -57,10 +74,10 @@ public class SearchActivityTest {
 
         SearchActivity activity = (SearchActivity) solo.getCurrentActivity();
         ListView searchResults = activity.expListView;
-        Experiment exp = (Experiment) searchResults.getItemAtPosition(0);
-        //activity.openExperimentActivity(exp);
+        //Experiment exp = (Experiment) searchResults.getItemAtPosition(0);
+        solo.clickInList(0);
 
-        String resultDesc = exp.getDescription();
+        //String resultDesc = exp.getDescription();
 
         // TODO: continue to implement
 
