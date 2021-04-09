@@ -4,12 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.fragment.app.DialogFragment;
 import androidx.test.rule.ActivityTestRule;
 
 import com.robotium.solo.Solo;
-import com.team007.appalanche.controller.ExperimentController;
 import com.team007.appalanche.view.experimentActivity.ExperimentActivity;
+import com.team007.appalanche.view.profile.ProfileActivity;
 import com.team007.appalanche.view.ui.mainActivity.MainActivity;
 
 import org.junit.Before;
@@ -19,41 +19,42 @@ import org.junit.Test;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertTrue;
 
-/**
- * This class is used to test the UI-component of subscribing to an experiment.
- */
-
-public class SubscriptionUITest {
+public class ViewAProfileTest {
     private Solo solo;
     SharedPreferences.Editor preferencesEditor;
     SharedPreferences sharedPref;
-    ExperimentController experimentController;
-
+    DialogFragment fragment;
     @Rule
     public ActivityTestRule<MainActivity> rule =
             new ActivityTestRule<>(MainActivity.class, true, true);
-
+    /**
+     * Runs before all tests and creates solo instance.
+     * @throws Exception
+     */
     @Before
     public void setUp() throws Exception{
-        solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
+        solo = new Solo(getInstrumentation(),rule.getActivity());
         Context targetContext = getInstrumentation().getTargetContext();
         sharedPref = rule.getActivity().getPreferences(Context.MODE_PRIVATE);
         preferencesEditor = sharedPref.edit();
+
     }
+    /**
+     * Gets the Activity
+     * @throws Exception
+     */
     @Test
     public void start() throws Exception{
         Activity activity = rule.getActivity();
     }
 
+
     @Test
-    public void mainTest(){
-        solo.clickOnView(solo.getView(R.id.app_bar_search)); // get ID of MainActivity search icon
-        solo.clickOnText("Count Michael");
+    public void viewProfile() {
+        solo.clickInList(0);
         solo.assertCurrentActivity("Wrong Activity", ExperimentActivity.class);
-        solo.clickOnMenuItem("Subscribe to Experiment");
-        solo.clickOnActionBarHomeButton();
-        solo.clickOnText("Subscribed");
-        // check if subscribed item is in list
-        assertTrue(solo.searchText("Measurement3"));
+        solo.clickOnView(solo.getView(R.id.owner));
+        solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
+        assertTrue(solo.searchText(sharedPref.getString("com.team007.Appalanche.user_key", null)));
     }
 }
