@@ -77,13 +77,13 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
                 String name = (String) snapshot.getData().get("Name");
-                Long phoneNumb  = (Long)  snapshot.getData().get("PhoneNumber");
+                String phoneNumb = (String) snapshot.getData().get("PhoneNumber");
                 String github = (String) snapshot.getData().get("Github");
                 ContactInfo contactInfo;
                 if (phoneNumb != null)
-                    contactInfo = new ContactInfo(phoneNumb.intValue(), github);
+                    contactInfo = new ContactInfo(phoneNumb, github);
                 else
-                    contactInfo = new  ContactInfo(github);
+                    contactInfo = new  ContactInfo("", github);
                 Profile profile = new Profile(name, contactInfo);
                 currentUser.setProfile(profile);
                 if (name != null) {

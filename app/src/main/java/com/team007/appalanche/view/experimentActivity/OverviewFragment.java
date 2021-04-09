@@ -14,18 +14,24 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 import com.team007.appalanche.R;
+import com.team007.appalanche.StatFunctions;
 import com.team007.appalanche.experiment.Experiment;
+import com.team007.appalanche.trial.BinomialTrial;
+import com.team007.appalanche.trial.MeasurementTrial;
+import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.profile.ProfileActivity;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
+import java.util.TreeMap;
 
 import static com.team007.appalanche.view.experimentActivity.TrialsFragment.trialListController;
 
@@ -33,7 +39,6 @@ import static com.team007.appalanche.view.experimentActivity.TrialsFragment.tria
  * A placeholder fragment containing a simple view.
  */
 public class OverviewFragment extends Fragment {
-
     private static final String ARG_SECTION_NUMBER = "section_number";
     private Experiment experiment;
 
@@ -78,7 +83,7 @@ public class OverviewFragment extends Fragment {
         }
 
         TextView region = root.findViewById(R.id.region);
-        region.setText("Region:" + experiment.getRegion());
+        region.setText("Region: " + experiment.getRegion());
 
         TextView currentTrialNum = root.findViewById(R.id.currentNumbTrials);
         currentTrialNum.setText("Current number of trials: " + experiment.getTrials().size());
@@ -86,17 +91,142 @@ public class OverviewFragment extends Fragment {
         TextView minTrialNum = root.findViewById(R.id.minTrials);
         minTrialNum.setText("Minimum number of trials: " + experiment.getMinNumTrials().toString());
 
-        // SET UP HISTOGRAM HERE
-//        setUpFirebase();
+        // Histogram set-up
         GraphView histogram = root.findViewById(R.id.histogram);
         histogram.getGridLabelRenderer().setHorizontalAxisTitle("Trial Result");
         histogram.getGridLabelRenderer().setVerticalAxisTitle("Number of Trials");
+        // count-based does not have any histogram graph
+        if (!experiment.getTrialType().equals("count")) {
+            BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(getDataPoint());
+            histogram.addSeries(series);}
 
-        BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(getDataPoint());
-        histogram.addSeries(series);
 
+        ArrayList<Trial> trialDataList = experiment.getTrials();
+        Double stdevValue = 0.0;
+        double[] quartiles = new double[3];
+        Double meanVal = 0.0;
+        Integer medianVal = 0;
+        Double doubleMedianVal = 0.0;
+
+        Integer total = 0;
+        Double doubleTotal = 0.0;
+
+        if(trialDataList.size() > 0) {
+            if (experiment.getTrialType().equals("count")) {
+                ArrayList<Integer> valueList = new ArrayList<Integer>();
+                for (int i = 0; i < trialDataList.size(); i++) {
+                    // CountBasedTrial trial = (CountBasedTrial) trialDataList.get(i);
+                    valueList.add(1);
+                }
+                Collections.sort(valueList);
+                for (int i = 0; i < trialDataList.size(); i++) {
+                    // CountBasedTrial trial = (CountBasedTrial) trialDataList.get(i);
+                    total++;
+                }
+                meanVal = Double.valueOf(total) / trialDataList.size();
+                medianVal = valueList.get(valueList.size()/2);
+                stdevValue = StatFunctions.calculateSD(valueList);
+                quartiles = StatFunctions.calculateQuartiles(valueList);
+            } else if (experiment.getTrialType().equals("binomial")) {
+                ArrayList<Integer> valueList = new ArrayList<Integer>();
+                for (int i = 0; i < trialDataList.size(); i++) {
+                    BinomialTrial trial = (BinomialTrial) trialDataList.get(i);
+                    valueList.add(trial.getOutcome() ? 1 : 0);
+                }
+                Collections.sort(valueList);
+                for (int i = 0; i < trialDataList.size(); i++) {
+                    BinomialTrial trial = (BinomialTrial) trialDataList.get(i);
+                    Integer boolValue = trial.getOutcome() ? 1 : 0;
+                    total = total + boolValue;
+                }
+                meanVal = Double.valueOf(total) / trialDataList.size();
+                medianVal = valueList.get(valueList.size()/2);
+                stdevValue = StatFunctions.calculateSD(valueList);
+                quartiles = StatFunctions.calculateQuartiles(valueList);
+            } else if (experiment.getTrialType().equals("nonNegativeCount")) {
+                ArrayList<Integer> valueList = new ArrayList<Integer>();
+                for (int i = 0; i < trialDataList.size(); i++) {
+                    NonNegativeCountTrial trial = (NonNegativeCountTrial) trialDataList.get(i);
+                    valueList.add(trial.getCount());
+                }
+                Collections.sort(valueList);
+                for (int i = 0; i < trialDataList.size(); i++) {
+                    NonNegativeCountTrial trial = (NonNegativeCountTrial) trialDataList.get(i);
+                    total = total + trial.getCount();
+                }
+                meanVal = Double.valueOf(total) / trialDataList.size();
+                medianVal = valueList.get(valueList.size()/2);
+                stdevValue = StatFunctions.calculateSD(valueList);
+                quartiles = StatFunctions.calculateQuartiles(valueList);
+            } else if (experiment.getTrialType().equals("measurement")) {
+                ArrayList<Double> valueList = new ArrayList<Double>();
+                for (int i = 0; i < trialDataList.size(); i++) {
+                    MeasurementTrial trial = (MeasurementTrial) trialDataList.get(i);
+                    valueList.add(trial.getValue());
+                }
+                Collections.sort(valueList);
+                for (int i = 0; i < trialDataList.size(); i++) {
+                    MeasurementTrial trial = (MeasurementTrial) trialDataList.get(i);
+                    doubleTotal = doubleTotal + trial.getValue();
+                }
+                meanVal = Double.valueOf(doubleTotal) / trialDataList.size();
+                doubleMedianVal = valueList.get(valueList.size()/2);
+                stdevValue = StatFunctions.doubleCalculateSD(valueList);
+                quartiles = StatFunctions.doubleCalculateQuartiles(valueList);
+            }
+        }
+
+
+        // STATISTIC FIELDS
+        TextView stdev = root.findViewById(R.id.stdv);
+        stdev.setText("Standard Deviation: " + stdevValue);
+
+        TextView q = root.findViewById(R.id.q);
+        q.setText("Quartiles: Q1 = " + quartiles[0] + ", Q3 = " + quartiles[2]);
+
+        TextView mean = root.findViewById(R.id.mean);
+        mean.setText("Mean: " + meanVal);
+
+        TextView median = root.findViewById(R.id.median);
+        median.setText("Median: " + (experiment.getTrialType().equals("measurement") ? doubleMedianVal : medianVal));
+
+         //Time plot set up
+        GraphView timePlot = root.findViewById(R.id.plot);
+        ArrayList<Trial> trials = experiment.getTrials();
+        createPlot(timePlot);
+
+        switch (experiment.getTrialType()) {
+            case "binomial":
+                timePlot.setTitle("Proportion of Success vs Time");
+                break;
+            case "count":
+                timePlot.setTitle("Count vs Time");
+                break;
+            default:
+                timePlot.setTitle("Mean vs Time");
+
+        }
 
         return root;
+    }
+
+    private void createPlot(GraphView timePlot) {
+        DataPoint[] points = experiment.obtainPlot();
+
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(points);
+
+        // Format the series
+        series.setDrawDataPoints(true);
+        series.setDataPointsRadius(10);
+        series.setThickness(8);
+
+        // Format the time plot
+        timePlot.addSeries(series);
+        timePlot.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
+        timePlot.getGridLabelRenderer().setHumanRounding(false);
+        timePlot.getGridLabelRenderer().setPadding(60);
+        timePlot.getGridLabelRenderer().setHorizontalLabelsAngle(90);
+        timePlot.setTitle("Mean vs Time");
     }
 
     public void viewAProfile(TextView owner) {
@@ -113,77 +243,75 @@ public class OverviewFragment extends Fragment {
         });
     }
 
-
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     private DataPoint[] getDataPoint() {
-//        ArrayList<Trial> trialList = experiment.getTrials() ;
-//        CountBasedTrial x = (CountBasedTrial) trialList.get(0);
-
-        ArrayList<Integer> countList =  getDataHistogram(trialListController.getExperiment().getTrials());
-//        ArrayList<Integer> countList =  getDataHistogram(experiment.getTrials());
-        Map<Integer, Integer> hm = countFrequencies(countList);
-        DataPoint[] series = new DataPoint[getSize(hm)];
+        int size1 = trialListController.getExperiment().getTrials().size();
+        Map<Double, Integer> hm;
+        double[] resultList = new double[size1];
+        if (experiment.getTrialType().equals("nonNegativeCount")) {
+            resultList =  getDataHistogram1(trialListController.getExperiment().getTrials());
+            hm = countFrequenciesForDouble(resultList);
+        }
+        else if (experiment.getTrialType().equals("binomial")) {
+            resultList = getDataHistogram3(trialListController.getExperiment().getTrials());
+            hm = countFrequenciesForDouble(resultList);
+        }
+        else {
+            resultList = getDataHistogram2(trialListController.getExperiment().getTrials());
+            hm = countFrequenciesForDouble(resultList);
+        }
+        DataPoint[] series = new DataPoint[hm.size()];
         int i = 0;
-        for (Map.Entry<Integer, Integer> val : hm.entrySet()) {
-            Toast.makeText(getContext(), String.valueOf(val.getKey()), Toast.LENGTH_SHORT).show();
-            Toast.makeText(getContext(), String.valueOf(val.getValue()), Toast.LENGTH_SHORT).show();
+        for (Map.Entry<Double, Integer> val : hm.entrySet()) {
             series[i] = new DataPoint(val.getKey(), val.getValue());
             i = i +1;
         }
-//        DataPoint[] series = new DataPoint[] {
-//                new DataPoint(countList.get(0) , 1),
-//                new DataPoint(2 , 4),
-//                new DataPoint(countList.get(1), 10),
-//                new DataPoint(countList.get(2), 3)
-////                new DataPoint(3, 2),
-////                new DataPoint(4, 6)
-//        };
+
         return series;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public  ArrayList<Integer> getDataHistogram(ArrayList<Trial> trialList) {
-        ArrayList<Integer> countList = new ArrayList<Integer>();
+    // GET DATA FUNCTION FOR NON-NEGATIVE COUNT TRIALS
+    public double[] getDataHistogram1(ArrayList<Trial> trialList) {
+        double[] countList = new  double[trialList.size()];
 
         for (int i = 0; i < trialList.size(); i++) {
-            //CountBasedTrial trial = (CountBasedTrial) trialList.get(i);
-            //countList.add( trial.getCount());
-//            if (experiment.getTrialType().equals("count")) {
-//                CountBasedTrial trial = (CountBasedTrial) trialList.get(i);
-//                countList.add( trial.getCount());
-//            } else if (experiment.getTrialType().equals("binomial")) {
-//                BinomialTrial trial = (BinomialTrial) trialList.get(i);
-//                countList.add( trial.getOutcome());
-//            } else if (experiment.getTrialType().equals("nonNegativeCount")) {
-//
-//            }
-//            else {
-//
-//            }
-
+            NonNegativeCountTrial trial = (NonNegativeCountTrial) trialList.get(i);
+            countList[i] = trial.getCount();
         }
-        countList.sort(Comparator.naturalOrder());
+
         return countList;
     }
+    
+    public double[] getDataHistogram2(ArrayList<Trial> trialList) {
+        double[] MeasurementList  = new double[trialList.size()];
+        for (int i = 0; i < trialList.size(); i++) {
+            MeasurementTrial trial = (MeasurementTrial) trialList.get(i);
+            MeasurementList[i] =  trial.getValue();
+        }
+        return MeasurementList;
+    }
 
-    public  Map<Integer, Integer> countFrequencies(ArrayList<Integer> list)
+    public double[] getDataHistogram3(ArrayList<Trial> trialList) {
+        double[] binomialList = new double[trialList.size()];
+        for (int i = 0; i < trialList.size(); i++) {
+            BinomialTrial trial = (BinomialTrial) trialList.get(i);
+            if (trial.getOutcome())
+                binomialList[i] = 1.0; // ADD 1 FOR TRUE
+            else
+                binomialList[i] = 2.0;  // ADD 2 FOR FALSE
+        }
+        return binomialList;
+    }
+
+    public  Map<Double, Integer> countFrequenciesForDouble(double[] list)
     {
-        Map<Integer, Integer> hm = new HashMap<Integer, Integer>();
-        for (Integer i : list) {
-            // Get the current occurennce into j
-            Integer j = hm.get(i);
-            hm.put(i, (j == null) ? 1 : j + 1);
+        Map<Double, Integer> tm = new TreeMap<>();
+        for (Double i : list) {
+            // Get the current occurence into j -> y-axis
+            // The value is in i -> x axis
+            Integer j = tm.get(i);
+            tm.put(i, (j == null) ? 1 : j + 1);
         }
-        return hm;
+        return tm;
     }
-    public int getSize( Map<Integer, Integer> hm) {
-        int i =0;
-        for (Map.Entry<Integer, Integer> val : hm.entrySet()) {
-            i += 1;
-        }
-        return i;
-    }
-
-
 }

@@ -28,7 +28,6 @@ public class CustomList extends ArrayAdapter<Experiment> {
         this.experiments = experiments;
     }
 
-    @SuppressLint("DefaultLocale")
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
@@ -48,7 +47,7 @@ public class CustomList extends ArrayAdapter<Experiment> {
         } else {
             status.setText("Closed");
         }
-        //description.setText(String.valueOf(experiments.size()));
+
         return view;
     }
 }

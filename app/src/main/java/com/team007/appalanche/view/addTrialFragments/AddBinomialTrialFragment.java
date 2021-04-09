@@ -62,17 +62,19 @@ public class AddBinomialTrialFragment extends DialogFragment {
                         if (geoRequired) {
                             // Get latitude and longitude
                             double latitude;
+                            EditText lat = view.findViewById(R.id.latitude);
                             try {
                                 latitude =
-                                        Double.parseDouble(view.findViewById(R.id.latitude).toString());
+                                        Double.parseDouble(lat.getText().toString());
                             } catch (NumberFormatException e) {
                                 latitude = 0;
                             }
 
                             double longitude;
+                            EditText lon = view.findViewById(R.id.latitude);
                             try {
                                 longitude =
-                                        Double.parseDouble(view.findViewById(R.id.latitude).toString());
+                                        Double.parseDouble(lon.getText().toString());
                             } catch (NumberFormatException e) {
                                 longitude = 0;
                             }
