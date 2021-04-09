@@ -1,5 +1,7 @@
 package com.team007.appalanche.experiment;
 
+import com.jjoe64.graphview.series.DataPoint;
+
 import java.util.ArrayList;
 
 /**
@@ -10,7 +12,6 @@ import java.util.ArrayList;
 public interface ExperimentInterface {
     public void obtainStatistics(); //change to lowercase o?
     public ArrayList<Integer> obtainHistogram();
-    public void obtainPlot();
+    public DataPoint[] obtainPlot();
     public void addQuestion();
-    public void obtainMap();
 }

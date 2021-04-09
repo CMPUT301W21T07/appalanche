@@ -1,17 +1,21 @@
 package com.team007.appalanche.experiment;
 
+import com.jjoe64.graphview.series.DataPoint;
 import com.team007.appalanche.scannableCode.BinomialScannableCode;
+import com.team007.appalanche.trial.BinomialTrial;
+import com.team007.appalanche.trial.Trial;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * This class that extends Experiment handles the creation of binomial trials.
  */
 
 public class BinomialExperiment extends Experiment implements ExperimentInterface, Serializable {
-    //public String trialType;
-
     /**
      * Constructor function for binomial experiment class
      * @param description
@@ -48,19 +52,35 @@ public class BinomialExperiment extends Experiment implements ExperimentInterfac
     }
 
     /**
-     * function to obtain experiment time plot
+     * Function to obtain experiment time plot
+     * @return
      */
-    @Override
-    public void obtainPlot() {
-        // TODO: implement
-    }
+    public DataPoint[] obtainPlot() {
+        Map<Date, ArrayList<Integer>> map = new TreeMap<Date, ArrayList<Integer>>();
 
-    /**
-     * function to obtain map of trial locations
-     */
-    @Override
-    public void obtainMap() {
-        // TODO: implement
+        for(Trial trial: getTrials()) {
+            ArrayList<Integer> values = map.get(trial.getDate()) != null ?
+                    map.get(trial.getDate()): new ArrayList<Integer>();
+            int outcome = ((BinomialTrial) trial).getOutcome() ? 1 : 0;
+            values.add(outcome);
+            map.put(trial.getDate(), values);
+        }
+
+        DataPoint[] points = new DataPoint[map.keySet().size()];
+
+        int i = 0;
+        for(Map.Entry<Date, ArrayList<Integer>> val : map.entrySet()) {
+            int proportion = 0;
+            for(Integer j: val.getValue()) {
+                proportion += j;
+            }
+            proportion = proportion / val.getValue().size();
+
+            points[i] = new DataPoint(val.getKey(), proportion);
+            i++;
+        }
+
+        return points;
     }
 
     /**
