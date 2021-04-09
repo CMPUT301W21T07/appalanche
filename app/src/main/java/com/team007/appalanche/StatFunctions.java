@@ -49,7 +49,7 @@ public class StatFunctions {
                 quartile = list.get((int) newArraySize);
             } else {
                 int newArraySize1 = (int) newArraySize;
-                quartile = (list.get(newArraySize1) + list.get(newArraySize1 + 1)) / 2;
+                quartile = (list.get((int) Math.floor(newArraySize1)) + list.get((int) Math.ceil(newArraySize1))) / 2;
             }
             quartiles[i - 1] = quartile;
         }
@@ -75,7 +75,6 @@ public class StatFunctions {
                 quartile =
                         ((double) list.get((int) Math.floor(position)) + (double) list.get((int) Math.ceil(position))) / 2;
             }
-
             quartiles[i - 1] = quartile;
         }
 
