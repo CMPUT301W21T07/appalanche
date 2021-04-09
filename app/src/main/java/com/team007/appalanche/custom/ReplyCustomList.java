@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.team007.appalanche.R;
 import com.team007.appalanche.question.Reply;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -34,6 +35,8 @@ public class ReplyCustomList extends ArrayAdapter<Reply> {
             view = LayoutInflater.from(context).inflate(R.layout.content_question,parent,false);
         }
         Reply reply = replies.get(position);
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
         // Display Reply List
         TextView ReplyContent = view.findViewById(R.id.questionContent);
@@ -42,6 +45,10 @@ public class ReplyCustomList extends ArrayAdapter<Reply> {
         // Display user ID
         TextView userReplied = view.findViewById(R.id.user_posted_question);
         userReplied.setText(reply.getUserReplied().getId());
+        // Display the date
+        TextView date = view.findViewById(R.id.date);
+        date.setText(simpleDateFormat.format(reply.getDateReplied()));
+
         userReplied.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -72,23 +72,8 @@ public class QuestionFragment extends Fragment {
 
         // Access a Cloud Firestore instance from your Activity
         db = FirebaseFirestore.getInstance();
+        setUpFireBase();
 
-        // Get a top-level reference to the collection.
-        final CollectionReference collectionReference = db.collection("Experiments/" + experiment.getDescription()+"/Questions");
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                // clear the old list
-                questionList.clearQuestionList();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
-                    Log.d(TAG, String.valueOf(doc.getData().get("user_posted_question")));
-                    String content = doc.getId();
-                    String user = (String) doc.getData().get("user_posted_question");
-
-                    questionList.addQuestion(new Question(content, new User(user, null), new Date()));}
-                questionAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.
-            }
-        });
     }
 
     @Override
@@ -120,19 +105,6 @@ public class QuestionFragment extends Fragment {
             }
         });
 
-        // Reply to a question
-//        questionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Question questionToReply = questionDataList.get(position);
-//
-//                Intent intent = new Intent(getActivity(), ReplyActivity.class);
-//                intent.putExtra("Experiment", experiment);
-//                intent.putExtra("Question", questionToReply);
-//                intent.putExtra("Replying User", user);
-//                startActivity(intent);
-//            }
-//        });
 
         questionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -158,5 +130,24 @@ public class QuestionFragment extends Fragment {
         });
 
         return root;
+    }
+
+    public void setUpFireBase() {
+        // Get a top-level reference to the collection.
+        final CollectionReference collectionReference = db.collection("Experiments/" + experiment.getDescription()+"/Questions");
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                // clear the old list
+                questionList.clearQuestionList();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                    Log.d(TAG, String.valueOf(doc.getData().get("user_posted_question")));
+                    String content = doc.getId();
+                    String user = (String) doc.getData().get("user_posted_question");
+                    Date date = (Date) doc.getTimestamp("date").toDate();
+                    questionList.addQuestion(new Question(content, new User(user, null), date));}
+                questionAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud.
+            }
+        });
     }
 }

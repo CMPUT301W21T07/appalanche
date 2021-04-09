@@ -21,6 +21,7 @@ import com.team007.appalanche.view.addTrialFragments.AddCountTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddMeasurementTrialFragment;
 import com.team007.appalanche.view.addTrialFragments.AddNonNegTrialFragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class TrialCustomList extends ArrayAdapter<Trial> {
@@ -45,31 +46,37 @@ public class TrialCustomList extends ArrayAdapter<Trial> {
         // Get TextView IDs
         TextView trialCount = view.findViewById(R.id.trialCount);
         TextView userAddedTrial = view.findViewById(R.id.userID);
-
+        TextView date = view.findViewById(R.id.date);
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         switch(trialType) {
             case "binomial":
                 BinomialTrial binomialTrial = (BinomialTrial) trials.get(position);
 
                 trialCount.setText(binomialTrial.getOutcome() ? "Pass" : "Fail");
                 userAddedTrial.setText(binomialTrial.getUserAddedTrial().getId());
+                date.setText(simpleDateFormat.format(binomialTrial.getDate()));
                 break;
             case "count":
                 CountBasedTrial countTrial = (CountBasedTrial) trials.get(position);
 
                 trialCount.setText("+1");
                 userAddedTrial.setText(countTrial.getUserAddedTrial().getId());
+                date.setText(simpleDateFormat.format(countTrial.getDate()));
                 break;
             case "measurement":
                 MeasurementTrial measurementTrial = (MeasurementTrial) trials.get(position);
 
                 trialCount.setText(String.valueOf(measurementTrial.getValue()));
                 userAddedTrial.setText(measurementTrial.getUserAddedTrial().getId());
+                date.setText(simpleDateFormat.format(measurementTrial.getDate()));
                 break;
             case "nonNegativeCount":
                 NonNegativeCountTrial trial = (NonNegativeCountTrial) trials.get(position);
 
                 trialCount.setText(String.valueOf(trial.getCount()));
                 userAddedTrial.setText(trial.getUserAddedTrial().getId());
+                date.setText(simpleDateFormat.format(trial.getDate()));
             default:
                 System.out.println("Something went wrong.");
                 break;
