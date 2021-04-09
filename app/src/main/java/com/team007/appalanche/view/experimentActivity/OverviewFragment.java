@@ -30,8 +30,7 @@ import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.profile.ProfileActivity;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Collections;
@@ -195,172 +194,27 @@ public class OverviewFragment extends Fragment {
         median.setText("Median: " + String.valueOf(experiment.getTrialType().equals("measurement") ? doubleMedianVal : medianVal));
 
         // Time plot set up
-        // US US 01.07.01
-        // As an owner or experimenter, I want to see plots of the results of trials over time.
         GraphView timePlot = root.findViewById(R.id.plot);
         ArrayList<Trial> trials = experiment.getTrials();
+        createPlot(timePlot);
 
         switch (experiment.getTrialType()) {
             case "binomial":
-                getBinomialPlot(timePlot, trials);
+                timePlot.setTitle("Proportion of Success vs Time");
                 break;
             case "count":
-                getCountPlot(timePlot, trials);
-                break;
-            case "measurement":
-                getMeasurementPlot(timePlot, trials);
-                break;
-            case "nonNegativeCount":
-                getNonNegPlot(timePlot, trials);
+                timePlot.setTitle("Count vs Time");
                 break;
             default:
-                break;
+                timePlot.setTitle("Mean vs Time");
+
         }
 
         return root;
     }
 
-    private void getBinomialPlot(GraphView timePlot, ArrayList<Trial> trials) {
-        Map<Date, ArrayList<Integer>> map = new TreeMap<Date, ArrayList<Integer>>();
-
-        for(Trial trial: trials) {
-            ArrayList<Integer> values = map.get(trial.getDate()) != null ?
-                    map.get(trial.getDate()): new ArrayList<Integer>();
-            int outcome = ((BinomialTrial) trial).getOutcome() ? 1 : 0;
-            values.add(outcome);
-            map.put(trial.getDate(), values);
-        }
-
-        DataPoint[] points = new DataPoint[map.keySet().size()];
-
-        int i = 0;
-        for(Map.Entry<Date, ArrayList<Integer>> val : map.entrySet()) {
-            int proportion = 0;
-            for(Integer j: val.getValue()) {
-                proportion += j;
-            }
-            proportion = proportion / val.getValue().size();
-
-            points[i] = new DataPoint(val.getKey(), proportion);
-            i++;
-        }
-
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(points);
-
-        // Format the series
-        series.setDrawDataPoints(true);
-        series.setDataPointsRadius(10);
-        series.setThickness(8);
-
-        // Format the time plot
-        timePlot.addSeries(series);
-        timePlot.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
-        timePlot.getGridLabelRenderer().setHumanRounding(false);
-        timePlot.getGridLabelRenderer().setPadding(60);
-        timePlot.getGridLabelRenderer().setHorizontalLabelsAngle(90);
-        timePlot.setTitle("Proportion of Success vs Time");
-    }
-
-    private void getCountPlot(GraphView timePlot, ArrayList<Trial> trials) {
-        Map<Date, Integer> map = new TreeMap<Date, Integer>();
-
-        for(Trial trial: trials) {
-            int value = map.get(trial.getDate()) != null ?
-                    map.get(trial.getDate()) + 1 : 1;
-            map.put(trial.getDate(), value);
-        }
-
-        DataPoint[] points = new DataPoint[map.keySet().size()];
-
-        int i = 0;
-        int count = 0;
-        for(Map.Entry<Date, Integer> val : map.entrySet()) {
-            count += val.getValue();
-            points[i] = new DataPoint(val.getKey(), count);
-            i++;
-        }
-
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(points);
-
-        // Format the series
-        series.setDrawDataPoints(true);
-        series.setDataPointsRadius(10);
-        series.setThickness(8);
-
-        // Format the time plot
-        timePlot.addSeries(series);
-        timePlot.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
-        timePlot.getGridLabelRenderer().setHumanRounding(false);
-        timePlot.getGridLabelRenderer().setPadding(60);
-        timePlot.getGridLabelRenderer().setHorizontalLabelsAngle(90);
-        timePlot.setTitle("Count vs Time");
-    }
-
-    private void getMeasurementPlot(GraphView timePlot, ArrayList<Trial> trials) {
-        Map<Date, ArrayList<Double>> map = new TreeMap<Date, ArrayList<Double>>();
-
-        for(Trial trial: trials) {
-            ArrayList<Double> values = map.get(trial.getDate()) != null ?
-                    map.get(trial.getDate()): new ArrayList<Double>();
-            double result = ((MeasurementTrial) trial).getValue();
-            values.add(result);
-            map.put(trial.getDate(), values);
-        }
-
-        DataPoint[] points = new DataPoint[map.keySet().size()];
-
-        int i = 0;
-        for(Map.Entry<Date, ArrayList<Double>> val : map.entrySet()) {
-            int proportion = 0;
-            for(double j: val.getValue()) {
-                proportion += j;
-            }
-            proportion = proportion / val.getValue().size();
-
-            points[i] = new DataPoint(val.getKey(), proportion);
-            i++;
-        }
-
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(points);
-
-        // Format the series
-        series.setDrawDataPoints(true);
-        series.setDataPointsRadius(10);
-        series.setThickness(8);
-
-        // Format the time plot
-        timePlot.addSeries(series);
-        timePlot.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
-        timePlot.getGridLabelRenderer().setHumanRounding(false);
-        timePlot.getGridLabelRenderer().setPadding(60);
-        timePlot.getGridLabelRenderer().setHorizontalLabelsAngle(90);
-        timePlot.setTitle("Mean vs Time");
-    }
-
-    private void getNonNegPlot(GraphView timePlot, ArrayList<Trial> trials) {
-        Map<Date, ArrayList<Integer>> map = new TreeMap<Date, ArrayList<Integer>>();
-
-        for (Trial trial : trials) {
-            ArrayList<Integer> values = map.get(trial.getDate()) != null ?
-                    map.get(trial.getDate()) : new ArrayList<Integer>();
-            int count = ((NonNegativeCountTrial) trial).getCount();
-            values.add(count);
-            map.put(trial.getDate(), values);
-        }
-
-        DataPoint[] points = new DataPoint[map.keySet().size()];
-
-        int i = 0;
-        for (Map.Entry<Date, ArrayList<Integer>> val : map.entrySet()) {
-            int mean = 0;
-            for (Integer j : val.getValue()) {
-                mean += j;
-            }
-            mean = mean / val.getValue().size();
-
-            points[i] = new DataPoint(val.getKey(), mean);
-            i++;
-        }
+    private void createPlot(GraphView timePlot) {
+        DataPoint[] points = experiment.obtainPlot();
 
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(points);
 
