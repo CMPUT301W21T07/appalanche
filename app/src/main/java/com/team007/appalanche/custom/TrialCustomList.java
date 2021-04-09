@@ -16,58 +16,70 @@ import com.team007.appalanche.trial.CountBasedTrial;
 import com.team007.appalanche.trial.MeasurementTrial;
 import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.trial.Trial;
+import com.team007.appalanche.view.addTrialFragments.AddBinomialTrialFragment;
+import com.team007.appalanche.view.addTrialFragments.AddCountTrialFragment;
+import com.team007.appalanche.view.addTrialFragments.AddMeasurementTrialFragment;
+import com.team007.appalanche.view.addTrialFragments.AddNonNegTrialFragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class TrialCustomList extends ArrayAdapter<Trial> {
     private ArrayList<Trial> trials;
     private Context context;
-    public TrialCustomList(Context context, ArrayList<Trial> trials) {
+    private String trialType;
+
+    public TrialCustomList(Context context, ArrayList<Trial> trials, String trialType) {
         super(context, 0, trials);
         this.context = context;
         this.trials = trials;
+        this.trialType = trialType;
     }
-    @SuppressLint("DefaultLocale")
+
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
+
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.content_trial,parent,false);
         }
-        // GET IDS OF ALL TEXTVIEW
+
+        // Get TextView IDs
         TextView trialCount = view.findViewById(R.id.trialCount);
         TextView userAddedTrial = view.findViewById(R.id.userID);
-        try {
-            //FIX THIS
-            CountBasedTrial trial = (CountBasedTrial) trials.get(position);
-            // Display trial List
-            trialCount.setText(String.valueOf(1));
-            userAddedTrial.setText(trial.getUserAddedTrial().getId());
+        TextView date = view.findViewById(R.id.date);
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        switch(trialType) {
+            case "binomial":
+                BinomialTrial binomialTrial = (BinomialTrial) trials.get(position);
 
-        } catch (Exception e0){
+                trialCount.setText(binomialTrial.getOutcome() ? "Pass" : "Fail");
+                userAddedTrial.setText(binomialTrial.getUserAddedTrial().getId());
+                date.setText(simpleDateFormat.format(binomialTrial.getDate()));
+                break;
+            case "count":
+                CountBasedTrial countTrial = (CountBasedTrial) trials.get(position);
 
-            try {
-                //FIX THIS
-                BinomialTrial trial = (BinomialTrial) trials.get(position);
-                // Display trial List
-                trialCount.setText(String.valueOf(trial.getOutcome()));
+                trialCount.setText("+1");
+                userAddedTrial.setText(countTrial.getUserAddedTrial().getId());
+                date.setText(simpleDateFormat.format(countTrial.getDate()));
+                break;
+            case "measurement":
+                MeasurementTrial measurementTrial = (MeasurementTrial) trials.get(position);
+
+                trialCount.setText(String.valueOf(measurementTrial.getValue()));
+                userAddedTrial.setText(measurementTrial.getUserAddedTrial().getId());
+                date.setText(simpleDateFormat.format(measurementTrial.getDate()));
+                break;
+            case "nonNegativeCount":
+                NonNegativeCountTrial trial = (NonNegativeCountTrial) trials.get(position);
+
+                trialCount.setText(String.valueOf(trial.getCount()));
                 userAddedTrial.setText(trial.getUserAddedTrial().getId());
-            } catch (Exception e1) {
-                try {
-                    MeasurementTrial trial = (MeasurementTrial) trials.get(position);
-
-                    trialCount.setText(String.valueOf(trial.getValue()));
-                    userAddedTrial.setText(trial.getUserAddedTrial().getId());
-                } catch (Exception e2) {
-                    try {
-                        NonNegativeCountTrial trial = (NonNegativeCountTrial) trials.get(position);
-
-                        trialCount.setText(String.valueOf(trial.getCount()));
-                        userAddedTrial.setText(trial.getUserAddedTrial().getId());
-                    } catch (Exception e3) {
-                        System.out.println("Something went wrong.");
-                    }
-                }
-            }
+                date.setText(simpleDateFormat.format(trial.getDate()));
+            default:
+                System.out.println("Something went wrong.");
+                break;
         }
 
         // CLICK ON USER ID -> SHOW PROFILE
@@ -86,7 +98,6 @@ public class TrialCustomList extends ArrayAdapter<Trial> {
                 ((ListView) parent).performItemClick(v, position, 1); // Let the event be handled in onItemClick()
             }
         });
-
 
         return view;
     }

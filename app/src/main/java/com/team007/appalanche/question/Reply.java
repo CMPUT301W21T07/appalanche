@@ -1,9 +1,9 @@
 package com.team007.appalanche.question;
 
+import com.team007.appalanche.user.User;
+
 import java.io.Serializable;
 import java.util.Date;
-
-import com.team007.appalanche.user.User;
 
 /**
  * This class represents a reply whenever a user wants to add a reply to a specific experiment question
@@ -23,6 +23,15 @@ public class Reply implements Serializable {
     public Reply(String replyText, User userReplied, Date dateReplied) {
         this.replyText = replyText;
         this.userReplied = userReplied;
+        this.dateReplied = dateReplied;
+    }
+
+    /**
+     * This is a getter method to get the date that the reply has been added
+     * @return
+     */
+    public Date getDateReplied() {
+        return dateReplied;
     }
 
     /**

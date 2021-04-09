@@ -12,7 +12,7 @@ import java.util.Date;
  * this class.
  */
 
-public abstract class Trial implements Serializable {
+public abstract class Trial implements Serializable, Comparable<Trial> {
     private Date date;
     private Location location;
     private User userAddedTrial;
@@ -52,5 +52,10 @@ public abstract class Trial implements Serializable {
 
     public void setUserAddedTrial(User userAddedTrial) {
         this.userAddedTrial = userAddedTrial;
+    }
+
+    @Override
+    public int compareTo(Trial o) {
+        return getDate().compareTo(o.getDate());
     }
 }

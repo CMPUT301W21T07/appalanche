@@ -14,22 +14,24 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 import com.team007.appalanche.R;
 import com.team007.appalanche.StatFunctions;
 import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.trial.BinomialTrial;
-import com.team007.appalanche.trial.CountBasedTrial;
 import com.team007.appalanche.trial.MeasurementTrial;
 import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.trial.Trial;
 import com.team007.appalanche.user.User;
 import com.team007.appalanche.view.profile.ProfileActivity;
 
+import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Collections;
+import java.util.Map;
 import java.util.TreeMap;
 
 import static com.team007.appalanche.view.experimentActivity.TrialsFragment.trialListController;
@@ -38,7 +40,6 @@ import static com.team007.appalanche.view.experimentActivity.TrialsFragment.tria
  * A placeholder fragment containing a simple view.
  */
 public class OverviewFragment extends Fragment {
-
     private static final String ARG_SECTION_NUMBER = "section_number";
     private Experiment experiment;
 
@@ -83,7 +84,7 @@ public class OverviewFragment extends Fragment {
         }
 
         TextView region = root.findViewById(R.id.region);
-        region.setText("Region:" + experiment.getRegion());
+        region.setText("Region: " + experiment.getRegion());
 
         TextView currentTrialNum = root.findViewById(R.id.currentNumbTrials);
         currentTrialNum.setText("Current number of trials: " + experiment.getTrials().size());
@@ -91,16 +92,24 @@ public class OverviewFragment extends Fragment {
         TextView minTrialNum = root.findViewById(R.id.minTrials);
         minTrialNum.setText("Minimum number of trials: " + experiment.getMinNumTrials().toString());
 
-        // SET UP HISTOGRAM HERE
-//        setUpFirebase();
+        // Histogram set-up
         GraphView histogram = root.findViewById(R.id.histogram);
         histogram.getGridLabelRenderer().setHorizontalAxisTitle("Trial Result");
         histogram.getGridLabelRenderer().setVerticalAxisTitle("Number of Trials");
-        // count-based does not have any histogram graph
+
+        // Count-based does not have any histogram graph
         if (!experiment.getTrialType().equals("count")) {
             BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(getDataPoint());
-            histogram.addSeries(series);}
+            histogram.addSeries(series);
+        }
 
+        // Time plot set-up
+        GraphView timePlot = root.findViewById(R.id.plot);
+        try {
+            createPlot(timePlot);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         ArrayList<Trial> trialDataList = experiment.getTrials();
         Double stdevValue = 0.0;
@@ -177,22 +186,52 @@ public class OverviewFragment extends Fragment {
             }
         }
 
-
         // STATISTIC FIELDS
         TextView stdev = root.findViewById(R.id.stdv);
-        stdev.setText("Standard Deviation: " + String.valueOf(stdevValue));
+        stdev.setText("Standard Deviation: " + stdevValue);
 
         TextView q = root.findViewById(R.id.q);
-        q.setText("Quartiles: Q2=" + String.valueOf(quartiles[1]) + ", Q3=" + String.valueOf(quartiles[2]));
+        q.setText("Quartiles: Q1 = " + quartiles[0] + ", Q3 = " + quartiles[2]);
 
         TextView mean = root.findViewById(R.id.mean);
-        mean.setText("Mean: " + String.valueOf(meanVal));
+        mean.setText("Mean: " + meanVal);
 
         TextView median = root.findViewById(R.id.median);
-        median.setText("Median: " + String.valueOf(experiment.getTrialType().equals("measurement") ? doubleMedianVal : medianVal));
-
+        median.setText("Median: " + (experiment.getTrialType().equals("measurement") ? doubleMedianVal : medianVal));
 
         return root;
+    }
+
+    private void createPlot(GraphView timePlot) throws ParseException {
+        DataPoint[] points = experiment.obtainPlot();
+
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(points);
+
+        // Format the series
+        series.setDrawDataPoints(true);
+        series.setDataPointsRadius(10);
+        series.setThickness(8);
+
+        // Format the time plot
+        timePlot.addSeries(series);
+        timePlot.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
+        timePlot.getGridLabelRenderer().setHumanRounding(true);
+        timePlot.getGridLabelRenderer().setHorizontalLabelsAngle(135);
+        timePlot.getGridLabelRenderer().setHorizontalAxisTitle("Date");
+
+        switch (experiment.getTrialType()) {
+            case "binomial":
+                timePlot.getGridLabelRenderer().setVerticalAxisTitle("Proportion of Success");
+                timePlot.setTitle("Proportion of Success vs Time");
+                break;
+            case "count":
+                timePlot.getGridLabelRenderer().setVerticalAxisTitle("Count");
+                timePlot.setTitle("Count vs Time");
+                break;
+            default:
+                timePlot.getGridLabelRenderer().setVerticalAxisTitle("Mean");
+                timePlot.setTitle("Mean vs Time");
+        }
     }
 
     public void viewAProfile(TextView owner) {
@@ -213,9 +252,9 @@ public class OverviewFragment extends Fragment {
     private DataPoint[] getDataPoint() {
         int size1 = trialListController.getExperiment().getTrials().size();
         Map<Double, Integer> hm;
-        double[] resultList = new double[size1];
+        double[] resultList;
         if (experiment.getTrialType().equals("nonNegativeCount")) {
-            resultList =  getDataHistogram1(trialListController.getExperiment().getTrials());
+            resultList = getDataHistogram1(trialListController.getExperiment().getTrials());
             hm = countFrequenciesForDouble(resultList);
         }
         else if (experiment.getTrialType().equals("binomial")) {
@@ -232,6 +271,7 @@ public class OverviewFragment extends Fragment {
             series[i] = new DataPoint(val.getKey(), val.getValue());
             i = i +1;
         }
+
         return series;
     }
 
@@ -246,7 +286,6 @@ public class OverviewFragment extends Fragment {
 
         return countList;
     }
-
     
     public double[] getDataHistogram2(ArrayList<Trial> trialList) {
         double[] MeasurementList  = new double[trialList.size()];

@@ -1,21 +1,11 @@
 package com.team007.appalanche.controller;
 
-import android.app.ActivityManager;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.question.Question;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -52,12 +42,12 @@ public class QuestionListController {
         final CollectionReference collectionReference = db.collection("Experiments/" + experiment.getDescription()+"/Questions");
         // collectionReference.add(newQuestion.getContent());
         // We use a HashMap to store a key-value pair in firestore.
-        HashMap<String, String> data = new HashMap<>();
+        HashMap<String, Object> data = new HashMap<>();
         data.put("user_posted_question", newQuestion.getUserPostedQuestion().getId());
+        data.put("date", newQuestion.getDateAsked());
         collectionReference
                 .document(newQuestion.getContent())
                 .set(data);
-
         // ADD TO OWNER
         final DocumentReference document = db.collection("Users/"+ experiment.getExperimentOwnerID() +"/OwnedExperiments/"+ experiment.getDescription()+"/Questions/").document(newQuestion.getContent());
         document.set(data);

@@ -23,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.team007.appalanche.Location;
 import com.team007.appalanche.R;
 import com.team007.appalanche.controller.TrialListController;
 import com.team007.appalanche.custom.TrialCustomList;
@@ -50,7 +51,7 @@ import static android.content.ContentValues.TAG;
 public class TrialsFragment extends Fragment  {
     private static final String ARG_SECTION_NUMBER = "section_number";
     private ListView trialListView;
-    private ArrayAdapter<Trial> trialAdapter;
+    public static ArrayAdapter<Trial> trialAdapter;
     private ArrayList<Trial> trialDataList;
     private Experiment experiment;
     private User user;
@@ -74,7 +75,7 @@ public class TrialsFragment extends Fragment  {
 
         // Create trialController here
         trialListController = new TrialListController(experiment);
-        //setUpFirebase();
+        setUpFirebase();
 
     }
 
@@ -86,7 +87,6 @@ public class TrialsFragment extends Fragment  {
         View root = inflater.inflate(R.layout.fragment_experiment_trials, container, false);
 
         ArrayList<Trial> trials = experiment.getTrials();
-//        Toast.makeText(getActivity(), "Trials size = " + String.valueOf(trials.size()), Toast.LENGTH_LONG).show();
 
         // Set description text
         TextView description = root.findViewById(R.id.description);
@@ -117,7 +117,7 @@ public class TrialsFragment extends Fragment  {
 
         // Set up Trial ListView
         trialDataList = trialListController.getExperiment().getTrials();
-        trialAdapter = new TrialCustomList(this.getContext(), trialDataList);
+        trialAdapter = new TrialCustomList(this.getContext(), trialDataList, experiment.getTrialType());
         trialListView = root.findViewById(R.id.trialList);
         trialListView.setAdapter(trialAdapter);
 
@@ -160,7 +160,6 @@ public class TrialsFragment extends Fragment  {
 
     private void openViewMapActivity() {
         Intent intent = new Intent(getActivity(), MapActivity.class);
-//        intent.putExtra("Trials", trialDataList);
         intent.putExtra("Experiment", experiment);
         startActivity(intent);
     }
@@ -210,10 +209,10 @@ public class TrialsFragment extends Fragment  {
 
 
     public void setUpFirebase() {
-        //set up firebase, realtime updates
+        // Set up firebase, realtime updates
         db = FirebaseFirestore.getInstance();
         final CollectionReference ownedCol = db.collection("Experiments/"+experiment.getDescription()+"/Trials");
-        //final CollectionReference ownedCol = db.collection("Users/"+user.getId()+"/OwnedExperiments/"+experiment.getDescription()+"/Trials");
+
         ownedCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -223,36 +222,78 @@ public class TrialsFragment extends Fragment  {
 
                     if (experiment.getTrialType().equals("count")) {
                         Log.d(TAG, String.valueOf(doc.getData().get("description")));
-//                        Long count = (Long) doc.getData().get("count");
                         String id = (String) doc.getData().get("userAddedTrial");
+                        Date date = (Date) doc.getTimestamp("date").toDate();
                         User addedUser = new User(id);
-                        trialListController.addTrial( new CountBasedTrial(addedUser, new Date()));
+
+                        if (experiment.getLocationRequired()) {
+                            Double longitude = (Double) doc.getData().get("longitude");
+                            Double latitude = (Double) doc.getData().get("latitude");
+                            Location location = new Location(latitude, longitude);
+
+                            trialListController.addTrial( new CountBasedTrial(addedUser, location, date));
+                        } else {
+                            trialListController.addTrial( new CountBasedTrial(addedUser, date));
+                        }
                     }
                     else if (experiment.getTrialType().equals("binomial")){
                         Log.d(TAG, String.valueOf(doc.getData().get("description")));
                         Boolean success= (Boolean) doc.getData().get("binomial");
                         String id = (String) doc.getData().get("userAddedTrial");
+                        Date date = (Date) doc.getTimestamp("date").toDate();
                         User addedUser = new User(id);
-                        trialListController.addTrial(new BinomialTrial(addedUser, new Date(),success));
+
+                        if (experiment.getLocationRequired()) {
+                            Double longitude = (Double) doc.getData().get("longitude");
+                            Double latitude = (Double) doc.getData().get("latitude");
+
+                            Location location = new Location(0, 0);
+
+                            trialListController.addTrial( new BinomialTrial(addedUser, location, date, success));
+                        } else {
+                            trialListController.addTrial( new BinomialTrial(addedUser, date, success));
+                        }
                     }
                     else if (experiment.getTrialType().equals("measurement")){
                         Log.d(TAG, String.valueOf(doc.getData().get("measurement")));
                         Double result = (Double) doc.getData().get("measurement");
                         String id = (String) doc.getData().get("userAddedTrial");
+                        Date date = (Date) doc.getTimestamp("date").toDate();
                         User addedUser = new User(id);
-                        trialListController.addTrial(new MeasurementTrial(addedUser, new Date(), result));
+
+                        if (experiment.getLocationRequired()) {
+                            Double longitude = (Double) doc.getData().get("longitude");
+                            Double latitude = (Double) doc.getData().get("latitude");
+                            Location location = new Location(latitude, longitude);
+
+                            trialListController.addTrial(new MeasurementTrial(addedUser, location, date,
+                                    result));
+                        } else {
+                            trialListController.addTrial(new MeasurementTrial(addedUser, date,
+                                    result));
+                        }
                     }
                     else if (experiment.getTrialType().equals("nonNegativeCount")) {
                         Log.d(TAG, String.valueOf(doc.getData().get("nonNegativeCount")));
                         Long count = (Long) doc.getData().get("nonNegativeCount");
                         String id = (String) doc.getData().get("userAddedTrial");
+                        Date date = (Date) doc.getTimestamp("date").toDate();
                         User addedUser = new User(id);
-                        trialListController.addTrial(new NonNegativeCountTrial(addedUser, new Date(), count.intValue()));
+
+                        if (experiment.getLocationRequired()) {
+                            Double longitude = (Double) doc.getData().get("longitude");
+                            Double latitude = (Double) doc.getData().get("latitude");
+                            Location location = new Location(latitude, longitude);
+                            trialListController.addTrial(new NonNegativeCountTrial(addedUser, location, date,
+                                    count.intValue()));
+                        } else {
+                            trialListController.addTrial(new NonNegativeCountTrial(addedUser, date,
+                                    count.intValue()));
+                        }
                     }
                 }
                 trialAdapter.notifyDataSetChanged();
             }});
-//        //TEST
-        //trialListController.addCountTrialToDb( new CountBasedTrial(new User("@pm"), new Date(), 4));
+
     }
 }
