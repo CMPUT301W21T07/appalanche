@@ -37,6 +37,9 @@ public class EditProfileFragmentTest {
         add.clickOnView(add.getView(R.id.app_bar_profile));
         add.assertCurrentActivity("Wrong Activity", OwnerProfileActivity.class);
         add.clickOnView(add.getView(R.id.editProfile));
+        add.clearEditText((EditText) add.getView(R.id.editUserName));
+        add.clearEditText((EditText) add.getView(R.id.editPhoneNumber));
+        add.clearEditText((EditText) add.getView(R.id.editGithubLink));
         add.enterText((EditText) add.getView(R.id.editUserName), "username");
         add.enterText((EditText) add.getView(R.id.editPhoneNumber), "1234567890");
         add.enterText((EditText) add.getView(R.id.editGithubLink), "github.link");
