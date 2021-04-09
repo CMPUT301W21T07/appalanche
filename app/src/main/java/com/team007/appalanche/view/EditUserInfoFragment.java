@@ -47,11 +47,12 @@ public class EditUserInfoFragment extends DialogFragment {
                         // NEED TO CHANGE THE USER AFTER CONNECTING TO THE DATABASE
                         User user = (User) getArguments().getSerializable("user");
                         ContactInfo contactInfo;
+                        // Integer phoneNum = phoneNumber.getText();
                         if (!phoneNumber.getText().toString().equals("")) {
-                            contactInfo = new ContactInfo(Integer.valueOf(phoneNumber.getText().toString()), githubLink.getText().toString());
+                            contactInfo = new ContactInfo(phoneNumber.getText().toString(), githubLink.getText().toString());
                         }
                         else {
-                            contactInfo = new ContactInfo( githubLink.getText().toString());
+                            contactInfo = new ContactInfo("", githubLink.getText().toString());
                         }
 
                         Profile profile = new Profile(userName.getText().toString(), contactInfo);

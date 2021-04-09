@@ -101,11 +101,11 @@ public class OwnerProfileActivity extends AppCompatActivity implements EditUserI
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
                 String name = (String) snapshot.getData().get("Name");
-                Long phoneNumb  = (Long)  snapshot.getData().get("PhoneNumber");
+                String phoneNumb  = (String)  snapshot.getData().get("PhoneNumber");
                 String github = (String) snapshot.getData().get("Github");
                 ContactInfo contactInfo;
                 if (phoneNumb != null)
-                    contactInfo = new ContactInfo(phoneNumb.intValue(), github);
+                    contactInfo = new ContactInfo(phoneNumb, github);
                 else
                     contactInfo = new  ContactInfo(github);
                 Profile profile = new Profile(name, contactInfo);
@@ -117,7 +117,7 @@ public class OwnerProfileActivity extends AppCompatActivity implements EditUserI
 
 
                 if (phoneNumb != null)
-                    phoneNumber.setText(String.valueOf(phoneNumb));
+                    phoneNumber.setText(phoneNumb);
                 else
                     phoneNumber.setText("Phone Number");
 
