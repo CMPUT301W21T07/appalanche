@@ -6,6 +6,6 @@
         android:id="@+id/search_item"
         android:icon="@drawable/ic_search_black_24dp"
         android:title="Search_item"
-        app:showAsAction="always|collapseActionView"
-        app:actionViewClass="android.widget.SearchView"/>
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="always" />
 </menu>
