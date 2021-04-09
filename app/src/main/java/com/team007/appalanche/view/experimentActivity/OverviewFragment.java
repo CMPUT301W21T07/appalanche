@@ -22,6 +22,7 @@ import com.team007.appalanche.R;
 import com.team007.appalanche.StatFunctions;
 import com.team007.appalanche.experiment.Experiment;
 import com.team007.appalanche.trial.BinomialTrial;
+import com.team007.appalanche.trial.CountBasedTrial;
 import com.team007.appalanche.trial.MeasurementTrial;
 import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.trial.Trial;
@@ -32,7 +33,6 @@ import java.util.ArrayList;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import java.util.Collections;
 import java.util.TreeMap;
 
@@ -278,14 +278,12 @@ public class OverviewFragment extends Fragment {
         double[] countList = new  double[trialList.size()];
 
         for (int i = 0; i < trialList.size(); i++) {
-
             NonNegativeCountTrial trial = (NonNegativeCountTrial) trialList.get(i);
             countList[i] = trial.getCount();
         }
 
         return countList;
     }
-
     
     public double[] getDataHistogram2(ArrayList<Trial> trialList) {
         double[] MeasurementList  = new double[trialList.size()];
@@ -295,7 +293,6 @@ public class OverviewFragment extends Fragment {
         }
         return MeasurementList;
     }
-
 
     public double[] getDataHistogram3(ArrayList<Trial> trialList) {
         double[] binomialList = new double[trialList.size()];
