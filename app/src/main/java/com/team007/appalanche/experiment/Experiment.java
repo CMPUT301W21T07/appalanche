@@ -169,11 +169,7 @@ public class Experiment implements Serializable {
      */
     public void addTrial(Trial trial) {
         // You are only able to add a trial if the experiment is open
-        if (open) {
-            trials.add(trial);
-        } else {
-            throw new RuntimeException("You cannot add a trial to this experiment as it is ended");
-        }
+        trials.add(trial);
     }
 
     /**
