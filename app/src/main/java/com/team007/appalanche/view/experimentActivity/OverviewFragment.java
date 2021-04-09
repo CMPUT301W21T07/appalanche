@@ -33,7 +33,6 @@ import static com.team007.appalanche.view.experimentActivity.TrialsFragment.tria
  * A placeholder fragment containing a simple view.
  */
 public class OverviewFragment extends Fragment {
-
     private static final String ARG_SECTION_NUMBER = "section_number";
     private Experiment experiment;
 
@@ -78,7 +77,7 @@ public class OverviewFragment extends Fragment {
         }
 
         TextView region = root.findViewById(R.id.region);
-        region.setText("Region:" + experiment.getRegion());
+        region.setText("Region: " + experiment.getRegion());
 
         TextView currentTrialNum = root.findViewById(R.id.currentNumbTrials);
         currentTrialNum.setText("Current number of trials: " + experiment.getTrials().size());
@@ -86,8 +85,7 @@ public class OverviewFragment extends Fragment {
         TextView minTrialNum = root.findViewById(R.id.minTrials);
         minTrialNum.setText("Minimum number of trials: " + experiment.getMinNumTrials().toString());
 
-        // SET UP HISTOGRAM HERE
-//        setUpFirebase();
+        // Histogram set-up
         GraphView histogram = root.findViewById(R.id.histogram);
         histogram.getGridLabelRenderer().setHorizontalAxisTitle("Trial Result");
         histogram.getGridLabelRenderer().setVerticalAxisTitle("Number of Trials");
@@ -95,8 +93,49 @@ public class OverviewFragment extends Fragment {
         BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(getDataPoint());
         histogram.addSeries(series);
 
+        // Time plot set up
+        // US US 01.07.01
+        // As an owner or experimenter, I want to see plots of the results of trials over time.
+        GraphView timePlot = root.findViewById(R.id.plot);
+        timePlot.getGridLabelRenderer().setHorizontalAxisTitle("Date");
+        ArrayList<Trial> trials = experiment.getTrials();
+
+        switch (experiment.getTrialType()) {
+            case "binomial":
+                getBinomialPlot(timePlot, trials);
+                break;
+            case "count":
+                getCountPlot(timePlot, trials);
+                break;
+            case "measurement":
+                getMeasurementPlot(timePlot, trials);
+                break;
+            case "nonNegativeCount":
+                getNonNegPlot(timePlot, trials);
+                break;
+            default:
+                break;
+        }
 
         return root;
+    }
+
+    private void getBinomialPlot(GraphView timePlot, ArrayList<Trial> trials) {
+        timePlot.getGridLabelRenderer().setVerticalAxisTitle("Proportion of Success");
+
+
+    }
+
+    private void getCountPlot(GraphView timePlot, ArrayList<Trial> trials) {
+        timePlot.getGridLabelRenderer().setVerticalAxisTitle("Count");
+    }
+
+    private void getMeasurementPlot(GraphView timePlot, ArrayList<Trial> trials) {
+        timePlot.getGridLabelRenderer().setVerticalAxisTitle("Mean");
+    }
+
+    private void getNonNegPlot(GraphView timePlot, ArrayList<Trial> trials) {
+        timePlot.getGridLabelRenderer().setVerticalAxisTitle("Mean");
     }
 
     public void viewAProfile(TextView owner) {
@@ -112,8 +151,6 @@ public class OverviewFragment extends Fragment {
             }
         });
     }
-
-
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private DataPoint[] getDataPoint() {
@@ -131,6 +168,7 @@ public class OverviewFragment extends Fragment {
             series[i] = new DataPoint(val.getKey(), val.getValue());
             i = i +1;
         }
+
 //        DataPoint[] series = new DataPoint[] {
 //                new DataPoint(countList.get(0) , 1),
 //                new DataPoint(2 , 4),
@@ -161,7 +199,6 @@ public class OverviewFragment extends Fragment {
 //            else {
 //
 //            }
-
         }
         countList.sort(Comparator.naturalOrder());
         return countList;
@@ -177,6 +214,7 @@ public class OverviewFragment extends Fragment {
         }
         return hm;
     }
+
     public int getSize( Map<Integer, Integer> hm) {
         int i =0;
         for (Map.Entry<Integer, Integer> val : hm.entrySet()) {
@@ -184,6 +222,4 @@ public class OverviewFragment extends Fragment {
         }
         return i;
     }
-
-
 }
