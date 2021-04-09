@@ -17,6 +17,7 @@ import com.team007.appalanche.trial.MeasurementTrial;
 import com.team007.appalanche.trial.NonNegativeCountTrial;
 import com.team007.appalanche.trial.Trial;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class TrialCustomList extends ArrayAdapter<Trial> {
@@ -36,12 +37,16 @@ public class TrialCustomList extends ArrayAdapter<Trial> {
         // GET IDS OF ALL TEXTVIEW
         TextView trialCount = view.findViewById(R.id.trialCount);
         TextView userAddedTrial = view.findViewById(R.id.userID);
+        TextView date = view.findViewById(R.id.date);
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
             //FIX THIS
             CountBasedTrial trial = (CountBasedTrial) trials.get(position);
             // Display trial List
             trialCount.setText(String.valueOf(1));
             userAddedTrial.setText(trial.getUserAddedTrial().getId());
+            date.setText(simpleDateFormat.format(trial.getDate()));
 
         } catch (Exception e0){
 
@@ -51,18 +56,21 @@ public class TrialCustomList extends ArrayAdapter<Trial> {
                 // Display trial List
                 trialCount.setText(String.valueOf(trial.getOutcome()));
                 userAddedTrial.setText(trial.getUserAddedTrial().getId());
+                date.setText(simpleDateFormat.format(trial.getDate()));
             } catch (Exception e1) {
                 try {
                     MeasurementTrial trial = (MeasurementTrial) trials.get(position);
 
                     trialCount.setText(String.valueOf(trial.getValue()));
                     userAddedTrial.setText(trial.getUserAddedTrial().getId());
+                    date.setText(simpleDateFormat.format(trial.getDate()));
                 } catch (Exception e2) {
                     try {
                         NonNegativeCountTrial trial = (NonNegativeCountTrial) trials.get(position);
 
                         trialCount.setText(String.valueOf(trial.getCount()));
                         userAddedTrial.setText(trial.getUserAddedTrial().getId());
+                        date.setText(simpleDateFormat.format(trial.getDate()));
                     } catch (Exception e3) {
                         System.out.println("Something went wrong.");
                     }

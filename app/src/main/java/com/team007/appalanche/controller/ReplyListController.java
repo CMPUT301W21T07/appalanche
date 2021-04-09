@@ -37,9 +37,10 @@ public class ReplyListController {
         // Get a top-level reference to the collection.
         final CollectionReference collectionReference = db.collection("Experiments/" + experiment.getDescription()+"/Questions/"+question.getContent()+"/Replies");
         // We use a HashMap to store a key-value pair in firestore.
-        HashMap<String, String> data = new HashMap<>();
+        HashMap<String, Object> data = new HashMap<>();
         //data.put("content", newReply.getReplyText());
         data.put("userPostedReply", newReply.getUserReplied().getId());
+        data.put("date", newReply.getDateReplied());
         collectionReference
                 .document(newReply.getReplyText())
                 .set(data);

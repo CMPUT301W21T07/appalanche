@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.team007.appalanche.R;
 import com.team007.appalanche.question.Question;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -34,6 +35,8 @@ public class QuestionCustomList extends ArrayAdapter<Question> {
             view = LayoutInflater.from(context).inflate(R.layout.content_question,parent,false);
         }
         Question question = questions.get(position);
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
         // Display Question List
         TextView questionContent = view.findViewById(R.id.questionContent);
@@ -41,6 +44,10 @@ public class QuestionCustomList extends ArrayAdapter<Question> {
         // Display user posted question
         TextView userPostedQues = view.findViewById(R.id.user_posted_question);
         userPostedQues.setText(question.getUserPostedQuestion().getId());
+
+        // Display date
+        TextView date = view.findViewById(R.id.date);
+        date.setText(simpleDateFormat.format(question.getDateAsked()));
         userPostedQues.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
