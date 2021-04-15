@@ -72,7 +72,7 @@ public class AddMeasurementTrialFragment extends DialogFragment  {
                             }
 
                             double longitude;
-                            EditText lon = view.findViewById(R.id.latitude);
+                            EditText lon = view.findViewById(R.id.longitude);
                             try {
                                 longitude =
                                         Double.parseDouble(lon.getText().toString());
