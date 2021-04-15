@@ -229,6 +229,8 @@ public class TrialsFragment extends Fragment  {
                         if (experiment.getLocationRequired()) {
                             Double longitude = (Double) doc.getData().get("longitude");
                             Double latitude = (Double) doc.getData().get("latitude");
+                            System.out.println(latitude);
+                            System.out.println(longitude);
                             Location location = new Location(latitude, longitude);
 
                             trialListController.addTrial( new CountBasedTrial(addedUser, location, date));
@@ -247,7 +249,7 @@ public class TrialsFragment extends Fragment  {
                             Double longitude = (Double) doc.getData().get("longitude");
                             Double latitude = (Double) doc.getData().get("latitude");
 
-                            Location location = new Location(0, 0);
+                            Location location = new Location(latitude, longitude);
 
                             trialListController.addTrial( new BinomialTrial(addedUser, location, date, success));
                         } else {

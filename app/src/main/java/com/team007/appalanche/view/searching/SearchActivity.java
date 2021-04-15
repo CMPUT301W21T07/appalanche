@@ -122,11 +122,13 @@ public class SearchActivity extends AppCompatActivity {
                     String description = doc.getId();
                     String trialType = (String) doc.getData().get("trialType");
                     Boolean expOpen =  doc.getBoolean("expOpen");
-                    Long minNumTrials  = (Long)    doc.getData().get("minNumTrials");
+                    Long minNumTrials  = (Long) doc.getData().get("minNumTrials");
                     String expOwnerID = (String) doc.getData().get("expOwnerID");
                     String region = (String) doc.getData().get("region");
+                    int minNumValue = minNumTrials != null ? minNumTrials.intValue() : 0;
                     Boolean locationRequired =  doc.getBoolean("locationRequired");
-                    Experiment newExp = new Experiment(description, region, trialType, minNumTrials.intValue(), locationRequired, expOpen, expOwnerID );
+                    Experiment newExp = new Experiment(description, region, trialType, minNumValue,
+                            locationRequired, expOpen, expOwnerID );
                     expDataList.add(newExp);
                     allExperiments.add(newExp);
                 }

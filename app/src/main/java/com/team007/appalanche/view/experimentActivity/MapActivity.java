@@ -70,6 +70,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             if (location != null) {
                 LatLng latLng = new LatLng(location.getLat(), location.getLon());
+
                 map.addMarker(new MarkerOptions()
                         .position(latLng)
                         .title("Trial" + i)
